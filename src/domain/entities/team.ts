@@ -5,20 +5,40 @@ import { Player } from './player';
 export type TeamParams = {
   name: string;
   players: Array<Player>;
+  minPlayers?: number;
+  maxPlayers?: number;
 };
 
 export class Team {
   id: string;
   name: string;
+  public static minPlayers: number = 6;
+  public static maxPlayers: number = 12;
   players: Array<Player>;
 
   constructor(params: TeamParams) {
     this.id = uid();
     this.name = params.name;
     this.players = params.players;
+    Team.minPlayers = params?.minPlayers || 6;
+    Team.maxPlayers = params?.maxPlayers || 12;
+  }
+
+  public get isValid(): boolean {
+    return (
+      this.players.length >= Team.minPlayers &&
+      this.players.length <= Team.maxPlayers
+    );
+  }
+
+  public get isComplete(): boolean {
+    return this.players.length === Team.maxPlayers;
   }
 
   addPlayer(player: Player): void {
+    if (this.isComplete) {
+      throw new Error('O time já está completo!');
+    }
     this.players.push(player);
   }
 

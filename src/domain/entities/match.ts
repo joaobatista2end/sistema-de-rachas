@@ -7,12 +7,13 @@ import { SoccerField } from './soccer-field';
 
 export type MatchParams = {
   soccerField: SoccerField;
+  schedule: Schedule;
 };
 
 export class Match {
   id: string;
   players: Array<Player>;
-  private _schedule: Schedule;
+  schedule: Schedule;
   paymentListPlayers: Array<string>;
   soccerField: SoccerField;
 
@@ -21,22 +22,7 @@ export class Match {
     this.players = [];
     this.paymentListPlayers = [];
     this.soccerField = params.soccerField;
-  }
-
-  public set schedule(scheduleParams: {
-    day: Date;
-    startTime: string;
-    finishTime: string;
-  }) {
-    this._schedule = new Schedule({
-      day: scheduleParams.day,
-      startTime: new Time(scheduleParams.startTime),
-      finishTime: new Time(scheduleParams.finishTime),
-    });
-  }
-
-  public get schedule(): Schedule {
-    return this._schedule;
+    this.schedule = params.schedule;
   }
 
   public get paymentPlayers(): Array<Player> {
@@ -68,7 +54,7 @@ export class Match {
 
   public get amountToBePaidPerPlayer(): number {
     return (
-      (this._schedule.totalHours * this.soccerField.rentalValue) /
+      (this.schedule.totalHours * this.soccerField.rentalValue) /
       this.players.length
     );
   }
