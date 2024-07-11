@@ -10,6 +10,7 @@ const soccerField = new SoccerField({
   rentalValue: 300,
 });
 
+
 describe('Testes relacionados ao Racha', () => {
   it('Verificar se os jogadores foram adicionados', () => {
     const match = new Match({ soccerField });
@@ -49,4 +50,7 @@ describe('Testes relacionados ao Racha', () => {
 
     expect(match.amountToBePaidPerPlayer).equals(100);
   });
+
+  
 });
+
