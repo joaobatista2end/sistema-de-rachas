@@ -18,6 +18,6 @@ export class Schedule {
   }
 
   public get totalHours(): number {
-    return 0;
+    return Math.abs(this.finishTime.number - this.startTime.number);
   }
 }

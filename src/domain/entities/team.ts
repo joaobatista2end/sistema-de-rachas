@@ -1,5 +1,6 @@
-import { uid } from "uid";
-import { Player } from "./player";
+import { uid } from 'uid';
+
+import { Player } from './player';
 
 export type TeamParams = {
   name: string;
@@ -22,12 +23,11 @@ export class Team {
   }
 
   removePlayer(playerId: string): void {
-    this.players = this.players.filter(player => player.id !== playerId);
+    this.players = this.players.filter((player) => player.id !== playerId);
   }
 
-
   editPlayer(playerId: string, newDetails: Partial<Player>): void {
-    const player = this.players.find(player => player.id === playerId);
+    const player = this.players.find((player) => player.id === playerId);
     if (player) {
       if (newDetails.name !== undefined) player.name = newDetails.name;
       if (newDetails.stars !== undefined) player.stars = newDetails.stars;

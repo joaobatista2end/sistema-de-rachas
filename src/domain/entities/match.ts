@@ -49,6 +49,15 @@ export class Match {
     this.players.push(player);
   }
 
+  public removePlayer(playerID: string) {
+    const indexPlayer = this.players.findIndex(
+      (player) => player.id === playerID
+    );
+    if (indexPlayer !== -1) {
+      this.players.splice(indexPlayer, 1);
+    }
+  }
+
   public getPlayer(playerID: string): Player | undefined {
     return this.players.find((playerItem) => playerItem.id === playerID);
   }
@@ -57,10 +66,10 @@ export class Match {
     this.paymentListPlayers.push(playerID);
   }
 
-  public get amountToBePaidPerPlayer() {
-    const valueForPlayer = this.soccerField.rentalValue / this.players.length;
-    return valueForPlayer;
+  public get amountToBePaidPerPlayer(): number {
+    return (
+      (this._schedule.totalHours * this.soccerField.rentalValue) /
+      this.players.length
+    );
   }
-
-  public get;
 }

@@ -10,6 +10,14 @@ const soccerField = new SoccerField({
   rentalValue: 300,
 });
 
+const players = [
+  new Player({ name: 'João', stars: 1 }),
+  new Player({ name: 'Erick', stars: 2 }),
+  new Player({ name: 'José', stars: 3 }),
+  new Player({ name: 'Maria', stars: 4 }),
+  new Player({ name: 'Ronaldinho', stars: 5 }),
+  new Player({ name: 'Maradona', stars: 5 }),
+];
 
 describe('Testes relacionados ao Racha', () => {
   it('Verificar se os jogadores foram adicionados', () => {
@@ -28,7 +36,6 @@ describe('Testes relacionados ao Racha', () => {
       finishTime: '16:30:00',
     };
 
-    console.log({ schedule: match.schedule });
     const playerJoao = new Player({ name: 'João', stars: 2 });
     const playerErick = new Player({ name: 'Erick', stars: 5 });
     match.addPlayer(playerJoao);
@@ -39,18 +46,32 @@ describe('Testes relacionados ao Racha', () => {
     expect(playerJoao.isPaid(match)).equals(false);
   });
 
-  it('Verificar valor a ser pago pelos jogadores', () => {
+  it('Verificar se a remoção de jogador está funcionando', () => {
     const match = new Match({ soccerField });
-    const playerJoao = new Player({ name: 'João', stars: 2 });
-    const playerErick = new Player({ name: 'Erick', stars: 5 });
-    const playerJose = new Player({ name: 'José', stars: 4 });
-    match.addPlayer(playerJoao);
-    match.addPlayer(playerErick);
-    match.addPlayer(playerJose);
+    match.addPlayer(players[0]);
+    match.addPlayer(players[1]);
+    match.addPlayer(players[2]);
 
-    expect(match.amountToBePaidPerPlayer).equals(100);
+    match.removePlayer(players[1].id);
+    expect(match.players.length).equals(2);
+
+    const playerDeleted = match.getPlayer(players[1].id);
+    expect(playerDeleted).equals(undefined);
   });
 
-  
-});
+  it('Verificar valor a ser pago pelos jogadores', () => {
+    const match = new Match({ soccerField });
+    match.schedule = {
+      day: new Date(),
+      finishTime: '12:30:00',
+      startTime: '10:30:00',
+    };
 
+    match.addPlayer(players[0]);
+    match.addPlayer(players[1]);
+    match.addPlayer(players[2]);
+    match.addPlayer(players[3]);
+
+    expect(match.amountToBePaidPerPlayer).equals(150);
+  });
+});
