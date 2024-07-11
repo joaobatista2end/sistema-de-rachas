@@ -10,7 +10,7 @@ import { Time } from '../object-values/time';
 import { GenerateTeamsUseCase } from './generate-teams.usecase';
 
 describe('Gerar times do racha', () => {
-  it('Verificar se os times estão sendo gerados corretamente', () => {
+  it('should verify if teams are generated correctly', () => {
     const soccerField = new SoccerField({
       pixKey: uid(),
       rentalValue: 300,
@@ -32,7 +32,7 @@ describe('Gerar times do racha', () => {
     expect(teams2.length).equals(16);
   });
 
-  it('should verify if teams are being generated correctly', () => {
+  it('should verify if teams are balanced correctly', () => {
     const soccerField = new SoccerField({
       pixKey: uid(),
       rentalValue: 300,
@@ -54,14 +54,13 @@ describe('Gerar times do racha', () => {
     console.log(`Number of teams: ${teams.length}`);
     teams.forEach((team, index) => {
       console.log(`Team ${index + 1}:`);
-      console.log(
-        `Total Stars: ${team.players.reduce(
-          (sum, player) => sum + player.stars,
-          0
-        )}`
-      );
+      console.log(`Total Stars: ${team.totalStars}`);
       console.dir(team, { depth: null, colors: true });
     });
+
+    const minStars = Math.min(...teams.map((team) => team.totalStars));
+    const maxStars = Math.max(...teams.map((team) => team.totalStars));
+    expect(maxStars - minStars).toBeLessThanOrEqual(1);
 
     expect(teams.length).toBeGreaterThanOrEqual(2);
     for (const team of teams) {

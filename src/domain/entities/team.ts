@@ -24,6 +24,10 @@ export class Team {
     Team.maxPlayers = params?.maxPlayers || 12;
   }
 
+  public get totalStars(): number {
+    return this.players.reduce((sum, player) => sum + player.stars, 0);
+  }
+
   public get isValid(): boolean {
     return (
       this.players.length >= Team.minPlayers &&
