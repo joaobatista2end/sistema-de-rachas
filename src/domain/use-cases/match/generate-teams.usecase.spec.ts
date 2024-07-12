@@ -1,12 +1,12 @@
 import { uid } from 'uid';
 import { describe, expect, it } from 'vitest';
 
-import { Match } from '../entities/match';
-import { Schedule } from '../entities/schedule';
-import { SoccerField } from '../entities/soccer-field';
-import { Team } from '../entities/team';
-import { playerFactory } from '../factories/player';
-import { Time } from '../object-values/time';
+import { Match } from '../../entities/match';
+import { Schedule } from '../../entities/schedule';
+import { SoccerField } from '../../entities/soccer-field';
+import { Team } from '../../entities/team';
+import { playerFactory } from '../../factories/player';
+import { Time } from '../../object-values/time';
 import { GenerateTeamsUseCase } from './generate-teams.usecase';
 
 const soccerField = new SoccerField({

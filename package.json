@@ -11,15 +11,22 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/mongodb": "^4.0.7",
+    "@types/node": "^20.14.10",
     "@typescript-eslint/eslint-plugin": "^7.16.0",
     "@typescript-eslint/parser": "^7.16.0",
     "eslint": "^8.57.0",
     "globals": "^15.8.0",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
     "vitest": "^2.0.2"
   },
   "dependencies": {
+    "fastify": "^4.28.1",
+    "fastify-mongodb": "^4.2.0",
+    "mongodb": "^6.8.0",
+    "mongose": "^0.0.2-security",
     "uid": "^2.0.2"
   }
 }
