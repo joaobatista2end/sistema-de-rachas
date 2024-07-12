@@ -1,8 +1,8 @@
 import { uid } from 'uid';
 
-import { Time } from '../object-values/time';
 import { Player } from './player';
-import { Schedule, ScheduleParams } from './schedule';
+import { Team } from './team';
+import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';
 
 export type MatchParams = {
@@ -16,6 +16,7 @@ export class Match {
   schedule: Schedule;
   paymentListPlayers: Array<string>;
   soccerField: SoccerField;
+  teams: Array<Team>;
 
   public constructor(params: MatchParams) {
     this.id = uid();
