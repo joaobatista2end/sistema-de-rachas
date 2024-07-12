@@ -1,9 +1,9 @@
 import { uid } from 'uid';
 
 import { Player } from './player';
-import { Team } from './team';
 import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';
+import { Team } from './team';
 
 export type MatchParams = {
   soccerField: SoccerField;
@@ -24,6 +24,7 @@ export class Match {
     this.paymentListPlayers = [];
     this.soccerField = params.soccerField;
     this.schedule = params.schedule;
+    this.teams = [];
   }
 
   public get paymentPlayers(): Array<Player> {
