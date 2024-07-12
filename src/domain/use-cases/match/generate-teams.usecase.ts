@@ -23,23 +23,20 @@ export class GenerateTeamsUseCase {
           players: [],
         })
     );
-    const teamStarsSum = (team: Team) =>
-      team.players.reduce((sum, player) => sum + player.stars, 0);
 
     for (let player of players) {
       let minTeam = teams.reduce(
         (minTeam, currentTeam) =>
-          teamStarsSum(currentTeam) < teamStarsSum(minTeam)
-            ? currentTeam
-            : minTeam,
+          currentTeam.totalStars < minTeam.totalStars ? currentTeam : minTeam,
         teams[0]
       );
 
       minTeam.addPlayer(player);
     }
 
-    const minStars = Math.min(...teams.map(teamStarsSum));
-    const maxStars = Math.max(...teams.map(teamStarsSum));
+    const minStars = Math.min(...teams.map((team) => team.totalStars));
+    const maxStars = Math.max(...teams.map((team) => team.totalStars));
+
     if (maxStars - minStars > 1) {
       throw new Error(
         'Erro: Não é possível criar times com diferença de estrelas superior a 1.'
