@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_PASSWORD: d192jd912312dj912
     ports:
       - 27017:27017
     volumes:
@@ -19,7 +19,7 @@ services:
     restart: always
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_ADMINPASSWORD: d192jd912312dj912
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: password

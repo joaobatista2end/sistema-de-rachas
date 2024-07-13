@@ -1,5 +1,5 @@
 import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify';
-
+import mongoosePlugin from '../../database/mongose/plugin';
 import routes from '../routes';
 
 class FastifyServer {
@@ -8,6 +8,7 @@ class FastifyServer {
   constructor() {
     this.server = Fastify({});
     this.server.register(routes);
+    this.server.register(mongoosePlugin);
   }
 
   async start() {
