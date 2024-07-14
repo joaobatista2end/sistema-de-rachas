@@ -5,7 +5,7 @@ export interface PlayerDto extends Document {
   stars: number;
 }
 
-const playerSchema: Schema = new Schema({
+export const playerSchema: Schema = new Schema({
   name: {
     type: String,
     required: true,
