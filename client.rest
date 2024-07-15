@@ -1,8 +1,11 @@
-
+### Testando registro de jogadores
 POST http://localhost:3000/players
-content-type: application/json
+Content-Type: application/json
 
 {
-    "name": "jhonx",
-    "stars": 20
+  "name": "John Doe",
+  "team": "Team A"
 }
+
+### Testando quantidade de jogadores pagos em um match
+GET http://localhost:3000/match/amount-paid-players/1
