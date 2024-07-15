@@ -1,6 +1,6 @@
 # @name RegisterPlayer
 POST http://localhost:3000/players
-content-type: application/json
+Content-Type: application/json
 
 {
     "name": "jhonx",
