@@ -1,8 +1,21 @@
-
+# @name RegisterPlayer
 POST http://localhost:3000/players
 content-type: application/json
 
 {
     "name": "jhonx",
     "stars": 20
+}
+
+
+###
+
+# @name RegisterMatch
+
+POST http://localhost:3000/match
+content-type: application/json
+
+{
+    "name": "Partida dos chuteiras de madeira",
+    "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate."
 }

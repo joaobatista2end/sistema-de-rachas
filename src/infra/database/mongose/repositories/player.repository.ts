@@ -1,35 +1,35 @@
 import { Model, Types } from 'mongoose';
 import { PlayerRepository } from '../../repositories/player.respository';
-import PlayerModel, { PlayerDto } from '../models/player.model';
+import { PlayerDto } from '../models/player.model';
 
 export class PlayerMongoRepository implements PlayerRepository {
-  private playerModel: Model<PlayerDto>;
+  private model: Model<PlayerDto>;
 
-  constructor(playerModel: Model<PlayerDto>) {
-    this.playerModel = playerModel;
+  constructor(model: Model<PlayerDto>) {
+    this.model = model;
   }
 
   async findById(id: Types.ObjectId): Promise<PlayerDto | null> {
-    return this.playerModel.findById(id).exec();
+    return this.model.findById(id).exec();
   }
 
   async findByName(name: string): Promise<PlayerDto | null> {
-    return this.playerModel.findOne({ name }).exec();
+    return this.model.findOne({ name }).exec();
   }
 
   async create(player: PlayerDto): Promise<PlayerDto> {
-    const newPlayer = new this.playerModel(player);
-    return newPlayer.save();
+    const newRegister = new this.model(player);
+    return newRegister.save();
   }
 
   async update(
     id: Types.ObjectId,
     player: Partial<PlayerDto>
   ): Promise<PlayerDto | null> {
-    return this.playerModel.findByIdAndUpdate(id, player, { new: true }).exec();
+    return this.model.findByIdAndUpdate(id, player, { new: true }).exec();
   }
 
   async delete(id: Types.ObjectId): Promise<PlayerDto | null> {
-    return this.playerModel.findByIdAndDelete(id).exec();
+    return this.model.findByIdAndDelete(id).exec();
   }
 }
