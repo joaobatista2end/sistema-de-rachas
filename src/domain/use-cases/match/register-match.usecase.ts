@@ -10,9 +10,9 @@ export class RegisterMatchUseCase {
   );
 
   static async execute(matchDto: MatchDto) {
-    const registredPlayer = await RegisterMatchUseCase.repository.create(
+    const registredMatch = await RegisterMatchUseCase.repository.create(
       matchDto
     );
-    return registredPlayer;
+    return registredMatch;
   }
 }

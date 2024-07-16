@@ -1,6 +1,7 @@
 import { Model, Types } from 'mongoose';
 import { MatchDto } from '../models/match.model';
 import { MatchRepository } from '../../repositories/match.repository';
+import { match } from 'assert';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDto>;
@@ -17,16 +18,16 @@ export class MatchMongoRepository implements MatchRepository {
     return this.model.findOne({ name }).exec();
   }
 
-  async create(player: MatchDto): Promise<MatchDto> {
-    const newPlayer = new this.model(player);
-    return newPlayer.save();
+  async create(match: MatchDto): Promise<MatchDto> {
+    const newMatch = new this.model(match);
+    return newMatch.save();
   }
 
   async update(
     id: Types.ObjectId,
-    player: Partial<MatchDto>
+    match: Partial<MatchDto>
   ): Promise<MatchDto | null> {
-    return this.model.findByIdAndUpdate(id, player, { new: true }).exec();
+    return this.model.findByIdAndUpdate(id, match, { new: true }).exec();
   }
 
   async delete(id: Types.ObjectId): Promise<MatchDto | null> {
