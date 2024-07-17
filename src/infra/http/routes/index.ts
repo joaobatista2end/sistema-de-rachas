@@ -13,7 +13,7 @@ const routes = async (fastify: FastifyInstance) => {
   fastify.get('/match/:id', matchController.findById.bind(matchController));
 
   fastify.get(
-    '/match/amount-paid-players/:id',
+    '/match/:id/amount-paid-players',
     matchController.getAmountPaidPlayer.bind(matchController)
   );
 

@@ -4,10 +4,26 @@ import { Player } from './player';
 import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';
 import { Team } from './team';
+import { MatchDto } from '../../infra/database/mongose/models/match.model';
 
 export type MatchParams = {
-  soccerField: SoccerField;
-  schedule: Schedule;
+  id: string;
+  name: string;
+  thumb: string;
+  description: string;
+  soccerField: {
+    rentalValue: number;
+    pixKey: string;
+  };
+  schedule: {
+    startTime: string;
+    finishTime: string;
+    day: string;
+  };
+  players: {
+    name: string;
+    stars: number;
+  }[];
 };
 
 export class Match {
@@ -18,13 +34,13 @@ export class Match {
   soccerField: SoccerField;
   teams: Array<Team>;
 
-  public constructor(params: MatchParams) {
-    this.id = uid();
-    this.players = [];
-    this.paymentListPlayers = [];
-    this.soccerField = params.soccerField;
-    this.schedule = params.schedule;
+  public constructor(params: MatchDto) {
+    this.id = params._id as string;
+    this.players = params.players.map((player) => new Player(player));
+    this.soccerField = new SoccerField(params.soccerField);
+    this.schedule = new Schedule(params.schedule);
     this.teams = [];
+    this.paymentListPlayers = [];
   }
 
   public get paymentPlayers(): Array<Player> {

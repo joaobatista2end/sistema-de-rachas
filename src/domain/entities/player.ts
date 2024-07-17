@@ -5,6 +5,7 @@ import { Match } from './match';
 export type PlayerParams = {
   name: string;
   stars: number;
+  id: string;
 };
 
 export class Player {
@@ -15,7 +16,7 @@ export class Player {
   public constructor(params: PlayerParams) {
     this.name = params.name;
     this.stars = params.stars;
-    this.id = uid();
+    this.id = params.id;
   }
 
   public isPaid(match: Match) {

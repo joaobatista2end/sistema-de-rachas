@@ -61,4 +61,4 @@ GET http://localhost:3000/match/66971ecd00f5b5b3f453ea94
 
 # @name CalculatePaymentPerPlayer
 
-GET http://localhost:3000/match/66970d12d8383a5a34caaae6/total-per-player
+GET http://localhost:3000/match/66970d12d8383a5a34caaae6/amount-paid-players

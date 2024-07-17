@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema, model, Model } from 'mongoose';
-import { playerSchema } from './player.model';
-import { ScheduleDto, scheduleSchema } from './schedule.model';
+import { ScheduleDto } from './schedule.model';
 import { teamSchema } from './teams.model';
 
 export interface MatchDto extends Document {

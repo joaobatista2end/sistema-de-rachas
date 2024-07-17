@@ -1,9 +1,9 @@
 import { Time } from '../object-values/time';
 
 export type ScheduleParams = {
-  startTime: Time;
-  finishTime: Time;
-  day: Date;
+  startTime: string;
+  finishTime: string;
+  day: string;
 };
 
 export class Schedule {
@@ -12,9 +12,9 @@ export class Schedule {
   day: Date;
 
   public constructor(params: ScheduleParams) {
-    this.startTime = params.startTime;
-    this.finishTime = params.finishTime;
-    this.day = params.day;
+    this.startTime = new Time(params.startTime);
+    this.finishTime = new Time(params.finishTime);
+    this.day = new Date(params.day);
   }
 
   public get totalHours(): number {
