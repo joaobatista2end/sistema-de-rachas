@@ -9,13 +9,17 @@ const routes = async (fastify: FastifyInstance) => {
 
   // Match
   fastify.post('/match', matchController.register.bind(matchController));
+  fastify.put('/match/:id', matchController.update.bind(matchController));
 
   fastify.get(
     '/match/amount-paid-players/:id',
     matchController.getAmountPaidPlayer.bind(matchController)
   );
 
-  fastify.post('/soccer-field', soccerFieldController.register.bind(soccerFieldController));
+  fastify.post(
+    '/soccer-field',
+    soccerFieldController.register.bind(soccerFieldController)
+  );
 };
 
 export default routes;

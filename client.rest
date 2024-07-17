@@ -7,7 +7,6 @@ Content-Type: application/json
     "stars": 20
 }
 
-
 ###
 
 # @name RegisterMatch
@@ -17,7 +16,9 @@ content-type: application/json
 
 {
     "name": "Partida dos chuteiras de madeira",
-    "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate."
+    "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate.",
+    "thumb": "somephoto.png",
+    "soccerField": "6692bc7e61b5fd78769bd2ca"
 }
 
 ###
@@ -30,4 +31,15 @@ content-type: application/json
 {
     "pixKey": "Campo do zézinho",
     "rentalValue": 123
+}
+
+###
+
+# @name UpdateMatch
+
+PUT http://localhost:3000/match/66970d12d8383a5a34caaae6
+content-type: application/json
+
+{
+    "soccerField": "6692bc7e61b5fd78769bd2ca"
 }

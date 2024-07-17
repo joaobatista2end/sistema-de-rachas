@@ -1,7 +1,7 @@
 import MatchModel, {
   MatchDto,
 } from '../../../infra/database/mongose/models/match.model';
-import { MatchMongoRepository } from '../../../infra/database/mongose/repositories/mach.repository';
+import { MatchMongoRepository } from '../../../infra/database/mongose/repositories/match.repository';
 import { MatchRepository } from '../../../infra/database/repositories/match.repository';
 
 export class RegisterMatchUseCase {
@@ -13,6 +13,9 @@ export class RegisterMatchUseCase {
     const registredMatch = await RegisterMatchUseCase.repository.create(
       matchDto
     );
-    return registredMatch;
+    const populatedMatch = await MatchModel.findById(registredMatch._id)
+      .populate('soccerField')
+      .exec();
+    return populatedMatch;
   }
 }

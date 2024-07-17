@@ -10,7 +10,7 @@ export class MatchMongoRepository implements MatchRepository {
     this.model = model;
   }
 
-  async findById(id: Types.ObjectId): Promise<MatchDto | null> {
+  async findById(id: string): Promise<MatchDto | null> {
     return this.model.findById(id).exec();
   }
 
@@ -23,14 +23,11 @@ export class MatchMongoRepository implements MatchRepository {
     return newMatch.save();
   }
 
-  async update(
-    id: Types.ObjectId,
-    match: Partial<MatchDto>
-  ): Promise<MatchDto | null> {
+  async update(id: string, match: Partial<MatchDto>): Promise<MatchDto | null> {
     return this.model.findByIdAndUpdate(id, match, { new: true }).exec();
   }
 
-  async delete(id: Types.ObjectId): Promise<MatchDto | null> {
+  async delete(id: string): Promise<MatchDto | null> {
     return this.model.findByIdAndDelete(id).exec();
   }
 }

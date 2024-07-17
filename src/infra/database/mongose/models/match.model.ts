@@ -7,7 +7,7 @@ export interface MatchDto extends Document {
   name: string;
   thumb: string;
   description: string;
-  soccerFieldId: string;
+  soccerField: mongoose.Types.ObjectId;
 }
 
 const matchSchema: Schema = new Schema({
@@ -16,7 +16,7 @@ const matchSchema: Schema = new Schema({
   description: String,
   players: [playerSchema],
   schedule: scheduleSchema,
-  soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'soccerFieldId' },
+  soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'soccer-field' },
   teams: teamSchema,
 });
 
