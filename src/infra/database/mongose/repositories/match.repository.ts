@@ -1,17 +1,24 @@
 import { Model, Types } from 'mongoose';
 import { MatchDto } from '../models/match.model';
 import { MatchRepository } from '../../repositories/match.repository';
-import { match } from 'assert';
+import { ScheduleDto, ScheduleModel } from '../models/schedule.model';
+import { ScheduleRepository } from '../../repositories/schedule.repository';
+import { ScheduleMongoRepository } from './schedule.repository';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDto>;
+  private scheduleRepository: ScheduleRepository;
 
   constructor(model: Model<MatchDto>) {
     this.model = model;
+    this.scheduleRepository = new ScheduleMongoRepository(ScheduleModel);
   }
 
   async findById(id: string): Promise<MatchDto | null> {
-    return this.model.findById(id).exec();
+    return this.model
+      .findById(id)
+      .populate(['soccerField', 'players', 'schedule'])
+      .exec();
   }
 
   async findByName(name: string): Promise<MatchDto | null> {
@@ -19,7 +26,11 @@ export class MatchMongoRepository implements MatchRepository {
   }
 
   async create(match: MatchDto): Promise<MatchDto> {
-    const newMatch = new this.model(match);
+    const schedule = await this.scheduleRepository.create(match.schedule);
+    const newMatch = new this.model({
+      ...match,
+      schedule: schedule._id,
+    });
     return newMatch.save();
   }
 

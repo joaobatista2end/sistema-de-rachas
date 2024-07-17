@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import { MatchDto } from '../mongose/models/match.model';
 
 export interface MatchRepository {
