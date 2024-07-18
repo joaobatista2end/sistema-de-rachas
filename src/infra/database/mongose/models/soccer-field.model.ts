@@ -1,6 +1,6 @@
-import { Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
 
-export interface SoccerFieldDto extends Document {
+export interface SoccerFieldDocument extends Document<string> {
   pixKey: string;
   rentalValue: number;
 }
@@ -16,7 +16,7 @@ export const soccerFieldSchema: Schema = new Schema({
   },
 });
 
-const SoccerFieldModel: Model<SoccerFieldDto> = model<SoccerFieldDto>(
+const SoccerFieldModel: Model<SoccerFieldDocument> = model<SoccerFieldDocument>(
   'soccer-field',
   soccerFieldSchema
 );

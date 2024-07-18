@@ -1,6 +1,6 @@
 import { Document, Schema, model, Model } from 'mongoose';
 
-export interface PlayerDto extends Document {
+export interface PlayerDocument extends Document<string> {
   name: string;
   stars: number;
 }
@@ -16,6 +16,9 @@ export const playerSchema: Schema = new Schema({
   },
 });
 
-const PlayerModel: Model<PlayerDto> = model<PlayerDto>('player', playerSchema);
+const PlayerModel: Model<PlayerDocument> = model<PlayerDocument>(
+  'player',
+  playerSchema
+);
 
 export default PlayerModel;

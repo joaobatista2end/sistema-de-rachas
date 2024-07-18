@@ -14,9 +14,9 @@ export class Player {
   stars: number;
 
   public constructor(params: PlayerParams) {
+    this.id = params.id;
     this.name = params.name;
     this.stars = params.stars;
-    this.id = params.id;
   }
 
   public isPaid(match: Match) {

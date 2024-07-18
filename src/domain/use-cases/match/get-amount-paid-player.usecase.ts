@@ -1,13 +1,7 @@
-import { uid } from 'uid';
-
 import { Match, MatchParams } from '../../entities/match';
-import { Schedule } from '../../entities/schedule';
-import { SoccerField } from '../../entities/soccer-field';
-import { playerFactory } from '../../factories/player';
-import { Time } from '../../object-values/time';
 import { MatchRepository } from '../../../infra/database/repositories/match.repository';
-import { MatchMongoRepository } from '../../../infra/database/mongose/repositories/match.repository';
 import MatchModel from '../../../infra/database/mongose/models/match.model';
+import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
 
 export class GetAmountPaidPlayerUseCase {
   private static repository: MatchRepository = new MatchMongoRepository(

@@ -1,6 +1,6 @@
 import { Model, model, Schema, Document } from 'mongoose';
 
-export interface ScheduleDto extends Document {
+export interface ScheduleDocument extends Document<string> {
   startTime: string;
   finishTime: string;
   day: string;
@@ -21,7 +21,7 @@ export const scheduleSchema: Schema = new Schema({
   },
 });
 
-export const ScheduleModel: Model<ScheduleDto> = model<ScheduleDto>(
+export const ScheduleModel: Model<ScheduleDocument> = model<ScheduleDocument>(
   'schedule',
   scheduleSchema
 );

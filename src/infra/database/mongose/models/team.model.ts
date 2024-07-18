@@ -1,14 +1,13 @@
-import { Document, Schema, model, Model } from 'mongoose';
-import { PlayerDto } from './player.model';
+import mongoose, { Document, Schema, model, Model } from 'mongoose';
 
-export interface TeamDto extends Document {
+export interface TeamDocument extends Document<string> {
   name: string;
-  players: Array<PlayerDto['_id']>;
+  players: mongoose.Types.ObjectId[];
   minPlayers?: number;
   maxPlayers?: number;
 }
 
-const teamSchema: Schema = new Schema({
+export const teamSchema: Schema = new Schema({
   name: {
     type: String,
     required: true,
@@ -29,6 +28,6 @@ const teamSchema: Schema = new Schema({
   },
 });
 
-const TeamModel: Model<TeamDto> = model<TeamDto>('Team', teamSchema);
+const TeamModel: Model<TeamDocument> = model<TeamDocument>('Team', teamSchema);
 
 export default TeamModel;

@@ -1,6 +1,7 @@
 import { Time } from '../object-values/time';
 
 export type ScheduleParams = {
+  id: string;
   startTime: string;
   finishTime: string;
   day: string;

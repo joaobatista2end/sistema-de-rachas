@@ -1,14 +1,13 @@
 import mongoose, { Document, Schema, model, Model } from 'mongoose';
-import { ScheduleDto } from './schedule.model';
-import { teamSchema } from './teams.model';
 
-export interface MatchDto extends Document {
+export interface MatchDocument extends Document<string> {
   name: string;
   thumb: string;
   description: string;
   soccerField: mongoose.Types.ObjectId;
-  schedule: ScheduleDto;
+  schedule: mongoose.Types.ObjectId;
   players: mongoose.Types.ObjectId[];
+  teams: mongoose.Types.ObjectId[];
 }
 
 const matchSchema: Schema = new Schema({
@@ -18,9 +17,12 @@ const matchSchema: Schema = new Schema({
   players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'player' }],
   schedule: { type: mongoose.Schema.Types.ObjectId, ref: 'schedule' },
   soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'soccer-field' },
-  teams: teamSchema,
+  teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'team' }],
 });
 
-const MatchModel: Model<MatchDto> = model<MatchDto>('match', matchSchema);
+const MatchModel: Model<MatchDocument> = model<MatchDocument>(
+  'match',
+  matchSchema
+);
 
 export default MatchModel;

@@ -1,8 +1,9 @@
-import { PlayerDto } from '../../infra/database/mongose/models/player.model';
-import { ScheduleDto } from '../../infra/database/mongose/models/schedule.model';
-import { SoccerFieldDto } from '../../infra/database/mongose/models/soccer-field.model';
+import { PlayerDto } from './player.dto';
+import { CreateScheduleDto, ScheduleDto } from './schedule.dto';
+import { SoccerFieldDto } from './soccer-field.dto';
 
 export interface MatchDto extends Document {
+  id: string;
   name: string;
   thumb: string;
   description: string;
@@ -16,6 +17,6 @@ export interface CreateMatchDto extends Document {
   thumb: string;
   description: string;
   soccerField: string;
-  schedule: ScheduleDto;
+  schedule: CreateScheduleDto;
   players: string[];
 }
