@@ -2,15 +2,19 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { GetAmountPaidPlayerUseCase } from '../../../domain/use-cases/match/get-amount-paid-player.usecase';
 import { RegisterMatchUseCase } from '../../../domain/use-cases/match/register-match.usecase';
-import { MatchDto } from '../../database/mongose/models/match.model';
 import { UpdateMatchUseCase } from '../../../domain/use-cases/match/update-match.usecase';
 import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.usecase';
+import { CreateMatchDto } from '../../../domain/dto/match.dto';
+import { MatchPresenter } from '../../../application/presenters/match.presenter';
 
 class MatchController {
   async register(req: FastifyRequest, res: FastifyReply) {
-    const registred = await RegisterMatchUseCase.execute(req.body as MatchDto);
+    const match = await RegisterMatchUseCase.execute(
+      req.body as CreateMatchDto
+    );
+
     res.send({
-      data: registred,
+      data: MatchPresenter(match),
     });
   }
 
@@ -35,7 +39,7 @@ class MatchController {
     const match = await FindMatchUseCase.execute(id);
 
     res.send({
-      data: match,
+      data: MatchPresenter(match),
     });
   }
 
@@ -44,7 +48,7 @@ class MatchController {
     res: FastifyReply
   ) {
     const { id } = req.params;
-    const matchDto = req.body as Partial<MatchDto>;
+    const matchDto = req.body as Partial<CreateMatchDto>;
     const updated = UpdateMatchUseCase.execute(id, matchDto);
 
     res.send({

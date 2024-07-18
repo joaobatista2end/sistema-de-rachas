@@ -17,17 +17,23 @@ export type MatchParams = {
 
 export class Match {
   id: string;
+  name: string;
+  thumb: string;
   players: Array<Player>;
   schedule: Schedule;
   paymentListPlayers: Array<string>;
   soccerField: SoccerField;
   teams: Array<Team>;
+  description: string;
 
   public constructor(params: MatchParams) {
     this.id = params.id;
+    this.name = params.name;
+    this.description = params.description;
     this.players = params.players;
     this.soccerField = params.soccerField;
     this.schedule = params.schedule;
+    this.thumb = params.thumb;
     this.teams = [];
     this.paymentListPlayers = [];
   }

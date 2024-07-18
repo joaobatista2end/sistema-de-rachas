@@ -1,35 +1,61 @@
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { SoccerFieldRepository } from '../../repositories/soccer-field.repository';
-import { SoccerFieldDto } from '../models/soccer-field.model';
-
+import {
+  CreateSoccerFieldDto,
+  SoccerFieldDto,
+} from '../../../../domain/dto/soccer-field.dto';
+import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
+import { SoccerField } from '../../../../domain/entities/soccer-field';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
-  private model: Model<SoccerFieldDto>;
+  private model: Model<SoccerFieldDocument>;
 
-  constructor(model: Model<SoccerFieldDto>) {
+  constructor(model: Model<SoccerFieldDocument>) {
     this.model = model;
   }
 
-  async findById(id: Types.ObjectId): Promise<SoccerFieldDto | null> {
-    return this.model.findById(id).exec();
+  async findById(id: string): Promise<SoccerField | null> {
+    const soccerField = await this.model.findById(id).exec();
+    if (!soccerField) return null;
+
+    return new SoccerField({
+      id: soccerField._id,
+      pixKey: soccerField.pixKey,
+      rentalValue: soccerField.rentalValue,
+    });
   }
 
-  async findByName(name: string): Promise<SoccerFieldDto | null> {
-    return this.model.findOne({ name }).exec();
+  async findByName(name: string): Promise<SoccerField | null> {
+    const soccerField = await this.model.findOne({ name }).exec();
+    if (!soccerField) return null;
+
+    return new SoccerField({
+      id: soccerField._id,
+      pixKey: soccerField.pixKey,
+      rentalValue: soccerField.rentalValue,
+    });
   }
 
-  async create(player: SoccerFieldDto): Promise<SoccerFieldDto> {
-    const newRegister = new this.model(player);
-    return newRegister.save();
+  async create(soccerField: CreateSoccerFieldDto): Promise<void> {
+    new this.model(soccerField);
   }
 
   async update(
-    id: Types.ObjectId,
-    player: Partial<SoccerFieldDto>
-  ): Promise<SoccerFieldDto | null> {
-    return this.model.findByIdAndUpdate(id, player, { new: true }).exec();
+    id: string,
+    payload: Partial<SoccerFieldDto>
+  ): Promise<SoccerField | null> {
+    const updated = await this.model
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
+
+    if (!updated) return null;
+    return new SoccerField({
+      id: updated._id,
+      pixKey: updated.pixKey,
+      rentalValue: updated.rentalValue,
+    });
   }
 
-  async delete(id: Types.ObjectId): Promise<SoccerFieldDto | null> {
-    return this.model.findByIdAndDelete(id).exec();
+  async delete(id: string): Promise<void | null> {
+    this.model.findByIdAndDelete(id).exec();
   }
 }

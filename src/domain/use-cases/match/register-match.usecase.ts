@@ -9,10 +9,7 @@ export class RegisterMatchUseCase {
   );
 
   static async execute(matchDto: CreateMatchDto) {
-    await RegisterMatchUseCase.repository.create(matchDto);
-    const populatedMatch = await MatchModel.findById(registredMatch._id)
-      .populate('soccerField')
-      .exec();
-    return populatedMatch;
+    const match = await RegisterMatchUseCase.repository.create(matchDto);
+    return match;
   }
 }

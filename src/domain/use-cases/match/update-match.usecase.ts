@@ -1,6 +1,6 @@
 import MatchModel from '../../../infra/database/mongose/models/match.model';
-import { MatchMongoRepository } from '../../../infra/database/mongose/repositories/match.repository';
 import { MatchRepository } from '../../../infra/database/repositories/match.repository';
+import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
 import { CreateMatchDto, MatchDto } from '../../dto/match.dto';
 
 export class UpdateMatchUseCase {

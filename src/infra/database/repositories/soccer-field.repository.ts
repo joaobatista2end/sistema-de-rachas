@@ -1,16 +1,16 @@
-import { Types } from 'mongoose';
 import {
   CreateSoccerFieldDto,
   SoccerFieldDto,
 } from '../../../domain/dto/soccer-field.dto';
+import { SoccerField } from '../../../domain/entities/soccer-field';
 
 export interface SoccerFieldRepository {
-  findById(id: string): Promise<SoccerFieldDto | null>;
-  findByName(name: string): Promise<SoccerFieldDto | null>;
-  create(data: string): Promise<void>;
+  findById(id: string): Promise<SoccerField | null>;
+  findByName(name: string): Promise<SoccerField | null>;
+  create(data: CreateSoccerFieldDto): Promise<void>;
   update(
-    id: Types.ObjectId,
+    id: string,
     data: Partial<CreateSoccerFieldDto>
-  ): Promise<string | null>;
-  delete(id: Types.ObjectId): Promise<SoccerFieldDto | null>;
+  ): Promise<SoccerField | null>;
+  delete(id: string): Promise<void | null>;
 }

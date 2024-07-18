@@ -1,35 +1,69 @@
 import { Model, Types } from 'mongoose';
-import { ScheduleDto } from '../models/schedule.model';
 import { ScheduleRepository } from '../../repositories/schedule.repository';
+import {
+  CreateScheduleDto,
+  ScheduleDto,
+} from '../../../../domain/dto/schedule.dto';
+import { ScheduleDocument } from '../../mongose/models/schedule.model';
+import { Schedule } from '../../../../domain/entities/schedule';
+import { uid } from 'uid';
 
 export class ScheduleMongoRepository implements ScheduleRepository {
-  private model: Model<ScheduleDto>;
+  private model: Model<ScheduleDocument>;
 
-  constructor(model: Model<ScheduleDto>) {
+  constructor(model: Model<ScheduleDocument>) {
     this.model = model;
   }
 
-  async findById(id: string): Promise<ScheduleDto | null> {
-    return this.model.findById(id).exec();
+  async findById(id: string): Promise<Schedule | null> {
+    const schedule = await this.model.findById(id).exec();
+
+    if (!schedule) return null;
+
+    return new Schedule({
+      id: schedule?.id || uid(),
+      day: schedule.day,
+      finishTime: schedule.finishTime,
+      startTime: schedule.startTime,
+    });
   }
 
-  async findByName(name: string): Promise<ScheduleDto | null> {
-    return this.model.findOne({ name }).exec();
+  async findByName(name: string): Promise<Schedule | null> {
+    const schedule = await this.model.findOne({ name }).exec();
+    if (!schedule) return null;
+
+    return new Schedule({
+      id: schedule.id || uid(),
+      day: schedule.day,
+      finishTime: schedule.finishTime,
+      startTime: schedule.startTime,
+    });
   }
 
-  async create(Schedule: ScheduleDto): Promise<ScheduleDto> {
+  async create(Schedule: CreateScheduleDto): Promise<void> {
     const newSchedule = new this.model(Schedule);
-    return newSchedule.save();
+    newSchedule.save();
   }
 
   async update(
     id: string,
-    Schedule: Partial<ScheduleDto>
-  ): Promise<ScheduleDto | null> {
-    return this.model.findByIdAndUpdate(id, Schedule, { new: true }).exec();
+    payload: Partial<CreateScheduleDto>
+  ): Promise<Schedule | null> {
+    const schedule = await this.model
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
+
+    if (!schedule) return null;
+
+    return new Schedule({
+      id: schedule.id || uid(),
+      day: schedule.day,
+      finishTime: schedule.finishTime,
+      startTime: schedule.startTime,
+    });
   }
 
-  async delete(id: string): Promise<ScheduleDto | null> {
-    return this.model.findByIdAndDelete(id).exec();
+  async delete(id: string): Promise<void> {
+    this.model.findByIdAndDelete(id).exec();
   }
 }
