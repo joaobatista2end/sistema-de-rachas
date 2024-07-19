@@ -9,7 +9,7 @@ export type MatchDto = {
   description: string;
   soccerField: SoccerFieldDto;
   schedule: ScheduleDto;
-  players: PlayerDto[];
+  players?: PlayerDto[];
 };
 
 export type CreateMatchDto = {

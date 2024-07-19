@@ -11,8 +11,8 @@ export interface MatchDocument extends Document<string> {
   description: string;
   soccerField: mongoose.Types.ObjectId;
   schedule: mongoose.Types.ObjectId;
-  players: mongoose.Types.ObjectId[];
-  teams: mongoose.Types.ObjectId[];
+  players?: mongoose.Types.ObjectId[];
+  teams?: mongoose.Types.ObjectId[];
 }
 
 export interface MatchDocumentWithRelations extends Document<string> {
@@ -21,8 +21,8 @@ export interface MatchDocumentWithRelations extends Document<string> {
   description: string;
   soccerField: SoccerFieldDocument;
   schedule: ScheduleDocument;
-  players: PlayerDocument[];
-  teams: TeamDocument[];
+  players?: PlayerDocument[];
+  teams?: TeamDocument[];
 }
 
 const matchSchema: Schema = new Schema({

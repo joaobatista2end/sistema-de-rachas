@@ -6,7 +6,7 @@ class FastifyServer {
   server: FastifyInstance;
 
   constructor() {
-    this.server = Fastify({});
+    this.server = Fastify({ logger: true });
     this.server.register(routes);
     this.server.register(mongoosePlugin);
   }

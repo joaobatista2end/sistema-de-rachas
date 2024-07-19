@@ -1,13 +1,10 @@
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { MatchRepository } from '../../repositories/match.repository';
 import { ScheduleRepository } from '../../repositories/schedule.repository';
 import { ScheduleMongoRepository } from './schedule.repository';
-import { CreateMatchDto, MatchDto } from '../../../../domain/dto/match.dto';
+import { CreateMatchDto } from '../../../../domain/dto/match.dto';
 import { ScheduleModel } from '../../mongose/models/schedule.model';
-import {
-  MatchDocument,
-  MatchDocumentWithRelations,
-} from '../../mongose/models/match.model';
+import { MatchDocumentWithRelations } from '../../mongose/models/match.model';
 import { Match } from '../../../../domain/entities/match';
 import { Player } from '../../../../domain/entities/player';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
@@ -25,8 +22,14 @@ export class MatchMongoRepository implements MatchRepository {
   findByName(name: string): Promise<Match | null> {
     throw new Error('Method not implemented.');
   }
-  create(data: CreateMatchDto): Promise<Match> {
-    throw new Error('Method not implemented.');
+  async create(data: CreateMatchDto): Promise<Match | null> {
+    const match = new this.model(data);
+    await match.save();
+    console.log(match);
+
+    return null;
+
+    // return this.findById(match._id);
   }
   update(id: string, data: Partial<CreateMatchDto>): Promise<Match | null> {
     throw new Error('Method not implemented.');
@@ -48,12 +51,14 @@ export class MatchMongoRepository implements MatchRepository {
       description: match.description,
       name: match.name,
       thumb: match.thumb,
-      players: match.players.map((player) => {
-        return new Player({
-          id: player._id || uid(),
-          name: player.name,
-          stars: player.stars,
-        });
+      players: (match?.players || []).map((player) => {
+        return (
+          new Player({
+            id: player._id || uid(),
+            name: player.name,
+            stars: player.stars,
+          }) || []
+        );
       }),
       soccerField: new SoccerField({
         id: match.soccerField?._id || uid(),
