@@ -7,7 +7,7 @@ import { SoccerField } from '../../../domain/entities/soccer-field';
 export interface SoccerFieldRepository {
   findById(id: string): Promise<SoccerField | null>;
   findByName(name: string): Promise<SoccerField | null>;
-  create(data: CreateSoccerFieldDto): Promise<void>;
+  create(data: CreateSoccerFieldDto): Promise<SoccerField | null>;
   update(
     id: string,
     data: Partial<CreateSoccerFieldDto>

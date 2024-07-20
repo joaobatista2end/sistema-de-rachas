@@ -18,7 +18,7 @@ content-type: application/json
     "name": "Partida dos chuteiras de madeira",
     "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate.",
     "thumb": "somephoto.png",
-    "soccerField": "6692bc7e61b5fd78769bd2ca",
+    "soccerField": "669af7ab235879b68b59ad85",
     "schedule": {
         "day": "20/08/2024",
         "startTime": "10:40:00",

@@ -40,9 +40,18 @@ export class ScheduleMongoRepository implements ScheduleRepository {
     });
   }
 
-  async create(Schedule: CreateScheduleDto): Promise<void> {
-    const newSchedule = new this.model(Schedule);
-    newSchedule.save();
+  async create(data: CreateScheduleDto): Promise<Schedule | null> {
+    const schedule = new this.model(data);
+    schedule.save();
+
+    if (!schedule?._id) return null;
+
+    return new Schedule({
+      id: schedule.id || uid(),
+      day: schedule.day,
+      finishTime: schedule.finishTime,
+      startTime: schedule.startTime,
+    });
   }
 
   async update(

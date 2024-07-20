@@ -23,13 +23,17 @@ export class MatchMongoRepository implements MatchRepository {
     throw new Error('Method not implemented.');
   }
   async create(data: CreateMatchDto): Promise<Match | null> {
-    const match = new this.model(data);
+    const schedule = await this.scheduleRepository.create(data.schedule);
+    if (!schedule) throw Error('Erro ao criar agendamento da partida');
+    const match = new this.model({
+      ...data,
+      schedule: schedule.id,
+    });
+
     await match.save();
     console.log(match);
 
-    return null;
-
-    // return this.findById(match._id);
+    return this.findById(match._id);
   }
   update(id: string, data: Partial<CreateMatchDto>): Promise<Match | null> {
     throw new Error('Method not implemented.');
@@ -44,7 +48,12 @@ export class MatchMongoRepository implements MatchRepository {
       .populate(['soccerField', 'players', 'schedule'])
       .exec();
 
+    console.log({ populateMatch: match });
+
     if (!match) throw Error('Partida não encontrada');
+    if (!match.soccerField?._id)
+      throw Error('É necessário especificiar o campo');
+    if (!match.schedule?._id) throw Error('É necessário especificiar o campo');
 
     return new Match({
       id: match._id,

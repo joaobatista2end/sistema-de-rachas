@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { RegisterSoccerFieldUseCase } from '../../../domain/use-cases/soccer-field/register-soccer-field.usecase';
 import { CreateSoccerFieldDto } from '../../../domain/dto/soccer-field.dto';
+import { SoccerFieldPresenter } from '../../../application/presenters/soccer-field.presenter';
 
 class SoccerFieldController {
   async register(req: FastifyRequest, res: FastifyReply) {
@@ -10,7 +11,7 @@ class SoccerFieldController {
     );
 
     res.send({
-      data: soccerField,
+      data: soccerField !== null ? SoccerFieldPresenter(soccerField) : {},
     });
   }
 }

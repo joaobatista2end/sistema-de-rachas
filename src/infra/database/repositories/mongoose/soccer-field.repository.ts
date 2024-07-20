@@ -35,8 +35,12 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     });
   }
 
-  async create(soccerField: CreateSoccerFieldDto): Promise<void> {
-    new this.model(soccerField);
+  async create(data: CreateSoccerFieldDto): Promise<SoccerField | null> {
+    const created = new this.model(data);
+    await created.save();
+
+    if (!created) return null;
+    return this.parseToEntity(created);
   }
 
   async update(
@@ -48,14 +52,18 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       .exec();
 
     if (!updated) return null;
-    return new SoccerField({
-      id: updated._id,
-      pixKey: updated.pixKey,
-      rentalValue: updated.rentalValue,
-    });
+    return this.parseToEntity(updated);
   }
 
   async delete(id: string): Promise<void | null> {
     this.model.findByIdAndDelete(id).exec();
+  }
+
+  private parseToEntity(document: SoccerFieldDocument): SoccerField {
+    return new SoccerField({
+      id: document._id as string,
+      pixKey: document.pixKey,
+      rentalValue: document.rentalValue,
+    });
   }
 }
