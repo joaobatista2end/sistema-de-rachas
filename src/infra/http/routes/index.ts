@@ -9,6 +9,7 @@ const routes = async (fastify: FastifyInstance) => {
 
   // Match
   fastify.post('/match', matchController.register.bind(matchController));
+  fastify.get('/match', matchController.all.bind(matchController));
   fastify.put('/match/:id', matchController.update.bind(matchController));
   fastify.get('/match/:id', matchController.findById.bind(matchController));
 
@@ -20,6 +21,10 @@ const routes = async (fastify: FastifyInstance) => {
   fastify.post(
     '/soccer-field',
     soccerFieldController.register.bind(soccerFieldController)
+  );
+  fastify.get(
+    '/soccer-field',
+    soccerFieldController.all.bind(soccerFieldController)
   );
 };
 

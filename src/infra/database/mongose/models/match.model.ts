@@ -9,8 +9,8 @@ export interface MatchDocument extends Document<string> {
   name: string;
   thumb: string;
   description: string;
-  soccerField: mongoose.Types.ObjectId;
-  schedule: mongoose.Types.ObjectId;
+  soccerField?: mongoose.Types.ObjectId;
+  schedule?: mongoose.Types.ObjectId;
   players?: mongoose.Types.ObjectId[];
   teams?: mongoose.Types.ObjectId[];
 }

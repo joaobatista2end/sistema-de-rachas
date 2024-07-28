@@ -6,8 +6,15 @@ import { UpdateMatchUseCase } from '../../../domain/use-cases/match/update-match
 import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.usecase';
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
 import { MatchPresenter } from '../../../application/presenters/match.presenter';
+import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
 
 class MatchController {
+  async all(req: FastifyRequest, res: FastifyReply) {
+    const matchs = await FetchMatchUseCase.execute();
+    res.send({
+      data: matchs,
+    });
+  }
   async register(req: FastifyRequest, res: FastifyReply) {
     const match = await RegisterMatchUseCase.execute(
       req.body as CreateMatchDto

@@ -4,12 +4,16 @@ import { ScheduleRepository } from '../../repositories/schedule.repository';
 import { ScheduleMongoRepository } from './schedule.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
 import { ScheduleModel } from '../../mongose/models/schedule.model';
-import { MatchDocumentWithRelations } from '../../mongose/models/match.model';
+import {
+  MatchDocument,
+  MatchDocumentWithRelations,
+} from '../../mongose/models/match.model';
 import { Match } from '../../../../domain/entities/match';
 import { Player } from '../../../../domain/entities/player';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
+import { match } from 'assert';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -18,6 +22,15 @@ export class MatchMongoRepository implements MatchRepository {
   constructor(model: Model<MatchDocumentWithRelations>) {
     this.model = model;
     this.scheduleRepository = new ScheduleMongoRepository(ScheduleModel);
+  }
+  async all(): Promise<Array<Match>> {
+    const matchs = await this.model
+      .find()
+      .populate(['soccerField', 'players', 'schedule'])
+      .exec();
+    return matchs
+      .map((match) => this.parseToEntity(match))
+      .filter((match) => match !== null);
   }
   findByName(name: string): Promise<Match | null> {
     throw new Error('Method not implemented.');
@@ -31,7 +44,6 @@ export class MatchMongoRepository implements MatchRepository {
     });
 
     await match.save();
-    console.log(match);
 
     return this.findById(match._id);
   }
@@ -48,15 +60,20 @@ export class MatchMongoRepository implements MatchRepository {
       .populate(['soccerField', 'players', 'schedule'])
       .exec();
 
-    console.log({ populateMatch: match });
-
     if (!match) throw Error('Partida não encontrada');
     if (!match.soccerField?._id)
       throw Error('É necessário especificiar o campo');
     if (!match.schedule?._id) throw Error('É necessário especificiar o campo');
 
+    return this.parseToEntity(match);
+  }
+
+  private parseToEntity(match: MatchDocumentWithRelations): Match | null {
+    if (!match?.soccerField?._id || !match?.schedule?._id) {
+      return null;
+    }
     return new Match({
-      id: match._id,
+      id: match._id || uid(),
       description: match.description,
       name: match.name,
       thumb: match.thumb,
@@ -75,7 +92,7 @@ export class MatchMongoRepository implements MatchRepository {
         rentalValue: match.soccerField.rentalValue,
       }),
       schedule: new Schedule({
-        id: match.schedule._id || uid(),
+        id: match.schedule?._id || uid(),
         day: match.schedule.day,
         startTime: match.schedule.startTime,
         finishTime: match.schedule.finishTime,

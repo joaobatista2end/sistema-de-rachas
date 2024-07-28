@@ -13,6 +13,18 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     this.model = model;
   }
 
+  async all(): Promise<Array<SoccerField>> {
+    const soccerFields = await this.model.find();
+
+    return soccerFields.map((soccerField) => {
+      return new SoccerField({
+        id: soccerField._id,
+        pixKey: soccerField.pixKey,
+        rentalValue: soccerField.rentalValue,
+      });
+    });
+  }
+
   async findById(id: string): Promise<SoccerField | null> {
     const soccerField = await this.model.findById(id).exec();
     if (!soccerField) return null;

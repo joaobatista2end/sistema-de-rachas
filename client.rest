@@ -1,3 +1,24 @@
+# @name FetchAllSoccerFields
+GET http://localhost:3000/soccer-field
+Content-Type: application/json
+
+{
+    "name": "mariquinha",
+    "stars": 10
+}
+
+
+# @name RegisterSoccerField
+
+POST http://localhost:3000/soccer-field
+content-type: application/json
+
+{
+    "pixKey": "Campo do zézinho",
+    "rentalValue": 123
+}
+
+
 # @name RegisterPlayer
 POST http://localhost:3000/player
 Content-Type: application/json
@@ -18,24 +39,12 @@ content-type: application/json
     "name": "Partida dos chuteiras de madeira",
     "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate.",
     "thumb": "somephoto.png",
-    "soccerField": "669af7ab235879b68b59ad85",
+    "soccerField": "66970c688810315138b0ad4f",
     "schedule": {
         "day": "20/08/2024",
         "startTime": "10:40:00",
         "finishTime": "14:40:00"
     }
-}
-
-###
-
-# @name RegisterSoccerField
-
-POST http://localhost:3000/soccer-field
-content-type: application/json
-
-{
-    "pixKey": "Campo do zézinho",
-    "rentalValue": 123
 }
 
 ###
@@ -56,6 +65,10 @@ content-type: application/json
 # @name FindMatch
 GET http://localhost:3000/match/6699b0abdd6721079e440bd6
 
+###
+
+# @name FetchAllMatch
+GET http://localhost:3000/match
 
 ### 
 
