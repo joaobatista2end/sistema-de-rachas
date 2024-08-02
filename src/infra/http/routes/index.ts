@@ -26,6 +26,10 @@ const routes = async (fastify: FastifyInstance) => {
     '/soccer-field',
     soccerFieldController.all.bind(soccerFieldController)
   );
+  fastify.get(
+    '/soccer-field/:id',
+    soccerFieldController.availableTimes.bind(soccerFieldController)
+  );
 };
 
 export default routes;

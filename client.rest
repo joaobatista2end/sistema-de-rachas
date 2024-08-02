@@ -7,6 +7,7 @@ Content-Type: application/json
     "stars": 10
 }
 
+###
 
 # @name RegisterSoccerField
 
@@ -15,8 +16,15 @@ content-type: application/json
 
 {
     "pixKey": "Campo do zézinho",
-    "rentalValue": 123
+    "rentalValue": 123,
+    "workStartTime": "12:00:00",
+    "workFinishTime": "20:00:00"
 }
+
+###
+
+# @name GetSoccerFieldAvailableTimes
+GET http://localhost:3000/soccer-field/
 
 
 # @name RegisterPlayer

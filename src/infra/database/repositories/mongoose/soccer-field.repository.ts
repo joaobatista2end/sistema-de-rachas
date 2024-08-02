@@ -6,6 +6,7 @@ import {
 } from '../../../../domain/dto/soccer-field.dto';
 import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
+import { DayOfWeek } from '../../../../domain/object-values/day';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private model: Model<SoccerFieldDocument>;
 
@@ -21,6 +22,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
         id: soccerField._id,
         pixKey: soccerField.pixKey,
         rentalValue: soccerField.rentalValue,
+        workDays: soccerField.worksDay as Array<DayOfWeek>,
+        workFinishTime: soccerField.workFinishTime,
+        workStartTime: soccerField.workStartTime,
       });
     });
   }
@@ -33,6 +37,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       id: soccerField._id,
       pixKey: soccerField.pixKey,
       rentalValue: soccerField.rentalValue,
+      workDays: soccerField.worksDay as Array<DayOfWeek>,
+      workFinishTime: soccerField.workFinishTime,
+      workStartTime: soccerField.workStartTime,
     });
   }
 
@@ -44,6 +51,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       id: soccerField._id,
       pixKey: soccerField.pixKey,
       rentalValue: soccerField.rentalValue,
+      workDays: soccerField.worksDay as Array<DayOfWeek>,
+      workFinishTime: soccerField.workFinishTime,
+      workStartTime: soccerField.workStartTime,
     });
   }
 
@@ -76,6 +86,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       id: document._id as string,
       pixKey: document.pixKey,
       rentalValue: document.rentalValue,
+      workDays: document.worksDay as Array<DayOfWeek>,
+      workStartTime: document.workStartTime,
+      workFinishTime: document.workFinishTime,
     });
   }
 }

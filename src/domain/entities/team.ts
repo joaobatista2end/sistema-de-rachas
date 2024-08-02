@@ -3,6 +3,7 @@ import { uid } from 'uid';
 import { Player } from './player';
 
 export type TeamParams = {
+  id: string;
   name: string;
   players: Array<Player>;
   minPlayers?: number;

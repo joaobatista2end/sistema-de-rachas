@@ -15,6 +15,7 @@ export class Time {
   }
 
   toString(): string {
-    return `${this.hours}:${this.minutes}:${this.seconds}`;
+    const pad = (num: number) => num.toString().padStart(2, '0');
+    return `${pad(this.hours)}:${pad(this.minutes)}:${pad(this.seconds)}`;
   }
 }

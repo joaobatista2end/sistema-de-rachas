@@ -14,6 +14,7 @@ import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
 import { match } from 'assert';
+import { DayOfWeek } from '../../../../domain/object-values/day';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -90,6 +91,9 @@ export class MatchMongoRepository implements MatchRepository {
         id: match.soccerField?._id || uid(),
         pixKey: match.soccerField.pixKey,
         rentalValue: match.soccerField.rentalValue,
+        workDays: match.soccerField.worksDay.map((day) => day as DayOfWeek),
+        workStartTime: match.soccerField.workStartTime,
+        workFinishTime: match.soccerField.workFinishTime,
       }),
       schedule: new Schedule({
         id: match.schedule?._id || uid(),

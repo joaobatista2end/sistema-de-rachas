@@ -10,18 +10,30 @@ import { Time } from '../../object-values/time';
 import { GenerateTeamsUseCase } from './generate-teams.usecase';
 
 const soccerField = new SoccerField({
+  id: uid(),
   pixKey: uid(),
   rentalValue: 300,
+  workDays: ['sábado', 'domingo'],
+  workEndTime: '08:00:00',
+  workStartTime: '18:00:00',
 });
 const schedule = new Schedule({
-  day: new Date(),
-  startTime: new Time('10:30:00'),
-  finishTime: new Time('16:30:00'),
+  id: uid(),
+  day: '10/02/2024',
+  startTime: '10:30:00',
+  finishTime: '16:30:00',
 });
 
 describe('Gerar times do racha', () => {
   it('should verify if teams are generated correctly', () => {
-    const match = new Match({ soccerField, schedule });
+    const match = new Match({
+      id: uid(),
+      description: 'Some description',
+      thumb: 'asdasd',
+      name: 'Some match',
+      soccerField,
+      schedule,
+    });
     const players = playerFactory(12);
     const players2 = playerFactory(100);
     match.players = players;
@@ -33,7 +45,14 @@ describe('Gerar times do racha', () => {
   });
 
   it('should verify if teams are balanced correctly', () => {
-    const match = new Match({ soccerField, schedule });
+    const match = new Match({
+      id: uid(),
+      description: 'Some description',
+      thumb: 'asdasd',
+      name: 'Some match',
+      soccerField,
+      schedule,
+    });
     const players = playerFactory(30);
     match.players = players;
     const teams = GenerateTeamsUseCase.execute(match);
