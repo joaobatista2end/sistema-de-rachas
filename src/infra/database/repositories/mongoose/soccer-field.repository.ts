@@ -6,6 +6,7 @@ import {
 } from '../../../../domain/dto/soccer-field.dto';
 import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
+import { Time } from '../../../../domain/object-values/time';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private model: Model<SoccerFieldDocument>;
@@ -22,7 +23,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
         id: soccerField._id,
         pixKey: soccerField.pixKey,
         rentalValue: soccerField.rentalValue,
-        workDays: soccerField.worksDay as Array<DayOfWeek>,
+        closeHours: soccerField.closeHours,
+        openHours: soccerField.openHours,
+        workDays: soccerField.workDays as Array<DayOfWeek>,
         workFinishTime: soccerField.workFinishTime,
         workStartTime: soccerField.workStartTime,
       });
@@ -33,28 +36,14 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     const soccerField = await this.model.findById(id).exec();
     if (!soccerField) return null;
 
-    return new SoccerField({
-      id: soccerField._id,
-      pixKey: soccerField.pixKey,
-      rentalValue: soccerField.rentalValue,
-      workDays: soccerField.worksDay as Array<DayOfWeek>,
-      workFinishTime: soccerField.workFinishTime,
-      workStartTime: soccerField.workStartTime,
-    });
+    return this.parseToEntity(soccerField);
   }
 
   async findByName(name: string): Promise<SoccerField | null> {
     const soccerField = await this.model.findOne({ name }).exec();
     if (!soccerField) return null;
 
-    return new SoccerField({
-      id: soccerField._id,
-      pixKey: soccerField.pixKey,
-      rentalValue: soccerField.rentalValue,
-      workDays: soccerField.worksDay as Array<DayOfWeek>,
-      workFinishTime: soccerField.workFinishTime,
-      workStartTime: soccerField.workStartTime,
-    });
+    return this.parseToEntity(soccerField);
   }
 
   async create(data: CreateSoccerFieldDto): Promise<SoccerField | null> {
@@ -86,7 +75,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       id: document._id as string,
       pixKey: document.pixKey,
       rentalValue: document.rentalValue,
-      workDays: document.worksDay as Array<DayOfWeek>,
+      closeHours: document.closeHours,
+      openHours: document.openHours,
+      workDays: document.workDays as DayOfWeek[],
       workStartTime: document.workStartTime,
       workFinishTime: document.workFinishTime,
     });

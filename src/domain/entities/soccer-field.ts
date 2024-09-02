@@ -11,6 +11,8 @@ export type SoccerFieldParams = {
   workDays: Array<DayOfWeek>;
   workStartTime: string;
   workFinishTime: string;
+  openHours: string;
+  closeHours: string;
 };
 
 export class SoccerField {

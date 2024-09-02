@@ -3,9 +3,11 @@ import { Document, Model, model, Schema } from 'mongoose';
 export interface SoccerFieldDocument extends Document<string> {
   pixKey: string;
   rentalValue: number;
-  worksDay: Array<string>;
+  workDays: Array<string>;
   workStartTime: string;
   workFinishTime: string;
+  closeHours: string;
+  openHours: string;
 }
 
 export const soccerFieldSchema: Schema = new Schema({
@@ -13,7 +15,7 @@ export const soccerFieldSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  worksDay: {
+  workDays: {
     type: Array<String>,
     required: true,
   },
@@ -27,6 +29,14 @@ export const soccerFieldSchema: Schema = new Schema({
   },
   rentalValue: {
     type: Number,
+    required: true,
+  },
+  closeHours: {
+    type: String,
+    required: true,
+  },
+  openHours: {
+    type: String,
     required: true,
   },
 });

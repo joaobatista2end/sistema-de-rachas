@@ -91,9 +91,13 @@ export class MatchMongoRepository implements MatchRepository {
         id: match.soccerField?._id || uid(),
         pixKey: match.soccerField.pixKey,
         rentalValue: match.soccerField.rentalValue,
-        workDays: match.soccerField.worksDay.map((day) => day as DayOfWeek),
+        workDays: match.soccerField.workDays.map(
+          (day: string) => day as DayOfWeek
+        ),
         workStartTime: match.soccerField.workStartTime,
         workFinishTime: match.soccerField.workFinishTime,
+        openHours: match.soccerField.openHours,
+        closeHours: match.soccerField.closeHours,
       }),
       schedule: new Schedule({
         id: match.schedule?._id || uid(),
