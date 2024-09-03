@@ -8,7 +8,7 @@ class FastifyServer {
   constructor() {
     this.server = Fastify({ logger: true });
     this.server.register(routes);
-    this.server.register(mongoosePlugin);
+    this.server.register(mongoosePlugin, { timeout: 30000 });
   }
 
   async start() {
