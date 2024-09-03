@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
+const cors_1 = __importDefault(require("@fastify/cors"));
 const plugin_1 = __importDefault(require("../../database/mongose/plugin"));
 const routes_1 = __importDefault(require("../routes"));
 class FastifyServer {
@@ -20,6 +21,12 @@ class FastifyServer {
         this.server = (0, fastify_1.default)({ logger: true });
         this.server.register(routes_1.default);
         this.server.register(plugin_1.default, { timeout: 30000 });
+        this.server.register(cors_1.default, {
+            origin: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true,
+        });
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
