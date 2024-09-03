@@ -12,9 +12,6 @@ class FastifyServer {
     this.server.register(mongoosePlugin, { timeout: 30000 });
     this.server.register(cors, {
       origin: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
     });
   }
 
