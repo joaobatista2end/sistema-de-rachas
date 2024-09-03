@@ -1,5 +1,5 @@
 # @name FetchAllSoccerFields
-GET http://rachas-api.fyxuj9.easypanel.host:3000/soccer-field
+GET https://rachas-api.fyxuj9.easypanel.host/soccer-field
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 # @name RegisterSoccerField
 
-POST http://localhost:3000/soccer-field
+POST http://localhost:8000/soccer-field
 content-type: application/json
 
 {
