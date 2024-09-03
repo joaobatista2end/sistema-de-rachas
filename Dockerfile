@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para rodar a aplicação em modo de desenvolvimento
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
