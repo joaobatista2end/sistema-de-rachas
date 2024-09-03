@@ -16,6 +16,11 @@ const match_controller_1 = __importDefault(require("../controllers/match.control
 const player_controller_1 = __importDefault(require("../controllers/player.controller"));
 const soccer_field_controller_1 = __importDefault(require("../controllers/soccer-field.controller"));
 const routes = (fastify) => __awaiter(void 0, void 0, void 0, function* () {
+    fastify.get('/', (req, reply) => {
+        reply.send({
+            message: 'API versão 1',
+        });
+    });
     fastify.post('/player', player_controller_1.default.register.bind(player_controller_1.default));
     // Match
     fastify.post('/match', match_controller_1.default.register.bind(match_controller_1.default));

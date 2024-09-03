@@ -6,7 +6,9 @@ import soccerFieldController from '../controllers/soccer-field.controller';
 
 const routes = async (fastify: FastifyInstance) => {
   fastify.get('/', (req, reply: FastifyReply) => {
-    reply.send('API de rachas v.01');
+    reply.send({
+      message: 'API versão 1',
+    });
   });
   fastify.post('/player', playerController.register.bind(playerController));
 

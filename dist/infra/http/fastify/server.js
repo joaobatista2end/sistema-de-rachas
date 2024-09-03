@@ -23,15 +23,12 @@ class FastifyServer {
         this.server.register(plugin_1.default, { timeout: 30000 });
         this.server.register(cors_1.default, {
             origin: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            allowedHeaders: ['Content-Type', 'Authorization'],
-            credentials: true,
         });
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.server.listen({ port: 8000 });
+                yield this.server.listen({ port: 8000, host: '0.0.0.0' });
                 console.log('Servidor iniciado com sucesso!');
             }
             catch (err) {
