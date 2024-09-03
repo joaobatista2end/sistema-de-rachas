@@ -1,5 +1,5 @@
 # @name FetchAllSoccerFields
-GET http://localhost:3000/soccer-field
+GET http://rachas-api.fyxuj9.easypanel.host:3000/soccer-field
 Content-Type: application/json
 
 {
@@ -19,8 +19,8 @@ content-type: application/json
     "rentalValue": 123,
     "workStartTime": "12:00:00",
     "workFinishTime": "20:00:00",
-    "openHours": "10:00:00",
-    "closeHours": "24:00:00",
+    "workStartTime": "10:00:00",
+    "workFinishTime": "24:00:00",
     "workDays": ["segunda", "sexta"]
 }
 

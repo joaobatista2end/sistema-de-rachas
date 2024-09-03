@@ -1,3 +1,4 @@
+import { uid } from 'uid';
 import { Match } from '../../entities/match';
 import { Team } from '../../entities/team';
 
@@ -19,6 +20,7 @@ export class GenerateTeamsUseCase {
       { length: teamQuantity },
       (_, index) =>
         new Team({
+          id: uid(),
           name: `Team ${index + 1}`,
           players: [],
         })

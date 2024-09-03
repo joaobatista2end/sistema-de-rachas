@@ -13,7 +13,7 @@ class FastifyServer {
 
   async start() {
     try {
-      await this.server.listen({ port: 3000 });
+      await this.server.listen({ port: 8000 });
       console.log('Servidor iniciado com sucesso!');
     } catch (err) {
       console.error(err);

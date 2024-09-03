@@ -6,8 +6,6 @@ export interface SoccerFieldDocument extends Document<string> {
   workDays: Array<string>;
   workStartTime: string;
   workFinishTime: string;
-  closeHours: string;
-  openHours: string;
 }
 
 export const soccerFieldSchema: Schema = new Schema({
@@ -29,14 +27,6 @@ export const soccerFieldSchema: Schema = new Schema({
   },
   rentalValue: {
     type: Number,
-    required: true,
-  },
-  closeHours: {
-    type: String,
-    required: true,
-  },
-  openHours: {
-    type: String,
     required: true,
   },
 });

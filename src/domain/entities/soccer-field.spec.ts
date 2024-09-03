@@ -10,7 +10,7 @@ describe('SoccerField', () => {
       pixKey: 'test-pix-key',
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
-      workEndTime: '12:00:00',
+      workFinishTime: '12:00:00',
     };
 
     const soccerField = new SoccerField(params);
@@ -40,7 +40,7 @@ describe('SoccerField', () => {
       pixKey: 'test-pix-key',
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
-      workEndTime: '12:00:00',
+      workFinishTime: '12:00:00',
     };
 
     const soccerField = new SoccerField(params);

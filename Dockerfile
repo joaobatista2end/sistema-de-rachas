@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expor a porta que o Fastify utiliza (por padrão, 3000)
-EXPOSE 3000
+EXPOSE 8000
 
 # Comando para rodar a aplicação em modo de desenvolvimento
 CMD ["npm", "run", "dev"]

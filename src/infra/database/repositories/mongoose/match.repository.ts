@@ -96,8 +96,6 @@ export class MatchMongoRepository implements MatchRepository {
         ),
         workStartTime: match.soccerField.workStartTime,
         workFinishTime: match.soccerField.workFinishTime,
-        openHours: match.soccerField.openHours,
-        closeHours: match.soccerField.closeHours,
       }),
       schedule: new Schedule({
         id: match.schedule?._id || uid(),

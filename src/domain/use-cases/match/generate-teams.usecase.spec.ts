@@ -14,7 +14,7 @@ const soccerField = new SoccerField({
   pixKey: uid(),
   rentalValue: 300,
   workDays: ['sábado', 'domingo'],
-  workEndTime: '08:00:00',
+  workFinishTime: '08:00:00',
   workStartTime: '18:00:00',
 });
 const schedule = new Schedule({

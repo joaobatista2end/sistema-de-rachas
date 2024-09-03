@@ -23,11 +23,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
         id: soccerField._id,
         pixKey: soccerField.pixKey,
         rentalValue: soccerField.rentalValue,
-        closeHours: soccerField.closeHours,
-        openHours: soccerField.openHours,
-        workDays: soccerField.workDays as Array<DayOfWeek>,
         workFinishTime: soccerField.workFinishTime,
         workStartTime: soccerField.workStartTime,
+        workDays: soccerField.workDays as Array<DayOfWeek>,
       });
     });
   }
@@ -75,11 +73,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       id: document._id as string,
       pixKey: document.pixKey,
       rentalValue: document.rentalValue,
-      closeHours: document.closeHours,
-      openHours: document.openHours,
-      workDays: document.workDays as DayOfWeek[],
-      workStartTime: document.workStartTime,
       workFinishTime: document.workFinishTime,
+      workStartTime: document.workStartTime,
+      workDays: document.workDays as DayOfWeek[],
     });
   }
 }

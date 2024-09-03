@@ -42,6 +42,7 @@ const generateRandomStars = (): number => {
 
 const createRandomPlayer = (): Player => {
   const params: PlayerParams = {
+    id: uid(),
     name: generateRandomName(),
     stars: generateRandomStars(),
   };
