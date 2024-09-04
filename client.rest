@@ -26,6 +26,7 @@ content-type: application/json
 # @name GetSoccerFieldAvailableTimes
 GET http://localhost:3000/soccer-field/
 
+###
 
 # @name RegisterPlayer
 POST http://localhost:3000/player
@@ -83,3 +84,26 @@ GET http://localhost:3000/match
 # @name CalculatePaymentPerPlayer
 
 GET http://localhost:3000/match/66970d12d8383a5a34caaae6/amount-paid-players
+
+###
+
+# @name Register
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "password": "secret"
+}
+
+###
+
+# @name Login 
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "john@example.com",
+    "password": "secret"
+}
