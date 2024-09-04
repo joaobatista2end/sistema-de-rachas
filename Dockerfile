@@ -55,7 +55,8 @@ COPY . .
 RUN npm run build
 
 # Cria um script de inicialização para configurar o MongoDB
+COPY mongod.conf /etc/mongod.conf
 COPY mongo-init.js /docker-entrypoint-initdb.d/mongo-init.js
 
-# Comando para iniciar o MongoDB e a aplicação
+# Comando para iniciar o MongoDB com autenticação e a aplicação
 CMD mongod --auth --logpath /var/log/mongodb.log --bind_ip_all & npm start
