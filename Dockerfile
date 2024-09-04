@@ -12,12 +12,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Adiciona a chave GPG oficial do MongoDB
-RUN apt-get install -y gnupg curl
-
-# Adiciona o repositório do MongoDB
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
     gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
 
+# Adiciona o repositório do MongoDB
 RUN echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 
 # Atualiza a lista de pacotes e instala o MongoDB
@@ -56,13 +54,8 @@ COPY . .
 # Executa o build da aplicação
 RUN npm run build
 
-# Cria o usuário admin no MongoDB e habilita a autenticação
-RUN mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && \
-    mongo admin --eval "db.createUser({user: 'admin', pwd: 'password', roles:[{role:'userAdminAnyDatabase', db:'admin'}]});" && \
-    sed -i '/#security:/a\  authorization: "enabled"' /etc/mongod.conf
+# Cria um script de inicialização para configurar o MongoDB
+COPY mongo-init.js /docker-entrypoint-initdb.d/mongo-init.js
 
-# Expõe a porta que o Fastify usa (geralmente 3000, mas você mencionou 8000)
-EXPOSE 8000
-
-# Comando para iniciar o MongoDB com autenticação e a aplicação Node.js
+# Comando para iniciar o MongoDB e a aplicação
 CMD mongod --auth --logpath /var/log/mongodb.log --bind_ip_all & npm start
