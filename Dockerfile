@@ -56,8 +56,13 @@ COPY . .
 # Executa o build da aplicação
 RUN npm run build
 
+# Cria o usuário admin no MongoDB e habilita a autenticação
+RUN mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db && \
+    mongo admin --eval "db.createUser({user: 'admin', pwd: 'password', roles:[{role:'userAdminAnyDatabase', db:'admin'}]});" && \
+    sed -i '/#security:/a\  authorization: "enabled"' /etc/mongod.conf
+
 # Expõe a porta que o Fastify usa (geralmente 3000, mas você mencionou 8000)
 EXPOSE 8000
 
-# Comando para iniciar o MongoDB sem --fork para ver o log no terminal
-CMD mongod --logpath /var/log/mongodb.log --bind_ip_all & npm start
+# Comando para iniciar o MongoDB com autenticação e a aplicação Node.js
+CMD mongod --auth --logpath /var/log/mongodb.log --bind_ip_all & npm start
