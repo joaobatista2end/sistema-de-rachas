@@ -16,6 +16,7 @@ class MatchController {
     });
   }
   async register(req: FastifyRequest, res: FastifyReply) {
+    console.log('Request body:', req.body); // Aqui você verá os dados recebidos
     const match = await RegisterMatchUseCase.execute(
       req.body as CreateMatchDto
     );

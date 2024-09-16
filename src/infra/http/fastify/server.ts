@@ -1,4 +1,5 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify';
+import Fastify, { FastifyInstance } from 'fastify';
+import fastifyCors from '@fastify/cors'; // Importe o pacote correto
 import mongoosePlugin from '../../database/mongose/plugin';
 import routes from '../routes';
 
@@ -11,6 +12,21 @@ class FastifyServer {
   }
 
   async boot() {
+    // Registre o @fastify/cors antes de outras coisas
+    await this.server.register(fastifyCors, {
+      origin: (
+        origin: string | undefined,
+        cb: (err: Error | null, allow: boolean) => void
+      ) => {
+        if (!origin || /localhost:3000/.test(origin)) {
+          cb(null, true); // Permitir a origem
+          return;
+        }
+        cb(new Error('Not allowed'), false); // Bloquear outras origens
+      },
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+    });
+
     await this.server.register(routes);
     await this.server.register(mongoosePlugin, { timeout: 30000 });
   }

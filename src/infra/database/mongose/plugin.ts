@@ -5,7 +5,8 @@ import mongoose, { ConnectOptions } from 'mongoose';
 async function mongooseConnector(fastify: FastifyInstance) {
   try {
     const mongoURL =
-      'mongodb://localhost:27017/sistema-rachas?authSource=admin';
+      'mongodb://root:password@localhost:27017/sistema-rachas?authSource=admin';
+
     const options: ConnectOptions = {
       serverSelectionTimeoutMS: 30000,
     };

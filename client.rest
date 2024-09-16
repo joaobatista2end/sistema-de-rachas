@@ -15,12 +15,10 @@ POST http://localhost:8000/soccer-field
 content-type: application/json
 
 {
-    "pixKey": "Campo do zézinho",
-    "rentalValue": 123,
-    "workStartTime": "12:00:00",
-    "workFinishTime": "20:00:00",
+    "pixKey": "Campo do zézinho2",
+    "rentalValue": 150,
     "workStartTime": "10:00:00",
-    "workFinishTime": "24:00:00",
+    "workFinishTime": "21:00:00",
     "workDays": ["segunda", "sexta"]
 }
 
