@@ -12,21 +12,10 @@ class FastifyServer {
   }
 
   async boot() {
-    // Registre o @fastify/cors antes de outras coisas
     await this.server.register(fastifyCors, {
-      origin: (
-        origin: string | undefined,
-        cb: (err: Error | null, allow: boolean) => void
-      ) => {
-        if (!origin || /localhost:3000/.test(origin)) {
-          cb(null, true); // Permitir a origem
-          return;
-        }
-        cb(new Error('Not allowed'), false); // Bloquear outras origens
-      },
-      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
     });
-
     await this.server.register(routes);
     await this.server.register(mongoosePlugin, { timeout: 30000 });
   }

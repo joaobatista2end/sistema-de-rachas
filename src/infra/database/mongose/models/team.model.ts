@@ -28,6 +28,6 @@ export const teamSchema: Schema = new Schema({
   },
 });
 
-const TeamModel: Model<TeamDocument> = model<TeamDocument>('Team', teamSchema);
+const TeamModel: Model<TeamDocument> = model<TeamDocument>('team', teamSchema);
 
 export default TeamModel;

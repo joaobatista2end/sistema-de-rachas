@@ -34,7 +34,8 @@ export class PlayerMongoRepository implements PlayerRepository {
   }
 
   async create(player: CreatePlayerDto): Promise<Player | null> {
-    const created = new this.model(player);
+    const created = await new this.model(player);
+
     if (!created) return null;
 
     return new Player({
@@ -58,6 +59,6 @@ export class PlayerMongoRepository implements PlayerRepository {
   }
 
   async delete(id: string): Promise<void | null> {
-    this.model.findByIdAndDelete(id).exec();
+    await this.model.findByIdAndDelete(id).exec();
   }
 }

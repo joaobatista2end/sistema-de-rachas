@@ -1,11 +1,5 @@
 # @name FetchAllSoccerFields
-GET https://rachas-api.fyxuj9.easypanel.host/soccer-field
-Content-Type: application/json
-
-{
-    "name": "mariquinha",
-    "stars": 10
-}
+GET http://localhost:8000/soccer-field
 
 ###
 
@@ -25,30 +19,31 @@ content-type: application/json
 ###
 
 # @name GetSoccerFieldAvailableTimes
-GET http://localhost:3000/soccer-field/
+GET http://localhost:8000/soccer-field
 
+###
 
 # @name RegisterPlayer
-POST http://localhost:3000/player
+POST http://localhost:8000/player
 Content-Type: application/json
 
 {
-    "name": "mariquinha",
-    "stars": 10
+    "name": "joao",
+    "stars": 4
 }
 
 ###
 
 # @name RegisterMatch
 
-POST http://localhost:3000/match
+POST http://localhost:8000/match
 content-type: application/json
 
 {
     "name": "Partida dos chuteiras de madeira",
     "description":"Ex id labore exercitation cillum. Cillum incididunt quis minim mollit ex dolor culpa velit ex reprehenderit id id sunt. Lorem labore eu elit ad quis voluptate.",
     "thumb": "somephoto.png",
-    "soccerField": "66970c688810315138b0ad4f",
+    "soccerField": "66ea1c83b6c878b4c7530adf",
     "schedule": {
         "day": "20/08/2024",
         "startTime": "10:40:00",
@@ -60,27 +55,27 @@ content-type: application/json
 
 # @name UpdateMatch
 
-PUT http://localhost:3000/match/66971ecd00f5b5b3f453ea94
+PUT http://localhost:8000/match/66971ecd00f5b5b3f453ea94
 content-type: application/json
 
 {
-    "soccerField": "6692bc7e61b5fd78769bd2ca",
-    "players": ["669719a0e73015f7572ad7ff", "669719c7e73015f7572ad801"]
+    "soccerField": "66ea1c97b6c878b4c7530ae3",
+    "players": ["66ea1ca8b6c878b4c7530ae9", "66ea1cb2b6c878b4c7530aea"]
 }
 
 
 ###
 
 # @name FindMatch
-GET http://localhost:3000/match/6699b0abdd6721079e440bd6
+GET http://localhost:8000/match/6699b0abdd6721079e440bd6
 
 ###
 
 # @name FetchAllMatch
-GET http://localhost:3000/match
+GET http://localhost:8000/match
 
 ### 
 
 # @name CalculatePaymentPerPlayer
 
-GET http://localhost:3000/match/66970d12d8383a5a34caaae6/amount-paid-players
+GET http://localhost:8000/match/66ea191e8665af450bf9f33b/amount-paid-players
