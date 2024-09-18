@@ -1,6 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
 export interface SoccerFieldDocument extends Document<string> {
+  name: string;
   pixKey: string;
   rentalValue: number;
   workDays: Array<string>;
@@ -9,6 +10,10 @@ export interface SoccerFieldDocument extends Document<string> {
 }
 
 export const soccerFieldSchema: Schema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
   pixKey: {
     type: String,
     required: true,

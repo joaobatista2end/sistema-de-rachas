@@ -6,7 +6,6 @@ import {
 } from '../../../../domain/dto/soccer-field.dto';
 import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
-import { Time } from '../../../../domain/object-values/time';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private model: Model<SoccerFieldDocument>;
@@ -21,6 +20,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     return soccerFields.map((soccerField) => {
       return new SoccerField({
         id: soccerField._id,
+        name: soccerField.name,
         pixKey: soccerField.pixKey,
         rentalValue: soccerField.rentalValue,
         workFinishTime: soccerField.workFinishTime,
@@ -71,6 +71,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private parseToEntity(document: SoccerFieldDocument): SoccerField {
     return new SoccerField({
       id: document._id as string,
+      name: document.name,
       pixKey: document.pixKey,
       rentalValue: document.rentalValue,
       workFinishTime: document.workFinishTime,

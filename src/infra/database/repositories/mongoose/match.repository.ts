@@ -89,6 +89,7 @@ export class MatchMongoRepository implements MatchRepository {
       }),
       soccerField: new SoccerField({
         id: match.soccerField?._id || uid(),
+        name: match.soccerField.name,
         pixKey: match.soccerField.pixKey,
         rentalValue: match.soccerField.rentalValue,
         workDays: match.soccerField.workDays.map(

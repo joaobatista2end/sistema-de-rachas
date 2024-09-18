@@ -6,6 +6,7 @@ import { Schedule } from './schedule';
 
 export type SoccerFieldParams = {
   id: string;
+  name: string;
   rentalValue: number;
   pixKey: string;
   workDays: Array<DayOfWeek>;
@@ -15,6 +16,7 @@ export type SoccerFieldParams = {
 
 export class SoccerField {
   id: string;
+  name: string;
   rentalValue: number;
   pixKey: string;
   workDays: Array<DayOfWeek>;
@@ -23,6 +25,7 @@ export class SoccerField {
 
   public constructor(params: SoccerFieldParams) {
     this.id = params.id;
+    this.name = params.name;
     this.rentalValue = params.rentalValue;
     this.pixKey = params.pixKey;
     this.workDays = params.workDays;

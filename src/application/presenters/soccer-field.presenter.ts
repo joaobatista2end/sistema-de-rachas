@@ -6,7 +6,11 @@ export const SoccerFieldPresenter = (
 ): SoccerFieldDto => {
   return {
     id: soccerField.id,
+    name: soccerField.name,
     pixKey: soccerField.pixKey,
     rentalValue: soccerField.rentalValue,
+    workDays: soccerField.workDays,
+    workFinishTime: soccerField.workFinishTime.toString(),
+    workStartTime: soccerField.workStartTime.toString(),
   };
 };
