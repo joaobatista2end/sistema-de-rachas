@@ -89,18 +89,18 @@ export class MatchMongoRepository implements MatchRepository {
       }),
       soccerField: new SoccerField({
         id: match.soccerField?._id || uid(),
-        name: match.soccerField.name,
-        pixKey: match.soccerField.pixKey,
-        rentalValue: match.soccerField.rentalValue,
-        workDays: match.soccerField.workDays.map(
+        name: match.soccerField.name ?? '',
+        pixKey: match.soccerField.pixKey ?? '',
+        rentalValue: match.soccerField.rentalValue ?? 0,
+        workDays: match.soccerField?.workDays ? match.soccerField.workDays.map(
           (day: string) => day as DayOfWeek
-        ),
-        workStartTime: match.soccerField.workStartTime,
-        workFinishTime: match.soccerField.workFinishTime,
+        ) : [],
+        workStartTime: match.soccerField.workStartTime ?? '',
+        workFinishTime: match.soccerField.workFinishTime ?? '',
       }),
       schedule: new Schedule({
         id: match.schedule?._id || uid(),
-        day: match.schedule.day,
+        day: match.schedule.day ?? 'Segunda-feira',
         startTime: match.schedule.startTime,
         finishTime: match.schedule.finishTime,
       }),

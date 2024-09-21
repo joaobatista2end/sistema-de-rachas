@@ -1,12 +1,12 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
 export interface SoccerFieldDocument extends Document<string> {
-  name: string;
-  pixKey: string;
-  rentalValue: number;
-  workDays: Array<string>;
-  workStartTime: string;
-  workFinishTime: string;
+  name: string | null;
+  pixKey: string | null;
+  rentalValue: number | null;
+  workDays: Array<string> | null;
+  workStartTime: string | null;
+  workFinishTime: string | null;
 }
 
 export const soccerFieldSchema: Schema = new Schema({
