@@ -1,66 +1,47 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import SoccerFieldModel from '../../database/mongose/models/soccer-field.model';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { RegisterSoccerFieldUseCase } from '../../../domain/use-cases/soccer-field/register-soccer-field.usecase';
+import { CreateSoccerFieldDto } from '../../../domain/dto/soccer-field.dto';
+import { SoccerFieldPresenter } from '../../../application/presenters/soccer-field.presenter';
+import { FetchSoccerFieldUseCase } from '../../../domain/use-cases/soccer-field/fetch-soccer-field.usecase';
+import { GetSoccerFieldAvailableTimes } from '../../../domain/use-cases/soccer-field/get-soccer-field-available-times';
+import { AvailableTimesPresenter } from '../../../application/presenters/available-times.presenter';
 
-interface Params {
-  id: string;
+class SoccerFieldController {
+  async all(req: FastifyRequest, res: FastifyReply) {
+    const soccerFields = await FetchSoccerFieldUseCase.execute();
+    res.send({
+      soccerFields,
+    });
+  }
+  async register(req: FastifyRequest, res: FastifyReply) {
+    const soccerFieldDto = req.body as CreateSoccerFieldDto;
+    const soccerField = await RegisterSoccerFieldUseCase.execute(
+      soccerFieldDto
+    );
+
+    res.send({
+      data: soccerField !== null ? SoccerFieldPresenter(soccerField) : {},
+    });
+  }
+  async availableTimes(
+    req: FastifyRequest<{
+      Params: { id: string };
+      Querystring: { month?: number };
+    }>,
+    res: FastifyReply
+  ) {
+    const { id } = req.params;
+    const { month } = req.query;
+
+    const availableTimes = await GetSoccerFieldAvailableTimes.execute(
+      id,
+      month
+    );
+
+    return {
+      data: availableTimes ? AvailableTimesPresenter(availableTimes) : null,
+    };
+  }
 }
 
-const soccerFieldController = {
-  async register(request: FastifyRequest, reply: FastifyReply) {
-    try {
-      const { name, rentalValue, pixKey, workStartTime, workFinishTime, workDays } = request.body as {
-        name: string;
-        rentalValue: number;
-        pixKey: string;
-        workStartTime: string; // Adicione este campo
-        workFinishTime: string; // Adicione este campo
-        workDays: string[];     // Adicione este campo
-      };
-  
-      const newField = new SoccerFieldModel({
-        name,
-        rentalValue,
-        pixKey,
-        workStartTime,   // Inclua este campo
-        workFinishTime,  // Inclua este campo
-        workDays         // Inclua este campo
-      });
-  
-      await newField.save();
-      reply.code(201).send({ message: 'Campo registrado com sucesso!' });
-    } catch (error) {
-      reply
-        .code(500)
-        .send({ error: 'Erro ao registrar campo', details: error });
-    }
-  },
-
-  async all(request: FastifyRequest, reply: FastifyReply) {
-    try {
-      const fields = await SoccerFieldModel.find();
-      reply.send(fields);
-    } catch (error) {
-      reply.code(500).send({ error: 'Erro ao buscar campos', details: error });
-    }
-  },
-
-  async availableTimes(
-    request: FastifyRequest<{ Params: Params }>,
-    reply: FastifyReply
-  ) {
-    try {
-      const field = await SoccerFieldModel.findById(request.params.id);
-      if (!field) {
-        reply.code(404).send({ message: 'Campo não encontrado' });
-        return;
-      }
-      // Implement logic to return available times for the field.
-    } catch (error) {
-      reply
-        .code(500)
-        .send({ error: 'Erro ao buscar horários disponíveis', details: error });
-    }
-  },
-};
-
-export default soccerFieldController;
+export default new SoccerFieldController();

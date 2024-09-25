@@ -9,6 +9,7 @@ POST http://localhost:8000/soccer-field
 content-type: application/json
 
 {
+    "name": "campo do zé",
     "pixKey": "Campo do zézinho2",
     "rentalValue": 150,
     "workStartTime": "10:00:00",
@@ -19,7 +20,7 @@ content-type: application/json
 ###
 
 # @name GetSoccerFieldAvailableTimes
-GET http://localhost:8000/soccer-field
+GET http://localhost:8000/soccer-field/66ef53e1438c1729a7afe92e?month=8
 
 ###
 

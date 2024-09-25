@@ -50,21 +50,25 @@ export class SoccerField {
         const dayOfWeek = date.getDay();
 
         if (this.workDays.includes(convertNumberToDayOfWeek(dayOfWeek))) {
-          const startTime = new Time(this.workStartTime.toString());
+          let currentTime = new Time(this.workStartTime.toString());
           const endTime = new Time(this.workFinishTime.toString());
-
-          const schedule = new Schedule({
-            id: `${date.getTime()}`,
-            startTime: startTime.toString(),
-            finishTime: endTime.toString(),
-            day: date.toISOString().split('T')[0],
-          });
 
           const dayString = date.toLocaleDateString('pt-BR');
           if (!availableTimes[dayString]) {
             availableTimes[dayString] = [];
           }
-          availableTimes[dayString].push(schedule);
+
+          // Adicionar os horários disponíveis em intervalos de 1 hora
+          while (currentTime.isBefore(endTime)) {
+            const schedule = new Schedule({
+              id: `${date.getTime()}-${currentTime.toString()}`,
+              startTime: currentTime.toString(),
+              finishTime: currentTime.addHours(1).toString(),
+              day: date.toISOString().split('T')[0],
+            });
+            availableTimes[dayString].push(schedule);
+            currentTime = currentTime.addHours(1); // Avança uma hora
+          }
         }
       }
     }
