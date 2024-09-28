@@ -13,7 +13,7 @@ class AuthController {
         message: result.value.message,
       });
     } else if (result.value) {
-      res.send({
+      res.status(HttpStatusCode.CREATED).send({
         user: UserPresenter(result.value),
       });
     }
