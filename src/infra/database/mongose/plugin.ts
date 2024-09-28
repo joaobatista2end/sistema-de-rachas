@@ -1,11 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import mongoose, { ConnectOptions } from 'mongoose';
+import { env } from '../../environment/EnvSchema';
 
 async function mongooseConnector(fastify: FastifyInstance) {
   try {
-    const mongoURL =
-      'mongodb://root:password@localhost:27017/sistema-rachas?authSource=admin';
+    const mongoURL = `${env.DB_DRIVER}://${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_DATABASE}?authSource=${env.DB_AUTH_SOURCE}`;
 
     const options: ConnectOptions = {
       serverSelectionTimeoutMS: 30000,
