@@ -22,7 +22,7 @@ export class UserMongoRespository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user = await this.model.findOne().where('email').equals('email');
+    const user = await this.model.findOne().where('email').equals(email);
     if (!user) return null;
     return this.parseToEntity(user);
   }

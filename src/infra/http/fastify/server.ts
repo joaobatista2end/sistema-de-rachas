@@ -16,14 +16,12 @@ class FastifyServer {
       origin: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
     });
-
     await this.server.register(require('@fastify/swagger'));
     await this.server.register(require('@fastify/swagger-ui'), {
       routePrefix: '/documentation',
     });
     await this.server.register(routes);
     await this.server.register(mongoosePlugin, { timeout: 30000 });
-
     await this.server.ready();
   }
 
