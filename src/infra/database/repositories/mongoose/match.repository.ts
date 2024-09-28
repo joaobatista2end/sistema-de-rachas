@@ -33,9 +33,6 @@ export class MatchMongoRepository implements MatchRepository {
       .map((match) => this.parseToEntity(match))
       .filter((match) => match !== null);
   }
-  findByName(name: string): Promise<Match | null> {
-    throw new Error('Method not implemented.');
-  }
   async create(data: CreateMatchDto): Promise<Match | null> {
     const schedule = await this.scheduleRepository.create(data.schedule);
     if (!schedule) throw Error('Erro ao criar agendamento da partida');

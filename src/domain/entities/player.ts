@@ -1,5 +1,3 @@
-import { uid } from 'uid';
-
 import { Match } from './match';
 
 export type PlayerParams = {
