@@ -2,7 +2,7 @@ import Fastify, { FastifyInstance } from 'fastify';
 import fastifyCors from '@fastify/cors'; // Importe o pacote correto
 import mongoosePlugin from '../../database/mongose/plugin';
 import routes from '../routes';
-
+import { env } from '../../environment/EnvSchema';
 class FastifyServer {
   server: FastifyInstance;
 
@@ -16,13 +16,20 @@ class FastifyServer {
       origin: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
     });
+
+    await this.server.register(require('@fastify/swagger'));
+    await this.server.register(require('@fastify/swagger-ui'), {
+      routePrefix: '/documentation',
+    });
     await this.server.register(routes);
     await this.server.register(mongoosePlugin, { timeout: 30000 });
+
+    await this.server.ready();
   }
 
   async start() {
     try {
-      await this.server.listen({ port: 8000, host: '0.0.0.0' });
+      await this.server.listen({ port: Number(env.PORT), host: '0.0.0.0' });
       console.log('Servidor iniciado com sucesso!');
     } catch (err) {
       console.error(err);

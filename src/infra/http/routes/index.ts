@@ -5,12 +5,30 @@ import playerController from '../controllers/player.controller';
 import soccerFieldController from '../controllers/soccer-field.controller';
 
 const routes = async (fastify: FastifyInstance) => {
-  fastify.get('/', (req, reply: FastifyReply) => {
-    reply.send({
-      message: 'API versão 1',
-    });
-  });
-  fastify.post('/player', playerController.register.bind(playerController));
+  fastify.post(
+    '/player',
+    {
+      schema: {
+        response: {
+          201: {
+            description: 'Successful response',
+            type: 'object',
+            properties: {
+              hello: { type: 'string' },
+            },
+          },
+          default: {
+            description: 'Default response',
+            type: 'object',
+            properties: {
+              foo: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    playerController.register.bind(playerController)
+  );
 
   // Match
   fastify.post('/match', matchController.register.bind(matchController));
