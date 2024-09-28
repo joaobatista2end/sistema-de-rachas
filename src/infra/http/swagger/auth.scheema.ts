@@ -1,7 +1,7 @@
 export const registerSwaggerSchema = {
   body: {
     type: 'object',
-    required: ['name', 'email', 'password', 'confirm'],
+    required: ['name', 'email', 'password'],
     properties: {
       name: { type: 'string', description: 'The name of the user' },
       email: {
@@ -12,11 +12,6 @@ export const registerSwaggerSchema = {
       password: {
         type: 'string',
         description: 'The password of the user',
-        format: 'password',
-      },
-      confirm: {
-        type: 'string',
-        description: 'Confirmation of the password',
         format: 'password',
       },
       photoUrl: {

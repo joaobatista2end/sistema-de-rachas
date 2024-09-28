@@ -1,8 +1,7 @@
 export type CreateUserDto = {
   name: string;
   email: string;
-  passwrod: string;
-  confirm: string;
+  password: string;
   photoUrl?: string;
 };
 
