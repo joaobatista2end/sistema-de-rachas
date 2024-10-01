@@ -16,9 +16,11 @@ export class UserMongoRespository implements UserRepository {
     return this.parseToEntity(user);
   }
   async register(payload: CreateUserDto): Promise<User | null> {
-    const user = await this.model.create(payload);
-    if (!user) return null;
-    return this.parseToEntity(user);
+    const createdUser = await this.model.create(payload);
+    await createdUser.save();
+    if (!createdUser) return null;
+
+    return this.parseToEntity(createdUser);
   }
 
   async findByEmail(email: string): Promise<User | null> {
