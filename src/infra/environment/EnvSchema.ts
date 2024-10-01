@@ -9,6 +9,14 @@ const envSchema = z.object({
   DB_AUTH_SOURCE: z.string(),
   DB_PASSWORD: z.string(),
   DB_PORT: z.string(),
+  JWT_SECRET: z.string(),
+  SALTS_PASSWORD: z.string().transform((val) => {
+    const parsed = parseInt(val, 10);
+    if (isNaN(parsed)) {
+      throw new Error('SALTS_PASSWORD precisa ser um número');
+    }
+    return parsed;
+  }),
 });
 
 export const env = envSchema.parse(process.env);

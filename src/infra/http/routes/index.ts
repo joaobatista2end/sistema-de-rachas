@@ -4,13 +4,21 @@ import matchController from '../controllers/match.controller';
 import playerController from '../controllers/player.controller';
 import soccerFieldController from '../controllers/soccer-field.controller';
 import authController from '../controllers/auth.controller';
-import { registerSwaggerSchema } from '../swagger/auth.scheema';
+import {
+  loginSwaggerSchema,
+  registerSwaggerSchema,
+} from '../swagger/auth.scheema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
     '/auth/register',
     { schema: registerSwaggerSchema },
     authController.register.bind(authController)
+  );
+  fastify.post(
+    '/auth/login',
+    { schema: loginSwaggerSchema },
+    authController.login.bind(authController)
   );
 
   // Players
