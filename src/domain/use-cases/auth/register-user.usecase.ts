@@ -7,8 +7,8 @@ import bcrypt from 'bcrypt';
 import { Either, left, right } from '../../utils/either';
 import { HttpStatusCode } from '../../enums/http-status-code';
 import { HttpError } from '../../errors/http.error';
+import { crypt } from '../../utils/crypt';
 
-const SALT_ROUNDS = 10;
 export class RegisterUserUseCase {
   private static repository: UserRepository = new UserMongoRespository(
     UserModel
@@ -23,8 +23,7 @@ export class RegisterUserUseCase {
         new HttpError(HttpStatusCode.BAD_REQUEST, 'O e-mail já foi cadastrado!')
       );
     }
-
-    const password = await bcrypt.hash(payload.password, SALT_ROUNDS);
+    const password = await crypt.hash(payload.password);
     const user = await RegisterUserUseCase.repository.register({
       ...payload,
       password,

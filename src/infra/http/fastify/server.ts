@@ -1,5 +1,6 @@
 import Fastify, { FastifyInstance } from 'fastify';
-import fastifyCors from '@fastify/cors'; // Importe o pacote correto
+import fastifyCors from '@fastify/cors';
+import fastifyJwt from '@fastify/jwt';
 import mongoosePlugin from '../../database/mongose/plugin';
 import routes from '../routes';
 import { env } from '../../environment/EnvSchema';
@@ -20,6 +21,10 @@ class FastifyServer {
     await this.server.register(require('@fastify/swagger-ui'), {
       routePrefix: '/documentation',
     });
+    await this.server.register(fastifyJwt, {
+      secret: env.JWT_SECRET,
+    });
+
     await this.server.register(routes);
     await this.server.register(mongoosePlugin, { timeout: 30000 });
     await this.server.ready();

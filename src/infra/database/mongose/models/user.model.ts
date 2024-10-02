@@ -4,7 +4,7 @@ export interface UserDocument extends Document<string> {
   name: string;
   email: string;
   password: string;
-  photoUrl: string;
+  photoUrl?: string;
 }
 
 export const userSchema: Schema = new Schema({
@@ -23,7 +23,7 @@ export const userSchema: Schema = new Schema({
   },
   photoUrl: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 

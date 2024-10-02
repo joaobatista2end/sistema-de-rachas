@@ -33,32 +33,31 @@ export class PlayerMongoRepository implements PlayerRepository {
     });
   }
 
-  async create(player: CreatePlayerDto): Promise<Player | null> {
-    const created = await new this.model(player);
-    await created.save(); 
-    if (!created) return null;
-
-    return new Player({
-      id: created._id,
-      name: created.name,
-      stars: created.stars,
-    });
+  async create(data: CreatePlayerDto): Promise<Player | null> {
+    const player = new this.model(data);
+    await player.save();
+    if (!player?._id) return null;
+    return this.parseToEntity(player);
   }
 
-  async update(id: string, player: Partial<Player>): Promise<Player | null> {
+  async update(id: string, data: Partial<Player>): Promise<Player | null> {
     const updated = await this.model
-      .findByIdAndUpdate(id, player, { new: true })
+      .findByIdAndUpdate(id, data, { new: true })
       .exec();
     if (!updated) return null;
 
-    return new Player({
-      id: updated._id,
-      name: updated.name,
-      stars: updated.stars,
-    });
+    return this.parseToEntity(updated);
   }
 
   async delete(id: string): Promise<void | null> {
     await this.model.findByIdAndDelete(id).exec();
+  }
+
+  parseToEntity(document: PlayerDocument): Player {
+    return new Player({
+      id: document._id as string,
+      name: document.name,
+      stars: document.stars,
+    });
   }
 }

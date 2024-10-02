@@ -5,6 +5,11 @@ export type CreateUserDto = {
   photoUrl?: string;
 };
 
+export type LoginDto = {
+  email: string;
+  password: string;
+};
+
 export type UserDto = {
   id: string;
   name: string;

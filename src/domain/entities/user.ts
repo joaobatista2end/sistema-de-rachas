@@ -11,8 +11,7 @@ export class User {
   name: string;
   email: string;
   photoUrl?: string;
-
-  private password: string;
+  password: string;
 
   constructor(params: UserParams) {
     this.id = params.id;

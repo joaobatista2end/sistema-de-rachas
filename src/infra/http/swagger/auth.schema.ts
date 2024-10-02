@@ -61,3 +61,49 @@ export const registerSwaggerSchema = {
     },
   },
 };
+
+export const loginSwaggerSchema = {
+  body: {
+    type: 'object',
+    required: ['email', 'password'],
+    properties: {
+      email: {
+        type: 'string',
+        format: 'email',
+        description: 'The email address of the user',
+      },
+      password: {
+        type: 'string',
+        description: 'The password of the user',
+        format: 'password',
+      },
+    },
+  },
+  response: {
+    201: {
+      type: 'object',
+      properties: {
+        token: {
+          type: 'string',
+          description: 'Token do usuário',
+        },
+      },
+    },
+    400: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'integer' },
+        error: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+    500: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'integer' },
+        error: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+  },
+};

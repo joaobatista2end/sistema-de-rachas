@@ -4,10 +4,7 @@ import { ScheduleRepository } from '../../repositories/schedule.repository';
 import { ScheduleMongoRepository } from './schedule.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
 import { ScheduleModel } from '../../mongose/models/schedule.model';
-import {
-  MatchDocument,
-  MatchDocumentWithRelations,
-} from '../../mongose/models/match.model';
+import { MatchDocumentWithRelations } from '../../mongose/models/match.model';
 import { Match } from '../../../../domain/entities/match';
 import { Player } from '../../../../domain/entities/player';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
