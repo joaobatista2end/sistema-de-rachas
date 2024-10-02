@@ -35,7 +35,7 @@ export class PlayerMongoRepository implements PlayerRepository {
 
   async create(player: CreatePlayerDto): Promise<Player | null> {
     const created = await new this.model(player);
-
+    await created.save(); 
     if (!created) return null;
 
     return new Player({
