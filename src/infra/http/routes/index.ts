@@ -7,7 +7,8 @@ import authController from '../controllers/auth.controller';
 import {
   loginSwaggerSchema,
   registerSwaggerSchema,
-} from '../swagger/auth.scheema';
+} from '../swagger/auth.schema';
+import { createPlayerSchema } from '../swagger/player.schema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -22,7 +23,11 @@ const routes = async (fastify: FastifyInstance) => {
   );
 
   // Players
-  fastify.post('/player', playerController.register.bind(playerController));
+  fastify.post(
+    '/player',
+    { schema: createPlayerSchema },
+    playerController.register.bind(playerController)
+  );
 
   // Match
   fastify.post('/match', matchController.register.bind(matchController));
