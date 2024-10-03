@@ -1,13 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { SoccerField, SoccerFieldParams } from './soccer-field';
 import { Time } from '../object-values/time';
+import { uid } from 'uid';
 
 describe('SoccerField', () => {
   it('should return available times for the entire year', () => {
     const params: SoccerFieldParams = {
-      id: '1',
+      id: uid(),
+      name: 'Campo de teste 1',
       rentalValue: 100,
-      pixKey: 'test-pix-key',
+      pixKey: uid(),
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
       workFinishTime: '12:00:00',
@@ -15,7 +17,7 @@ describe('SoccerField', () => {
 
     const soccerField = new SoccerField(params);
     const availableTimes = soccerField.getAvailableTimes();
-    console.log({ availableTimes });
+
     expect(Object.keys(availableTimes).length).toBeGreaterThan(0);
 
     const exampleDateKey = Object.keys(availableTimes)[0];
@@ -30,25 +32,25 @@ describe('SoccerField', () => {
     expect(exampleSchedule).toHaveProperty('day');
 
     expect(exampleSchedule.startTime.toString()).toBe('10:00:00');
-    expect(exampleSchedule.finishTime.toString()).toBe('12:00:00');
+    expect(exampleSchedule.finishTime.toString()).toBe('11:00:00');
   });
 
   it('should return available times for a specific month', () => {
     const params: SoccerFieldParams = {
-      id: '1',
+      id: uid(),
+      name: 'Campo de teste 2',
       rentalValue: 100,
-      pixKey: 'test-pix-key',
+      pixKey: uid(),
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
       workFinishTime: '12:00:00',
     };
 
     const soccerField = new SoccerField(params);
-    const availableTimes = soccerField.getAvailableTimes(2); // Fevereiro
-    console.log({ availableTimes });
+    const availableTimes = soccerField.getAvailableTimes(2);
     expect(Object.keys(availableTimes).length).toBeGreaterThan(0);
     Object.keys(availableTimes).forEach((dateKey) => {
-      const date = new Date(dateKey.split('/').reverse().join('-')); // Convertendo a string para Date
+      const date = new Date(dateKey.split('/').reverse().join('-'));
       const month = date.getMonth() + 1;
       expect(month).toBe(2);
     });
