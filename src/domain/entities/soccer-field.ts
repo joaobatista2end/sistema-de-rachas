@@ -3,6 +3,7 @@ import { Time } from '../object-values/time';
 import { AvailableTimesByDay } from '../types/available-times';
 import { convertNumberToDayOfWeek } from '../utils/day-of-week';
 import { Schedule } from './schedule';
+import { User } from './user';
 
 export type SoccerFieldParams = {
   id: string;
@@ -12,6 +13,7 @@ export type SoccerFieldParams = {
   workDays: Array<DayOfWeek>;
   workStartTime: string;
   workFinishTime: string;
+  user: User;
 };
 
 export class SoccerField {
@@ -22,6 +24,7 @@ export class SoccerField {
   workDays: Array<DayOfWeek>;
   workStartTime: Time;
   workFinishTime: Time;
+  user: User;
 
   public constructor(params: SoccerFieldParams) {
     this.id = params.id;
@@ -31,6 +34,7 @@ export class SoccerField {
     this.workDays = params.workDays;
     this.workStartTime = new Time(params.workStartTime);
     this.workFinishTime = new Time(params.workFinishTime);
+    this.user = params.user;
   }
 
   public getAvailableTimes(month?: number): AvailableTimesByDay {

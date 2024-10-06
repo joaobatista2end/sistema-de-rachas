@@ -1,4 +1,5 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import mongoose, { Document, Model, model, Schema } from 'mongoose';
+import { UserDocument } from './user.model';
 
 export interface SoccerFieldDocument extends Document<string> {
   name: string;
@@ -7,6 +8,7 @@ export interface SoccerFieldDocument extends Document<string> {
   workDays: Array<string>;
   workStartTime: string;
   workFinishTime: string;
+  user: UserDocument;
 }
 
 export const soccerFieldSchema: Schema = new Schema({
@@ -34,6 +36,7 @@ export const soccerFieldSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
 });
 
 const SoccerFieldModel: Model<SoccerFieldDocument> = model<SoccerFieldDocument>(

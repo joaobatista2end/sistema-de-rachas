@@ -7,6 +7,7 @@ import {
 import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { DayOfWeek } from '../../../../domain/object-values/day';
+import { User } from '../../../../domain/entities/user';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private model: Model<SoccerFieldDocument>;
 
@@ -18,15 +19,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     const soccerFields = await this.model.find();
 
     return soccerFields.map((soccerField) => {
-      return new SoccerField({
-        id: soccerField._id,
-        name: soccerField.name,
-        pixKey: soccerField.pixKey,
-        rentalValue: soccerField.rentalValue,
-        workFinishTime: soccerField.workFinishTime,
-        workStartTime: soccerField.workStartTime,
-        workDays: soccerField.workDays as Array<DayOfWeek>,
-      });
+      return this.parseToEntity(soccerField);
     });
   }
 
@@ -77,6 +70,13 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       workFinishTime: document.workFinishTime,
       workStartTime: document.workStartTime,
       workDays: document.workDays as DayOfWeek[],
+      user: new User({
+        email: document.user.email,
+        id: document.user._id as string,
+        name: document.user.name,
+        password: document.user.password,
+        photoUrl: document.user.photoUrl,
+      }),
     });
   }
 }
