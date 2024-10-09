@@ -3,6 +3,7 @@ export type CreateUserDto = {
   email: string;
   password: string;
   photoUrl?: string;
+  userType: string;
 };
 
 export type LoginDto = {
@@ -15,4 +16,5 @@ export type UserDto = {
   name: string;
   email: string;
   photoUrl?: string;
+  userType: string;
 };

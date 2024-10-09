@@ -48,6 +48,7 @@ export class UserMongoRespository implements UserRepository {
       name: document.name,
       password: document.password,
       photoUrl: document.photoUrl,
+      userType: document.userType,
     });
   }
 }

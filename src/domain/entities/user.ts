@@ -4,6 +4,7 @@ export type UserParams = {
   email: string;
   password: string;
   photoUrl?: string;
+  userType: string;
 };
 
 export class User {
@@ -12,6 +13,7 @@ export class User {
   email: string;
   photoUrl?: string;
   password: string;
+  userType: string;
 
   constructor(params: UserParams) {
     this.id = params.id;
@@ -19,5 +21,6 @@ export class User {
     this.email = params.email;
     this.password = params.password;
     this.photoUrl = params.photoUrl;
+    this.userType = params.userType;
   }
 }
