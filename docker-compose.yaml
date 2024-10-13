@@ -30,13 +30,23 @@ services:
       - "8081:8081"
 
   app:
-    image: node:20.17.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: fastify-app
-    working_dir: /usr/src/app
-    volumes:
-      - ./:/usr/src/app
-    command: sh -c "npm install && npm run build && npm run start"
     ports:
       - "3000:3000"
     depends_on:
       - mongo
+    environment:
+      - NODE_OPTIONS=--import tsx
+      - DB_DRIVER=mongodb
+      - DB_HOST=mongo
+      - DB_USER=root
+      - DB_DATABASE=sistema-rachas
+      - DB_AUTH_SOURCE=admin
+      - DB_PASSWORD=password
+      - DB_PORT=27017
+      - PORT=3000
+      - JWT_SECRET=diasdjp1dj12diasd-ascni1-23o1jdsad
+      - SALTS_PASSWORD=10
