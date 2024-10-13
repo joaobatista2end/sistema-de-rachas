@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.soccerFieldSchema = void 0;
 const mongoose_1 = require("mongoose");
 exports.soccerFieldSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
     pixKey: {
         type: String,
         required: true,

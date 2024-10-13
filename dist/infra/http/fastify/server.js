@@ -13,17 +13,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
+const cors_1 = __importDefault(require("@fastify/cors"));
+const jwt_1 = __importDefault(require("@fastify/jwt"));
+const plugin_1 = __importDefault(require("../../database/mongose/plugin"));
 const routes_1 = __importDefault(require("../routes"));
+const EnvSchema_1 = require("../../environment/EnvSchema");
 class FastifyServer {
     constructor() {
         this.server = (0, fastify_1.default)({ logger: true });
-        this.server.register(routes_1.default);
-        // this.server.register(mongoosePlugin, { timeout: 30000 });
+        this.boot();
+    }
+    boot() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.server.register(cors_1.default, {
+                origin: true,
+                methods: ['GET', 'POST', 'PUT', 'DELETE'],
+            });
+            yield this.server.register(require('@fastify/swagger'));
+            yield this.server.register(require('@fastify/swagger-ui'), {
+                routePrefix: '/documentation',
+            });
+            yield this.server.register(jwt_1.default, {
+                secret: EnvSchema_1.env.JWT_SECRET,
+            });
+            yield this.server.register(routes_1.default);
+            yield this.server.register(plugin_1.default, { timeout: 30000 });
+            yield this.server.ready();
+        });
     }
     start() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.server.listen({ port: 8000 });
+                yield this.server.listen({ port: Number(EnvSchema_1.env.PORT), host: '0.0.0.0' });
                 console.log('Servidor iniciado com sucesso!');
             }
             catch (err) {

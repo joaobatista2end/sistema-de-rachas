@@ -22,5 +22,5 @@ exports.teamSchema = new mongoose_1.Schema({
         default: 12,
     },
 });
-const TeamModel = (0, mongoose_1.model)('Team', exports.teamSchema);
+const TeamModel = (0, mongoose_1.model)('team', exports.teamSchema);
 exports.default = TeamModel;

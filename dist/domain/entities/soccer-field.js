@@ -7,6 +7,7 @@ const schedule_1 = require("./schedule");
 class SoccerField {
     constructor(params) {
         this.id = params.id;
+        this.name = params.name;
         this.rentalValue = params.rentalValue;
         this.pixKey = params.pixKey;
         this.workDays = params.workDays;
@@ -25,19 +26,23 @@ class SoccerField {
                 const date = new Date(year, m, day);
                 const dayOfWeek = date.getDay();
                 if (this.workDays.includes((0, day_of_week_1.convertNumberToDayOfWeek)(dayOfWeek))) {
-                    const startTime = new time_1.Time(this.workStartTime.toString());
+                    let currentTime = new time_1.Time(this.workStartTime.toString());
                     const endTime = new time_1.Time(this.workFinishTime.toString());
-                    const schedule = new schedule_1.Schedule({
-                        id: `${date.getTime()}`,
-                        startTime: startTime.toString(),
-                        finishTime: endTime.toString(),
-                        day: date.toISOString().split('T')[0],
-                    });
                     const dayString = date.toLocaleDateString('pt-BR');
                     if (!availableTimes[dayString]) {
                         availableTimes[dayString] = [];
                     }
-                    availableTimes[dayString].push(schedule);
+                    // Adicionar os horários disponíveis em intervalos de 1 hora
+                    while (currentTime.isBefore(endTime)) {
+                        const schedule = new schedule_1.Schedule({
+                            id: `${date.getTime()}-${currentTime.toString()}`,
+                            startTime: currentTime.toString(),
+                            finishTime: currentTime.addHours(1).toString(),
+                            day: date.toISOString().split('T')[0],
+                        });
+                        availableTimes[dayString].push(schedule);
+                        currentTime = currentTime.addHours(1); // Avança uma hora
+                    }
                 }
             }
         }

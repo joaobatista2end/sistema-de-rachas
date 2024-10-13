@@ -9,66 +9,58 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PlayerMongoRepository = void 0;
-const player_1 = require("../../../../domain/entities/player");
-class PlayerMongoRepository {
+exports.UserMongoRespository = void 0;
+const user_1 = require("../../../../domain/entities/user");
+class UserMongoRespository {
     constructor(model) {
         this.model = model;
     }
     findById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const player = yield this.model.findById(id).exec();
-            if (!player)
+            const user = yield this.model.findById(id);
+            if (!user)
                 return null;
-            return new player_1.Player({
-                id: player._id,
-                name: player.name,
-                stars: player.stars,
-            });
+            return this.parseToEntity(user);
         });
     }
-    findByName(name) {
+    register(payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            const player = yield this.model.findOne({ name }).exec();
-            if (!player)
+            const createdUser = yield this.model.create(payload);
+            yield createdUser.save();
+            if (!createdUser)
                 return null;
-            return new player_1.Player({
-                id: player._id,
-                name: player.name,
-                stars: player.stars,
-            });
+            return this.parseToEntity(createdUser);
         });
     }
-    create(data) {
+    findByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const player = new this.model(data);
-            yield player.save();
-            if (!(player === null || player === void 0 ? void 0 : player._id))
+            const user = yield this.model.findOne().where('email').equals(email);
+            if (!user)
                 return null;
-            return this.parseToEntity(player);
+            return this.parseToEntity(user);
         });
     }
-    update(id, data) {
+    update(id, payload) {
         return __awaiter(this, void 0, void 0, function* () {
-            const updated = yield this.model
-                .findByIdAndUpdate(id, data, { new: true })
-                .exec();
-            if (!updated)
+            const user = yield this.model.findByIdAndDelete(id, payload);
+            if (!user)
                 return null;
-            return this.parseToEntity(updated);
+            return this.parseToEntity(user);
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.model.findByIdAndDelete(id).exec();
+            yield this.model.findByIdAndDelete(id);
         });
     }
     parseToEntity(document) {
-        return new player_1.Player({
+        return new user_1.User({
+            email: document.email,
             id: document._id,
             name: document.name,
-            stars: document.stars,
+            password: document.password,
+            photoUrl: document.photoUrl,
         });
     }
 }
-exports.PlayerMongoRepository = PlayerMongoRepository;
+exports.UserMongoRespository = UserMongoRespository;

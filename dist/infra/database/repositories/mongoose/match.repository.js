@@ -33,9 +33,6 @@ class MatchMongoRepository {
                 .filter((match) => match !== null);
         });
     }
-    findByName(name) {
-        throw new Error('Method not implemented.');
-    }
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const schedule = yield this.scheduleRepository.create(data.schedule);
@@ -87,6 +84,7 @@ class MatchMongoRepository {
             }),
             soccerField: new soccer_field_1.SoccerField({
                 id: ((_c = match.soccerField) === null || _c === void 0 ? void 0 : _c._id) || (0, uid_1.uid)(),
+                name: match.soccerField.name,
                 pixKey: match.soccerField.pixKey,
                 rentalValue: match.soccerField.rentalValue,
                 workDays: match.soccerField.workDays.map((day) => day),

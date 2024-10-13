@@ -13,6 +13,7 @@ const register_soccer_field_usecase_1 = require("../../../domain/use-cases/socce
 const soccer_field_presenter_1 = require("../../../application/presenters/soccer-field.presenter");
 const fetch_soccer_field_usecase_1 = require("../../../domain/use-cases/soccer-field/fetch-soccer-field.usecase");
 const get_soccer_field_available_times_1 = require("../../../domain/use-cases/soccer-field/get-soccer-field-available-times");
+const available_times_presenter_1 = require("../../../application/presenters/available-times.presenter");
 class SoccerFieldController {
     all(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,7 +38,7 @@ class SoccerFieldController {
             const { month } = req.query;
             const availableTimes = yield get_soccer_field_available_times_1.GetSoccerFieldAvailableTimes.execute(id, month);
             return {
-                data: availableTimes,
+                data: availableTimes ? (0, available_times_presenter_1.AvailableTimesPresenter)(availableTimes) : null,
             };
         });
     }

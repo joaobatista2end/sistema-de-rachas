@@ -14,19 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_plugin_1 = __importDefault(require("fastify-plugin"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const EnvSchema_1 = require("../../environment/EnvSchema");
 function mongooseConnector(fastify) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const mongoURL = 'mongodb://mongo:e07be2c58d4d201d22eb@easypanel.conscientizar.online:27017/sistema-rachas?authSource=admin';
+            const mongoURL = `${EnvSchema_1.env.DB_DRIVER}://${EnvSchema_1.env.DB_USER}:${EnvSchema_1.env.DB_PASSWORD}@${EnvSchema_1.env.DB_HOST}:${EnvSchema_1.env.DB_PORT}/${EnvSchema_1.env.DB_DATABASE}?authSource=${EnvSchema_1.env.DB_AUTH_SOURCE}`;
             const options = {
-                serverSelectionTimeoutMS: 30000, // 30 segundos
+                serverSelectionTimeoutMS: 30000,
             };
             yield mongoose_1.default.connect(mongoURL, options);
             fastify.log.info('MongoDB connected');
         }
         catch (err) {
             fastify.log.error('MongoDB connection error:', err);
-            throw err; // Lançar erro para que o Fastify saiba que a inicialização falhou
+            throw err;
         }
     });
 }
