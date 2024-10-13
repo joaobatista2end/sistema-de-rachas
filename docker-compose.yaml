@@ -30,7 +30,7 @@ services:
       - "8081:8081"
 
   app:
-    image: node:18
+    image: node:20.17.0
     container_name: fastify-app
     working_dir: /usr/src/app
     volumes:
