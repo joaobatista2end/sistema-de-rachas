@@ -7,4 +7,5 @@ export type PlayerDto = {
 export type CreatePlayerDto = {
   name: string;
   stars: number;
+  token: string;
 };

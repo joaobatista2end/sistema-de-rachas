@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyReply } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 import matchController from '../controllers/match.controller';
 import playerController from '../controllers/player.controller';
@@ -9,6 +9,8 @@ import {
   registerSwaggerSchema,
 } from '../swagger/auth.schema';
 import { createPlayerSchema } from '../swagger/player.schema';
+import { verifyJwt } from '../middlewares/Authenticated';
+
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -25,31 +27,60 @@ const routes = async (fastify: FastifyInstance) => {
   // Players
   fastify.post(
     '/player',
-    { schema: createPlayerSchema },
+    { onRequest: [verifyJwt], schema: createPlayerSchema },
     playerController.register.bind(playerController)
   );
 
   // Match
-  fastify.post('/match', matchController.register.bind(matchController));
-  fastify.get('/match', matchController.all.bind(matchController));
-  fastify.put('/match/:id', matchController.update.bind(matchController));
-  fastify.get('/match/:id', matchController.findById.bind(matchController));
+  fastify.post(
+    '/match',
+    { onRequest: [verifyJwt] },
+    matchController.register.bind(matchController)
+  );
   fastify.get(
+    '/match',
+    { onRequest: [verifyJwt] },
+    matchController.all.bind(matchController)
+  );
+  fastify.put<{
+    Params: { id: string };
+  }>(
+    '/match/:id',
+    { onRequest: [verifyJwt] },
+    matchController.update.bind(matchController)
+  );
+  fastify.get<{
+    Params: { id: string };
+  }>(
+    '/match/:id',
+    { onRequest: [verifyJwt] },
+    matchController.findById.bind(matchController)
+  );
+  fastify.get<{
+    Params: { id: string };
+  }>(
     '/match/:id/amount-paid-players',
+    { onRequest: [verifyJwt] },
     matchController.getAmountPaidPlayer.bind(matchController)
   );
 
   // Soccer Field
   fastify.post(
     '/soccer-field',
+    { onRequest: [verifyJwt] },
     soccerFieldController.register.bind(soccerFieldController)
   );
   fastify.get(
     '/soccer-field',
+    { onRequest: [verifyJwt] },
     soccerFieldController.all.bind(soccerFieldController)
   );
-  fastify.get(
+  fastify.get<{
+    Params: { id: string };
+    Querystring: { month: number | undefined };
+  }>(
     '/soccer-field/:id',
+    { onRequest: [verifyJwt] },
     soccerFieldController.availableTimes.bind(soccerFieldController)
   );
 };

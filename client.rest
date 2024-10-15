@@ -27,9 +27,10 @@ GET http://localhost:8000/soccer-field/66fac90c0b7f0d8c63b94c8c?month=10
 # @name RegisterPlayer
 POST http://localhost:8000/player
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDg1ZjZmMTZkZmIzMTllZTUzZDljOSIsImVtYWlsIjoiZW1haWx0ZXN0ZUBnbWFpbC5jb20iLCJuYW1lIjoiVGVzdGUiLCJwaG90b1VybCI6Imh0dHA6Ly93d3cuZm90b3Rlc3RlLmNvbSIsImlhdCI6MTcyODkxNzIzMn0.K0BYh8CrUCdZ99YufBQUDsl0KdKmlNOB6dYI_hk5xzI
 
 {
-    "name": "joao3",
+    "name": "joao45",
     "stars": 4
 }
 
@@ -80,3 +81,31 @@ GET http://localhost:8000/match
 # @name CalculatePaymentPerPlayer
 
 GET http://localhost:8000/match/66ea191e8665af450bf9f33b/amount-paid-players
+
+###
+
+# @name RegisterUser
+
+POST http://localhost:8000/auth/register
+content-type: application/json
+
+{
+  "name": "Teste",
+  "email": "emailteste@gmail.com",
+  "password": "Senha123",
+  "photoUrl": "http://www.fototeste.com",
+  "userType": "client"
+}
+
+###
+
+# @name Login
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+    "email": "emailteste@gmail.com",
+    "password": "Senha123"
+}
+
+###
