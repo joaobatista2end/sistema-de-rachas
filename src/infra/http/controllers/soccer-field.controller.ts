@@ -5,6 +5,7 @@ import { SoccerFieldPresenter } from '../../../application/presenters/soccer-fie
 import { FetchSoccerFieldUseCase } from '../../../domain/use-cases/soccer-field/fetch-soccer-field.usecase';
 import { GetSoccerFieldAvailableTimes } from '../../../domain/use-cases/soccer-field/get-soccer-field-available-times';
 import { AvailableTimesPresenter } from '../../../application/presenters/available-times.presenter';
+import { RemoveSoccerFieldUseCasee } from '../../../domain/use-cases/soccer-field/remove-soccer-field.usecase';
 
 class SoccerFieldController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -41,6 +42,21 @@ class SoccerFieldController {
     return {
       data: availableTimes ? AvailableTimesPresenter(availableTimes) : null,
     };
+  }
+
+  async delete(
+    request: FastifyRequest<{ Params: { id: string } }>,
+    reply: FastifyReply
+  ) {
+    const { id } = request.params;
+    console.log('ID recebido para deleção:', id);
+    try {
+      await RemoveSoccerFieldUseCasee.execute(id);
+      return reply.code(200).send({ message: 'Campo deletado com sucesso' });
+    } catch (error) {
+      console.error('Erro ao deletar campo:', error); // Log para capturar o erro
+      return reply.send({ error: 'Erro ao deletar campo de carai' });
+    }
   }
 }
 

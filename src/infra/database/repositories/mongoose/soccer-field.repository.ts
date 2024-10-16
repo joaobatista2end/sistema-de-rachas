@@ -64,8 +64,20 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     return this.parseToEntity(updated);
   }
 
-  async delete(id: string): Promise<void | null> {
-    this.model.findByIdAndDelete(id).exec();
+  async delete(id: string){
+    try {
+      const deletedField = await this.model.findByIdAndDelete(id);
+
+      if (!deletedField) {
+        console.error(`Campo não encontrado para o ID: ${id}`);
+        throw new Error('Campo não encontrado.');
+      }
+
+      console.log('Campo deletado com sucesso:', deletedField);
+    } catch (error) {
+      console.error('Erro ao deletar o campo:', error);
+      throw error;
+    }
   }
 
   private parseToEntity(document: SoccerFieldDocument): SoccerField {

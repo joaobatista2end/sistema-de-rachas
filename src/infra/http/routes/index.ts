@@ -83,6 +83,14 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [verifyJwt] },
     soccerFieldController.availableTimes.bind(soccerFieldController)
   );
+
+  fastify.delete<{
+    Params: { id: string };
+  }>(
+    '/soccer-field/:id',
+    { onRequest: [verifyJwt] },
+    soccerFieldController.delete.bind(soccerFieldController)
+  );
 };
 
 export default routes;
