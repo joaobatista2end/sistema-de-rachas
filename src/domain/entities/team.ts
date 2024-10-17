@@ -13,16 +13,14 @@ export type TeamParams = {
 export class Team {
   id: string;
   name: string;
-  public static minPlayers: number = 6;
-  public static maxPlayers: number = 12;
+  public static readonly minPlayers: number = 6;
+  public static readonly maxPlayers: number = 12;
   players: Array<Player>;
 
   constructor(params: TeamParams) {
     this.id = uid();
     this.name = params.name;
     this.players = params.players;
-    Team.minPlayers = params?.minPlayers || 6;
-    Team.maxPlayers = params?.maxPlayers || 12;
   }
 
   public get totalStars(): number {

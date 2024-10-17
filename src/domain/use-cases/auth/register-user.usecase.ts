@@ -3,7 +3,6 @@ import { UserMongoRespository } from '../../../infra/database/repositories/mongo
 import { UserRepository } from '../../../infra/database/repositories/user.repository';
 import { CreateUserDto } from '../../dto/user.dto';
 import { User } from '../../entities/user';
-import bcrypt from 'bcrypt';
 import { Either, left, right } from '../../utils/either';
 import { HttpStatusCode } from '../../enums/http-status-code';
 import { HttpError } from '../../errors/http.error';

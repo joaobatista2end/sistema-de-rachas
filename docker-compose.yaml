@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 services:
   mongo:
     image: mongo:5.0
@@ -8,12 +8,11 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - ./database/db:/data/db
       - ./database/dev.archive:/Databases/dev.archive
       - ./database/production:/Databases/production
-  
   mongo-express:
     image: mongo-express
     container_name: mexpress
@@ -27,26 +26,27 @@ services:
       - mongo
     restart: unless-stopped
     ports:
-      - "8081:8081"
+      - '8081:8081'
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: fastify-app
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mongo
+  sonarqube:
+    image: sonarqube:10.6-community
+    container_name: sonarqube
     environment:
-      - NODE_OPTIONS=--import tsx
-      - DB_DRIVER=mongodb
-      - DB_HOST=mongo
-      - DB_USER=root
-      - DB_DATABASE=sistema-rachas
-      - DB_AUTH_SOURCE=admin
-      - DB_PASSWORD=password
-      - DB_PORT=27017
-      - PORT=3000
-      - JWT_SECRET=diasdjp1dj12diasd-ascni1-23o1jdsad
-      - SALTS_PASSWORD=10
+      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonar
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+    ports:
+      - '9000:9000'
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    container_name: sonarqube_db
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    restart: unless-stopped
+    volumes:
+      - ./sonarqube/postgresql:/var/lib/postgresql/data

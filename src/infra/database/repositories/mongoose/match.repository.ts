@@ -72,13 +72,13 @@ export class MatchMongoRepository implements MatchRepository {
       description: match.description,
       name: match.name,
       thumb: match.thumb,
-      players: (match?.players || []).map((player) => {
+      players: (match?.players ?? []).map((player) => {
         return (
           new Player({
             id: player._id || uid(),
             name: player.name,
             stars: player.stars,
-          }) || []
+          }) ?? []
         );
       }),
       soccerField: new SoccerField({

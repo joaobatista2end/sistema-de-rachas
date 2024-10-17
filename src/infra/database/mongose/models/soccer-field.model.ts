@@ -21,7 +21,7 @@ export const soccerFieldSchema: Schema = new Schema({
     required: true,
   },
   workDays: {
-    type: Array<String>,
+    type: Array<string>,
     required: true,
   },
   workStartTime: {

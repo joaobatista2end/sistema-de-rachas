@@ -1,5 +1,3 @@
-import { uid } from 'uid';
-
 import { Player } from './player';
 import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';

@@ -1,7 +1,6 @@
 import { ScheduleDto } from '../../domain/dto/schedule.dto';
 import { Schedule } from '../../domain/entities/schedule';
 import { AvailableTimesByDay } from '../../domain/types/available-times';
-import { formatDate } from '../utils/date';
 import { SchedulePresenter } from './schedule.presenter';
 
 export const AvailableTimesPresenter = (
