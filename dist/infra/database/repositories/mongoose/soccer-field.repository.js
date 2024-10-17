@@ -21,6 +21,7 @@ class SoccerFieldMongoRepository {
             return soccerFields.map((soccerField) => {
                 return new soccer_field_1.SoccerField({
                     id: soccerField._id,
+                    name: soccerField.name,
                     pixKey: soccerField.pixKey,
                     rentalValue: soccerField.rentalValue,
                     workFinishTime: soccerField.workFinishTime,
@@ -73,6 +74,7 @@ class SoccerFieldMongoRepository {
     parseToEntity(document) {
         return new soccer_field_1.SoccerField({
             id: document._id,
+            name: document.name,
             pixKey: document.pixKey,
             rentalValue: document.rentalValue,
             workFinishTime: document.workFinishTime,

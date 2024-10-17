@@ -11,6 +11,7 @@ import { GenerateTeamsUseCase } from './generate-teams.usecase';
 
 const soccerField = new SoccerField({
   id: uid(),
+  name: 'Campo de teste',
   pixKey: uid(),
   rentalValue: 300,
   workDays: ['sábado', 'domingo'],

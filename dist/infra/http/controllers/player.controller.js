@@ -10,14 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const register_player_usecase_1 = require("../../../domain/use-cases/player/register-player.usecase");
+const http_status_code_1 = require("../../../domain/enums/http-status-code");
+const player_presenter_1 = require("../../../application/presenters/player.presenter");
 class PlayerController {
     register(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const playerDto = req.body;
-            const player = yield register_player_usecase_1.RegisterPlayerUseCase.execute(playerDto);
-            res.send({
-                data: player,
-            });
+            const result = yield register_player_usecase_1.RegisterPlayerUseCase.execute(playerDto);
+            if (result) {
+                res.status(http_status_code_1.HttpStatusCode.CREATED).send((0, player_presenter_1.PlayerPresenter)(result));
+            }
+            else {
+                res.status(http_status_code_1.HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+                    message: 'Erro ao criar jogador',
+                });
+            }
         });
     }
 }

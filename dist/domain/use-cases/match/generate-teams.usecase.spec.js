@@ -10,6 +10,7 @@ const player_1 = require("../../factories/player");
 const generate_teams_usecase_1 = require("./generate-teams.usecase");
 const soccerField = new soccer_field_1.SoccerField({
     id: (0, uid_1.uid)(),
+    name: 'Campo de teste',
     pixKey: (0, uid_1.uid)(),
     rentalValue: 300,
     workDays: ['sábado', 'domingo'],
