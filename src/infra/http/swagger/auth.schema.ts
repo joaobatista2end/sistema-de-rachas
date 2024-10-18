@@ -20,6 +20,11 @@ export const registerSwaggerSchema = {
         description: "Optional URL for the user's profile photo",
         nullable: true,
       },
+      role: {
+        type: 'number',
+        description: 'Role of user',
+        nullable: false,
+      },
     },
   },
   response: {
@@ -40,6 +45,10 @@ export const registerSwaggerSchema = {
           type: 'string',
           format: 'uri',
           description: "The URL of the user's profile photo",
+        },
+        role: {
+          type: 'number',
+          description: 'Role of user',
         },
       },
     },

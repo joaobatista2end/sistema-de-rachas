@@ -7,5 +7,6 @@ export const UserPresenter = (user: User): UserDto => {
     email: user.email,
     name: user.name,
     photoUrl: user.photoUrl,
+    role: user.role,
   };
 };

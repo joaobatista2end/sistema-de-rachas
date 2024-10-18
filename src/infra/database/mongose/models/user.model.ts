@@ -5,7 +5,7 @@ export interface UserDocument extends Document<string> {
   name: string;
   email: string;
   password: string;
-  role: UserRoleEnum;
+  role: number;
   photoUrl?: string;
 }
 
@@ -28,7 +28,7 @@ export const userSchema: Schema = new Schema({
     required: false,
   },
   role: {
-    type: UserRoleEnum,
+    type: Number,
     required: true,
   },
 });
