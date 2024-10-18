@@ -1,9 +1,11 @@
 import { Model, model, Schema, Document } from 'mongoose';
+import { UserRoleEnum } from '../../../../domain';
 
 export interface UserDocument extends Document<string> {
   name: string;
   email: string;
   password: string;
+  role: UserRoleEnum;
   photoUrl?: string;
 }
 
@@ -24,6 +26,10 @@ export const userSchema: Schema = new Schema({
   photoUrl: {
     type: String,
     required: false,
+  },
+  role: {
+    type: UserRoleEnum,
+    required: true,
   },
 });
 
