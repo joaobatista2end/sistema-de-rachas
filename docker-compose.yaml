@@ -35,7 +35,7 @@ services:
       dockerfile: Dockerfile
     container_name: fastify-app
     ports:
-      - "3000:3000"
+      - "8000:8000"
     depends_on:
       - mongo
     environment:
@@ -47,6 +47,6 @@ services:
       - DB_AUTH_SOURCE=admin
       - DB_PASSWORD=password
       - DB_PORT=27017
-      - PORT=3000
+      - PORT=8000
       - JWT_SECRET=diasdjp1dj12diasd-ascni1-23o1jdsad
       - SALTS_PASSWORD=10

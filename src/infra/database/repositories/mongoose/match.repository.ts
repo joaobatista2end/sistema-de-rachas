@@ -10,8 +10,8 @@ import { Player } from '../../../../domain/entities/player';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
-import { match } from 'assert';
 import { DayOfWeek } from '../../../../domain/object-values/day';
+import { User } from '../../../../domain';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -91,12 +91,28 @@ export class MatchMongoRepository implements MatchRepository {
         ),
         workStartTime: match.soccerField.workStartTime,
         workFinishTime: match.soccerField.workFinishTime,
+        user: new User({
+          id: match.soccerField.user?._id || uid(),
+          email: match.soccerField.user.email,
+          name: match.soccerField.user.email,
+          role: match.soccerField.user.role,
+          password: match.soccerField.user.password,
+          photoUrl: match.soccerField.user.photoUrl,
+        }),
       }),
       schedule: new Schedule({
         id: match.schedule?._id || uid(),
         day: match.schedule.day,
         startTime: match.schedule.startTime,
         finishTime: match.schedule.finishTime,
+      }),
+      user: new User({
+        id: match.user?._id || uid(),
+        email: match.user.email,
+        name: match.user.email,
+        role: match.user.role,
+        password: match.user.password,
+        photoUrl: match.user.photoUrl,
       }),
     });
   }

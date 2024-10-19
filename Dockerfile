@@ -26,7 +26,7 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app .
 
 # Expõe a porta da aplicação
-EXPOSE 3000
+EXPOSE 3001
 
 # Comando para rodar a aplicação
 CMD ["npm", "run", "start"]

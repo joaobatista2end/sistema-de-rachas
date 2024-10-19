@@ -76,6 +76,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
         name: document.user.name,
         password: document.user.password,
         photoUrl: document.user.photoUrl,
+        role: document.user.role,
       }),
     });
   }

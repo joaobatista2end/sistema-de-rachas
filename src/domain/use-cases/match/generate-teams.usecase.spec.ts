@@ -7,6 +7,7 @@ import { SoccerField } from '../../entities/soccer-field';
 import { Team } from '../../entities/team';
 import { playerFactory } from '../../factories/player';
 import { GenerateTeamsUseCase } from './generate-teams.usecase';
+import { UserFactory } from '../../factories/user';
 
 const soccerField = new SoccerField({
   id: uid(),
@@ -16,6 +17,7 @@ const soccerField = new SoccerField({
   workDays: ['sábado', 'domingo'],
   workFinishTime: '08:00:00',
   workStartTime: '18:00:00',
+  user: UserFactory.createUser(),
 });
 const schedule = new Schedule({
   id: uid(),
@@ -33,6 +35,7 @@ describe('Gerar times do racha', () => {
       name: 'Some match',
       soccerField,
       schedule,
+      user: UserFactory.createUser(),
     });
     const players = playerFactory(12);
     const players2 = playerFactory(100);
@@ -52,6 +55,7 @@ describe('Gerar times do racha', () => {
       name: 'Some match',
       soccerField,
       schedule,
+      user: UserFactory.createUser(),
     });
     const players = playerFactory(30);
     match.players = players;

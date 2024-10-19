@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { SoccerField, SoccerFieldParams } from './soccer-field';
 import { Time } from '../object-values/time';
 import { uid } from 'uid';
+import { UserFactory } from '../factories/user';
 
 describe('SoccerField', () => {
   it('should return available times for the entire year', () => {
@@ -13,6 +14,7 @@ describe('SoccerField', () => {
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
       workFinishTime: '12:00:00',
+      user: UserFactory.createUser(),
     };
 
     const soccerField = new SoccerField(params);
@@ -44,6 +46,7 @@ describe('SoccerField', () => {
       workDays: ['segunda', 'quarta', 'sexta'],
       workStartTime: '10:00:00',
       workFinishTime: '12:00:00',
+      user: UserFactory.createUser(),
     };
 
     const soccerField = new SoccerField(params);

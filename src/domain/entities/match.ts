@@ -2,6 +2,7 @@ import { Player } from './player';
 import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';
 import { Team } from './team';
+import { User } from './user';
 
 export type MatchParams = {
   id: string;
@@ -11,6 +12,7 @@ export type MatchParams = {
   soccerField: SoccerField;
   schedule: Schedule;
   players?: Array<Player>;
+  user: User;
 };
 
 export class Match {
@@ -23,6 +25,7 @@ export class Match {
   soccerField: SoccerField;
   teams: Array<Team>;
   description: string;
+  user: User;
 
   public constructor(params: MatchParams) {
     this.id = params.id;
@@ -34,6 +37,7 @@ export class Match {
     this.thumb = params.thumb;
     this.teams = [];
     this.paymentListPlayers = [];
+    this.user = params.user;
   }
 
   public get paymentPlayers(): Array<Player> {
