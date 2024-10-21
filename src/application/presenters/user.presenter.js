@@ -7,6 +7,7 @@ const UserPresenter = (user) => {
         email: user.email,
         name: user.name,
         photoUrl: user.photoUrl,
+        role: user.role,
     };
 };
 exports.UserPresenter = UserPresenter;
