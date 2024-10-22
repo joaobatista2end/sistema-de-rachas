@@ -3,10 +3,10 @@ import { User } from '../../domain/entities/user';
 
 export const UserPresenter = (user: User): UserDto => {
   return {
-    id: user.id,
+    id: user.id.toString(),
     email: user.email,
     name: user.name,
-    photoUrl: user.photoUrl,
+    photoUrl: user?.photoUrl,
     role: user.role,
   };
 };

@@ -19,6 +19,21 @@ content-type: application/json
 
 ###
 
+# @name RegisterUser
+
+POST http://localhost:3003/auth/register
+content-type: application/json
+
+{
+    "name": "José da Silva3",
+    "email": "josesilva12@gmail.com",
+    "password": "qwe123qwewww",
+    "photoUrl": "https://lasdijasidas.com",
+    "role": 1
+}
+
+###
+
 # @name GetSoccerFieldAvailableTimes
 GET http://localhost:8000/soccer-field/66fac90c0b7f0d8c63b94c8c?month=10
 

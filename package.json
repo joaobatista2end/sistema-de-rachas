@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "lint": "eslint . --ext .ts",
-    "dev": "tsx --env-file=.env --inspect --watch ./src/main.ts",
+    "dev": "tsx watch --env-file .env ./src/main.ts",
     "build": "tsc",
     "start": "node ./dist/main.js"
   },

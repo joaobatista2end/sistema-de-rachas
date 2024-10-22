@@ -5,7 +5,7 @@ export const SoccerFieldPresenter = (
   soccerField: SoccerField
 ): SoccerFieldDto => {
   return {
-    id: soccerField.id,
+    id: soccerField.id.toString(),
     name: soccerField.name,
     pixKey: soccerField.pixKey,
     rentalValue: soccerField.rentalValue,

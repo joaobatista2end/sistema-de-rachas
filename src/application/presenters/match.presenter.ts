@@ -9,7 +9,7 @@ export const MatchPresenter = (match: Match | null): MatchDto | null => {
   if (!match) return match;
 
   return {
-    id: match.id,
+    id: match.id.toString(),
     name: match.name,
     description: match.description,
     thumb: match.thumb,
