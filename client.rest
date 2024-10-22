@@ -1,97 +1,123 @@
-# @name FetchAllSoccerFields
-GET http://localhost:8000/soccer-field
+### Definição de Variáveis Globais
+@baseUrl = http://localhost:3003
+@token = {{AuthLogin.response.body.token}}
 
 ###
 
-# @name RegisterSoccerField
-
-POST http://localhost:8000/soccer-field
+# @name AuthLogin
+POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-    "name": "campo do zé",
-    "pixKey": "Campo do zézinho2",
-    "rentalValue": 150,
-    "workStartTime": "10:00:00",
-    "workFinishTime": "21:00:00",
-    "workDays": ["segunda", "sexta"]
+  "email": "josesilva12@gmail.com",
+  "password": "qwe123qwewww"
 }
 
 ###
 
-# @name RegisterUser
-
-POST http://localhost:3003/auth/register
+# @name AuthRegisterUser
+POST {{baseUrl}}/auth/register
 content-type: application/json
 
 {
-    "name": "José da Silva3",
-    "email": "josesilva12@gmail.com",
-    "password": "qwe123qwewww",
-    "photoUrl": "https://lasdijasidas.com",
-    "role": 1
+  "name": "José da Silva3",
+  "email": "josesilva12@gmail.com",
+  "password": "qwe123qwewww",
+  "photoUrl": "https://lasdijasidas.com",
+  "role": 1
 }
 
 ###
 
-# @name GetSoccerFieldAvailableTimes
-GET http://localhost:8000/soccer-field/66fac90c0b7f0d8c63b94c8c?month=10
+# @name AuthGetUserProfile
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
 
 ###
 
-# @name RegisterPlayer
-POST http://localhost:8000/player
+# @name SoccerFieldGetAll
+GET {{baseUrl}}/soccer-field
+Authorization: Bearer {{token}}
+
+###
+
+# @name SoccerFieldRegister
+POST {{baseUrl}}/soccer-field
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "campo do zé",
+  "pixKey": "Campo do zézinho2",
+  "rentalValue": 150,
+  "workStartTime": "10:00:00",
+  "workFinishTime": "21:00:00",
+  "workDays": ["segunda", "sexta"]
+}
+
+###
+
+# @name SoccerFieldGetAvailableTimes
+GET {{baseUrl}}/soccer-field/66fac90c0b7f0d8c63b94c8c?month=10
+Authorization: Bearer {{token}}
+
+###
+
+# @name PlayerRegister
+POST {{baseUrl}}/player
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "name": "joao3",
-    "stars": 4
+  "name": "joao3",
+  "stars": 4
 }
 
 ###
 
-# @name RegisterMatch
-
-POST http://localhost:8000/match
+# @name MatchRegister
+POST {{baseUrl}}/match
 content-type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "name": "Partida de teste",
-    "description":"Partida de teste.",
-    "thumb": "Partida de teste",
-    "soccerField": "66fac90c0b7f0d8c63b94c8c",
-    "schedule": {
-        "day": "20/08/2024",
-        "startTime": "10:40:00",
-        "finishTime": "14:40:00"
-    }
+  "name": "Partida de teste",
+  "description":"Partida de teste.",
+  "thumb": "Partida de teste",
+  "soccerField": "66fac90c0b7f0d8c63b94c8c",
+  "schedule": {
+    "day": "20/08/2024",
+    "startTime": "10:40:00",
+    "finishTime": "14:40:00"
+  }
 }
 
 ###
 
-# @name UpdateMatch
-
-PUT http://localhost:8000/match/66971ecd00f5b5b3f453ea94
+# @name MatchUpdate
+PUT {{baseUrl}}/match/66971ecd00f5b5b3f453ea94
 content-type: application/json
+Authorization: Bearer {{token}}
 
 {
-    "soccerField": "66ea1c97b6c878b4c7530ae3",
-    "players": ["66ea1ca8b6c878b4c7530ae9", "66ea1cb2b6c878b4c7530aea"]
+  "soccerField": "66ea1c97b6c878b4c7530ae3",
+  "players": ["66ea1ca8b6c878b4c7530ae9", "66ea1cb2b6c878b4c7530aea"]
 }
 
+###
+
+# @name MatchFindById
+GET {{baseUrl}}/match/6699b0abdd6721079e440bd6
+Authorization: Bearer {{token}}
 
 ###
 
-# @name FindMatch
-GET http://localhost:8000/match/6699b0abdd6721079e440bd6
+# @name MatchGetAll
+GET {{baseUrl}}/match
+Authorization: Bearer {{token}}
 
 ###
 
-# @name FetchAllMatch
-GET http://localhost:8000/match
-
-### 
-
-# @name CalculatePaymentPerPlayer
-
-GET http://localhost:8000/match/66ea191e8665af450bf9f33b/amount-paid-players
+# @name MatchCalculatePaymentPerPlayer
+GET {{baseUrl}}/match/66ea191e8665af450bf9f33b/amount-paid-players
+Authorization: Bearer {{token}}

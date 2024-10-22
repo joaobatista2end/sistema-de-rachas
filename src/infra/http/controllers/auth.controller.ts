@@ -7,6 +7,10 @@ import { HttpStatusCode } from '../../../domain/enums/http-status-code';
 import { AutenticateUserUsecases } from '../../../domain/use-cases/auth/authenticate-user.usecase';
 
 class AuthController {
+  async me(req: FastifyRequest, res: FastifyReply) {
+    res.send(req.user);
+  }
+
   async register(req: FastifyRequest, res: FastifyReply) {
     const result = await RegisterUserUseCase.execute(req.body as CreateUserDto);
     if (result.isLeft()) {
