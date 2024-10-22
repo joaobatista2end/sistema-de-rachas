@@ -5,10 +5,16 @@ import { CreateUserDto, LoginDto } from '../../../domain/dto/user.dto';
 import { UserPresenter } from '../../../application/presenters/user.presenter';
 import { HttpStatusCode } from '../../../domain/enums/http-status-code';
 import { AutenticateUserUsecases } from '../../../domain/use-cases/auth/authenticate-user.usecase';
+import { GetUserInformationsUsecase } from '../../../domain/use-cases/auth/get-user-informations.usecase';
 
 class AuthController {
   async me(req: FastifyRequest, res: FastifyReply) {
-    res.send(req.user);
+    const user = req.user as any;
+    const result = await GetUserInformationsUsecase.execute(user.id);
+
+    if (result.isRight()) {
+      return res.status(HttpStatusCode.OK).send(UserPresenter(result.value));
+    }
   }
 
   async register(req: FastifyRequest, res: FastifyReply) {

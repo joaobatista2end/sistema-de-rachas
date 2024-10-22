@@ -7,6 +7,7 @@ import {
 import fp from 'fastify-plugin';
 import fastifyJwt from '@fastify/jwt';
 import { env } from '../../../environment/EnvSchema';
+import { UserDto } from '../../../../domain';
 
 interface JwtPluginOptions extends FastifyPluginOptions {
   secret: string;
@@ -15,6 +16,14 @@ interface JwtPluginOptions extends FastifyPluginOptions {
 const JWTVerifyPlugin = fp(
   async (fastify: FastifyInstance, opts: JwtPluginOptions) => {
     fastify.register(fastifyJwt, {
+      formatUser: function (user: any): UserDto {
+        return {
+          email: user.email,
+          id: user.id,
+          name: user.name,
+          role: user.role,
+        };
+      },
       secret: env.JWT_SECRET,
     });
 

@@ -7,6 +7,7 @@ import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.use
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
 import { MatchPresenter } from '../../../application/presenters/match.presenter';
 import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
+import { UserDto } from '../../../domain';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -15,11 +16,12 @@ class MatchController {
       data: matchs,
     });
   }
-  async register(req: FastifyRequest, res: FastifyReply) {
-    const match = await RegisterMatchUseCase.execute(
-      req.body as CreateMatchDto
-    );
-
+  async register(
+    req: FastifyRequest<{ Body: CreateMatchDto }>,
+    res: FastifyReply
+  ) {
+    const user: UserDto = req.user;
+    const match = await RegisterMatchUseCase.execute(req.body);
     res.send({
       data: MatchPresenter(match),
     });
