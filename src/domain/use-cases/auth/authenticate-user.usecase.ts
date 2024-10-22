@@ -15,9 +15,7 @@ export class AutenticateUserUsecases {
     UserModel
   );
 
-  static async execute(
-    payload: LoginDto
-  ): Promise<Either<HttpError, string | null>> {
+  static async execute(payload: LoginDto): Promise<Either<HttpError, string>> {
     const user = await this.repository.findByEmail(payload.email);
 
     if (!user) {

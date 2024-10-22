@@ -15,7 +15,7 @@ export class RegisterUserUseCase {
 
   static async execute(
     payload: CreateUserDto
-  ): Promise<Either<HttpError, User | null>> {
+  ): Promise<Either<HttpError, User>> {
     const existsUser = await this.repository.findByEmail(payload.email);
     if (existsUser) {
       return left(

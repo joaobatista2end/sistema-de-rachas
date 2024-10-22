@@ -39,7 +39,7 @@ export class GenerateTeamsUseCase {
     const minStars = Math.min(...teams.map((team) => team.totalStars));
     const maxStars = Math.max(...teams.map((team) => team.totalStars));
 
-    if (maxStars - minStars > 1) {
+    if (maxStars - minStars > 2) {
       throw new Error(
         'Erro: Não é possível criar times com diferença de estrelas superior a 1.'
       );

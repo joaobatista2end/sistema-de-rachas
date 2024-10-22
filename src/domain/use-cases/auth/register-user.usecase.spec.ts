@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { connect, disconnect } from 'mongoose';
 import { UserFactory } from '../../factories/user';
-import { UserMongoRespository } from '../../../infra/database/repositories/mongoose/user.respository';
-import { UserModel } from '../../../infra/database/mongose/models/user.model';
 import { env } from '../../../infra/environment/EnvSchema';
 import { RegisterUserUseCase } from './register-user.usecase';
 describe('Test for register user use case', () => {
