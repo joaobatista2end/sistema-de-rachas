@@ -22,34 +22,62 @@ const routes = async (fastify: FastifyInstance) => {
     authController.login.bind(authController)
   );
 
+  fastify.get(
+    '/auth/me',
+    {
+      onRequest: [fastify.authenticate],
+    },
+    authController.me.bind(authController)
+  );
+
   // Players
   fastify.post(
     '/player',
-    { schema: createPlayerSchema },
+    { schema: createPlayerSchema, onRequest: [fastify.authenticate] },
     playerController.register.bind(playerController)
   );
 
   // Match
-  fastify.post('/match', matchController.register.bind(matchController));
-  fastify.get('/match', matchController.all.bind(matchController));
-  fastify.put('/match/:id', matchController.update.bind(matchController));
-  fastify.get('/match/:id', matchController.findById.bind(matchController));
+  fastify.post(
+    '/match',
+    { onRequest: [fastify.authenticate] },
+    matchController.register.bind(matchController)
+  );
   fastify.get(
+    '/match',
+    { onRequest: [fastify.authenticate] },
+    matchController.all.bind(matchController)
+  );
+  fastify.put<{ Params: { id: string } }>(
+    '/match/:id',
+    { onRequest: [fastify.authenticate] },
+    matchController.update.bind(matchController)
+  );
+  fastify.get<{ Params: { id: string } }>(
+    '/match/:id',
+    { onRequest: [fastify.authenticate] },
+    matchController.findById.bind(matchController)
+  );
+  fastify.get<{ Params: { id: string } }>(
     '/match/:id/amount-paid-players',
+    { onRequest: [fastify.authenticate] },
     matchController.getAmountPaidPlayer.bind(matchController)
   );
 
   // Soccer Field
   fastify.post(
     '/soccer-field',
+    { onRequest: [fastify.authenticate] },
     soccerFieldController.register.bind(soccerFieldController)
   );
   fastify.get(
     '/soccer-field',
+    { onRequest: [fastify.authenticate] },
     soccerFieldController.all.bind(soccerFieldController)
   );
-  fastify.get(
+  fastify.get<{ Params: { id: string }; Querystring: { month: number } }>(
     '/soccer-field/:id',
+    { onRequest: [fastify.authenticate] },
     soccerFieldController.availableTimes.bind(soccerFieldController)
   );
 };
