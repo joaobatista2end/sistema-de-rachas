@@ -16,12 +16,10 @@ class MatchController {
       data: matchs,
     });
   }
-  async register(
-    req: FastifyRequest<{ Body: CreateMatchDto }>,
-    res: FastifyReply
-  ) {
-    const user: UserDto = req.user;
-    const match = await RegisterMatchUseCase.execute(req.body);
+  async register(req: FastifyRequest, res: FastifyReply) {
+    const match = await RegisterMatchUseCase.execute(
+      req.body as CreateMatchDto
+    );
     res.send({
       data: MatchPresenter(match),
     });
