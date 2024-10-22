@@ -14,7 +14,7 @@ class AuthController {
         message: result.value.message,
       });
     } else if (result.isRight() && result?.value) {
-      res.send(UserPresenter(result.value));
+      res.status(HttpStatusCode.CREATED).send(UserPresenter(result.value));
     }
   }
 
