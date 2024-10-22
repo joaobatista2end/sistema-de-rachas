@@ -8,6 +8,16 @@ export interface SoccerFieldDocument extends Document<string> {
   workDays: Array<string>;
   workStartTime: string;
   workFinishTime: string;
+  user: mongoose.Types.ObjectId[];
+}
+
+export interface SoccerFieldDocumentWithRelations extends Document<string> {
+  name: string;
+  pixKey: string;
+  rentalValue: number;
+  workDays: Array<string>;
+  workStartTime: string;
+  workFinishTime: string;
   user: UserDocument;
 }
 
@@ -39,9 +49,7 @@ export const soccerFieldSchema: Schema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
 });
 
-const SoccerFieldModel: Model<SoccerFieldDocument> = model<SoccerFieldDocument>(
-  'soccer-field',
-  soccerFieldSchema
-);
+const SoccerFieldModel: Model<SoccerFieldDocumentWithRelations> =
+  model<SoccerFieldDocumentWithRelations>('soccer-field', soccerFieldSchema);
 
 export default SoccerFieldModel;

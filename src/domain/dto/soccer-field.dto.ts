@@ -1,4 +1,5 @@
 import { DayOfWeek } from '../object-values/day';
+import { UserDto } from './user.dto';
 
 export type SoccerFieldDto = {
   id: string;
@@ -8,6 +9,7 @@ export type SoccerFieldDto = {
   workDays: Array<DayOfWeek>;
   workStartTime: string;
   workFinishTime: string;
+  user: UserDto;
 };
 
 export type CreateSoccerFieldDto = {
@@ -17,4 +19,5 @@ export type CreateSoccerFieldDto = {
   workDays: Array<DayOfWeek>;
   workStartTime: string;
   workFinishTime: string;
+  user: string;
 };

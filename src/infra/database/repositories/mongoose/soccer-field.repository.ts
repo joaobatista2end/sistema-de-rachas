@@ -4,19 +4,23 @@ import {
   CreateSoccerFieldDto,
   SoccerFieldDto,
 } from '../../../../domain/dto/soccer-field.dto';
-import { SoccerFieldDocument } from '../../mongose/models/soccer-field.model';
+import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { User } from '../../../../domain/entities/user';
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
-  private model: Model<SoccerFieldDocument>;
+  private model: Model<SoccerFieldDocumentWithRelations>;
 
-  constructor(model: Model<SoccerFieldDocument>) {
+  constructor(model: Model<SoccerFieldDocumentWithRelations>) {
     this.model = model;
   }
 
-  async all(): Promise<Array<SoccerField>> {
-    const soccerFields = await this.model.find();
+  async all(userId: string): Promise<Array<SoccerField>> {
+    const soccerFields = await this.model
+      .where('user')
+      .equals(userId)
+      .populate(['user'])
+      .exec();
 
     return soccerFields.map((soccerField) => {
       return this.parseToEntity(soccerField);
@@ -24,7 +28,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   }
 
   async findById(id: string): Promise<SoccerField | null> {
-    const soccerField = await this.model.findById(id).exec();
+    const soccerField = await this.model.findById(id).populate(['user']).exec();
     if (!soccerField) return null;
 
     return this.parseToEntity(soccerField);
@@ -38,22 +42,25 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   }
 
   async create(data: CreateSoccerFieldDto): Promise<SoccerField | null> {
-    const created = new this.model(data);
-    await created.save();
+    const soccerField = new this.model(data);
+    await soccerField.save();
 
-    if (!created) return null;
-    return this.parseToEntity(created);
+    if (!soccerField) return null;
+
+    return this.parseToEntity(soccerField);
   }
 
   async update(
     id: string,
-    payload: Partial<SoccerFieldDto>
+    payload: Partial<CreateSoccerFieldDto>
   ): Promise<SoccerField | null> {
     const updated = await this.model
       .findByIdAndUpdate(id, payload, { new: true })
+      .populate(['user'])
       .exec();
 
     if (!updated) return null;
+
     return this.parseToEntity(updated);
   }
 
@@ -61,7 +68,9 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     this.model.findByIdAndDelete(id).exec();
   }
 
-  private parseToEntity(document: SoccerFieldDocument): SoccerField {
+  private parseToEntity(
+    document: SoccerFieldDocumentWithRelations
+  ): SoccerField {
     return new SoccerField({
       id: document._id as string,
       name: document.name,
