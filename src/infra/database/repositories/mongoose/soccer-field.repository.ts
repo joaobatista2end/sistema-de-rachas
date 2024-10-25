@@ -15,7 +15,14 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     this.model = model;
   }
 
-  async all(userId: string): Promise<Array<SoccerField>> {
+  async all(): Promise<Array<SoccerField>> {
+    const soccerFields = await this.model.find().populate(['user']).exec();
+    return soccerFields.map((soccerField) => {
+      return this.parseToEntity(soccerField);
+    });
+  }
+
+  async allByUser(userId: string): Promise<Array<SoccerField>> {
     const soccerFields = await this.model
       .where('user')
       .equals(userId)

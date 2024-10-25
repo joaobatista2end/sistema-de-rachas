@@ -6,14 +6,16 @@ import { HttpStatusCode } from '../../enums';
 import { HttpError } from '../../errors/http.error';
 import { Either, left, right } from '../../utils';
 
-export class FetchSoccerFieldUseCase {
+export class FetchSoccerFieldByUserUseCase {
   private static repository: SoccerFieldRepository =
     new SoccerFieldMongoRepository(SoccerFieldModel);
 
-  static async execute(): Promise<Either<HttpError, Array<SoccerField>>> {
+  static async execute(
+    userId: string
+  ): Promise<Either<HttpError, Array<SoccerField>>> {
     try {
       const registredSoccerField =
-        await FetchSoccerFieldUseCase.repository.all();
+        await FetchSoccerFieldByUserUseCase.repository.allByUser(userId);
 
       return right(registredSoccerField);
     } catch (error) {

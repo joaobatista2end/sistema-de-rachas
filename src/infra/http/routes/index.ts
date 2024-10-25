@@ -75,6 +75,11 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     soccerFieldController.all.bind(soccerFieldController)
   );
+  fastify.get(
+    '/soccer-field/by-user',
+    { onRequest: [fastify.authenticate] },
+    soccerFieldController.allByUser.bind(soccerFieldController)
+  );
   fastify.get<{ Params: { id: string }; Querystring: { month: number } }>(
     '/soccer-field/:id',
     { onRequest: [fastify.authenticate] },

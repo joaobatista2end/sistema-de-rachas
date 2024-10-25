@@ -41,6 +41,12 @@ Authorization: Bearer {{token}}
 
 ###
 
+# @name SoccerFieldGetAllByUser
+GET {{baseUrl}}/soccer-field/by-user
+Authorization: Bearer {{token}}
+
+###
+
 # @name SoccerFieldRegister
 POST {{baseUrl}}/soccer-field
 content-type: application/json

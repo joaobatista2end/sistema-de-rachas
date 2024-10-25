@@ -9,11 +9,24 @@ import { FetchSoccerFieldUseCase } from '../../../domain/use-cases/soccer-field/
 import { GetSoccerFieldAvailableTimes } from '../../../domain/use-cases/soccer-field/get-soccer-field-available-times';
 import { AvailableTimesPresenter } from '../../../application/presenters/available-times.presenter';
 import { HttpStatusCode } from '../../../domain';
+import { FetchSoccerFieldByUserUseCase } from '../../../domain/use-cases/soccer-field/fetch-soccer-field-by-user';
 
 class SoccerFieldController {
   async all(req: FastifyRequest, res: FastifyReply) {
+    const result = await FetchSoccerFieldUseCase.execute();
+
+    if (result.isRight()) {
+      res
+        .status(HttpStatusCode.OK)
+        .send(ArraySoccerFieldPresenter(result.value));
+    } else {
+      res.status(result.value.code).send(result.value.message);
+    }
+  }
+
+  async allByUser(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
-    const result = await FetchSoccerFieldUseCase.execute(user.id);
+    const result = await FetchSoccerFieldByUserUseCase.execute(user.id);
 
     if (result.isRight()) {
       res
