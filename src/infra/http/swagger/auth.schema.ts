@@ -1,4 +1,5 @@
 export const registerSwaggerSchema = {
+  tags: ['Usuário'],
   body: {
     type: 'object',
     required: ['name', 'email', 'password'],
@@ -72,6 +73,7 @@ export const registerSwaggerSchema = {
 };
 
 export const loginSwaggerSchema = {
+  tags: ['Usuário'],
   body: {
     type: 'object',
     required: ['email', 'password'],

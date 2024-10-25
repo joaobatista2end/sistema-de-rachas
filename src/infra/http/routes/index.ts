@@ -12,6 +12,10 @@ import {
   createPlayerSchema,
   deletePlayerSchema,
 } from '../swagger/player.schema';
+import {
+  createSoccerFieldSchema,
+  deleteSoccerFieldSchema,
+} from '../swagger/soccer-field.schema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -75,12 +79,12 @@ const routes = async (fastify: FastifyInstance) => {
   // Soccer Field
   fastify.post(
     '/soccer-field',
-    { onRequest: [fastify.authenticate] },
+    { schema: createSoccerFieldSchema, onRequest: [fastify.authenticate] },
     soccerFieldController.register.bind(soccerFieldController)
   );
   fastify.delete<{ Params: { id: string } }>(
     '/soccer-field/:id',
-    { schema: deletePlayerSchema, onRequest: [fastify.authenticate] },
+    { schema: deleteSoccerFieldSchema, onRequest: [fastify.authenticate] },
     soccerFieldController.delete.bind(soccerFieldController)
   );
   fastify.get(
