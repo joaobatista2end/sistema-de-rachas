@@ -11,7 +11,14 @@ export class RemoveSoccerFieldUsecase {
 
   static async execute(id: string): Promise<Either<HttpError, string>> {
     try {
-      await RemoveSoccerFieldUsecase.repository.delete(id);
+      const deletedSoccerField =
+        await RemoveSoccerFieldUsecase.repository.delete(id);
+
+      if (!deletedSoccerField) {
+        return left(
+          new HttpError(HttpStatusCode.NOT_FOUND, 'Campo não encontrado.')
+        );
+      }
       return right('Campo removido com sucesso');
     } catch (error) {
       console.error(error);

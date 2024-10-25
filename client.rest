@@ -1,5 +1,5 @@
 ### Definição de Variáveis Globais
-@baseUrl = http://localhost:3003
+@baseUrl = http://localhost:3002
 @token = {{AuthLogin.response.body.token}}
 
 ###

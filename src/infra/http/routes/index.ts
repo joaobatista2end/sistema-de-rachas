@@ -8,7 +8,10 @@ import {
   loginSwaggerSchema,
   registerSwaggerSchema,
 } from '../swagger/auth.schema';
-import { createPlayerSchema } from '../swagger/player.schema';
+import {
+  createPlayerSchema,
+  deletePlayerSchema,
+} from '../swagger/player.schema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -38,7 +41,7 @@ const routes = async (fastify: FastifyInstance) => {
   );
   fastify.delete<{ Params: { id: string } }>(
     '/player/:id',
-    { onRequest: [fastify.authenticate] },
+    { schema: deletePlayerSchema, onRequest: [fastify.authenticate] },
     playerController.delete.bind(playerController)
   );
 

@@ -14,14 +14,21 @@ export class RemovePlayerUseCase {
 
   static async execute(id: string): Promise<Either<HttpError, string>> {
     try {
-      await RemovePlayerUseCase.repository.delete(id);
-      return right('Jogador removido com sucesso');
+      const deletedPlayer = await RemovePlayerUseCase.repository.delete(id);
+
+      if (!deletedPlayer) {
+        return left(
+          new HttpError(HttpStatusCode.NOT_FOUND, 'Jogador não encontrado.')
+        );
+      }
+
+      return right('Jogador removido com sucesso!');
     } catch (error) {
       console.error(error);
       return left(
         new HttpError(
           HttpStatusCode.INTERNAL_SERVER_ERROR,
-          'Erro ao obter os horários disponíveis'
+          'Erro ao remover jogador!'
         )
       );
     }
