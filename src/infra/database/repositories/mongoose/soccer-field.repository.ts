@@ -71,8 +71,14 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     return this.parseToEntity(updated);
   }
 
-  async delete(id: string): Promise<void | null> {
-    this.model.findByIdAndDelete(id).exec();
+  async delete(id: string): Promise<SoccerField | null> {
+    const deletedSoccerField = await this.model.findByIdAndDelete(id).exec();
+
+    if (!deletedSoccerField) {
+      return null;
+    }
+
+    return this.parseToEntity(deletedSoccerField);
   }
 
   private parseToEntity(

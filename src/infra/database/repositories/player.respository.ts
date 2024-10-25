@@ -7,5 +7,5 @@ export interface PlayerRepository {
   findByName(name: string): Promise<Player | null>;
   create(data: CreatePlayerDto): Promise<Player | null>;
   update(id: string, user: Partial<CreatePlayerDto>): Promise<Player | null>;
-  delete(id: string): Promise<void | null>;
+  delete(id: string): Promise<Player | null>;
 }

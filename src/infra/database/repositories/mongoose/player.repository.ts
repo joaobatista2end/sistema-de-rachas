@@ -49,8 +49,14 @@ export class PlayerMongoRepository implements PlayerRepository {
     return this.parseToEntity(updated);
   }
 
-  async delete(id: string): Promise<void | null> {
-    await this.model.findByIdAndDelete(id).exec();
+  async delete(id: string): Promise<Player | null> {
+    const deleted = await this.model.findByIdAndDelete(id).exec();
+
+    if (!deleted) {
+      return null;
+    }
+
+    return this.parseToEntity(deleted);
   }
 
   parseToEntity(document: PlayerDocument): Player {

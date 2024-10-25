@@ -78,6 +78,11 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     soccerFieldController.register.bind(soccerFieldController)
   );
+  fastify.delete<{ Params: { id: string } }>(
+    '/soccer-field/:id',
+    { schema: deletePlayerSchema, onRequest: [fastify.authenticate] },
+    soccerFieldController.delete.bind(soccerFieldController)
+  );
   fastify.get(
     '/soccer-field',
     { onRequest: [fastify.authenticate] },

@@ -10,6 +10,7 @@ import { GetSoccerFieldAvailableTimes } from '../../../domain/use-cases/soccer-f
 import { AvailableTimesPresenter } from '../../../application/presenters/available-times.presenter';
 import { HttpStatusCode } from '../../../domain';
 import { FetchSoccerFieldByUserUseCase } from '../../../domain/use-cases/soccer-field/fetch-soccer-field-by-user';
+import { RemoveSoccerFieldUsecase } from '../../../domain/use-cases/soccer-field/remove-soccer-field.usecase';
 
 class SoccerFieldController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -51,6 +52,20 @@ class SoccerFieldController {
 
     res.status(HttpStatusCode.CREATED).send(SoccerFieldPresenter(result.value));
   }
+
+  async delete(
+    req: FastifyRequest<{ Params: { id: string } }>,
+    res: FastifyReply
+  ) {
+    const result = await RemoveSoccerFieldUsecase.execute(req.params.id);
+    if (result.isLeft()) {
+      res.status(result.value.code).send(result.value.message);
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).send(result.value);
+  }
+
   async availableTimes(
     req: FastifyRequest<{
       Params: { id: string };

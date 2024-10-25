@@ -11,5 +11,5 @@ export interface SoccerFieldRepository {
     id: string,
     payload: Partial<CreateSoccerFieldDto>
   ): Promise<SoccerField | null>;
-  delete(id: string): Promise<void | null>;
+  delete(id: string): Promise<SoccerField | null>;
 }

@@ -41,6 +41,13 @@ Authorization: Bearer {{token}}
 
 ###
 
+# @name SoccerFieldDelete
+DELETE {{baseUrl}}/soccer-field/671bff73e7b36b5e83161c02
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+
 # @name SoccerFieldGetAllByUser
 GET {{baseUrl}}/soccer-field/by-user
 Authorization: Bearer {{token}}
@@ -82,10 +89,9 @@ Authorization: Bearer {{token}}
 ###
 
 # @name PlayerDelete
-DELETE {{baseUrl}}/player/671bd6cde4c8bf61aee9549e
+DELETE {{baseUrl}}/player/671bfe53b97aeb100c7f68b1
 Content-Type: application/json
 Authorization: Bearer {{token}}
-
 
 ###
 

@@ -15,7 +15,6 @@ export class RemovePlayerUseCase {
   static async execute(id: string): Promise<Either<HttpError, string>> {
     try {
       const deletedPlayer = await RemovePlayerUseCase.repository.delete(id);
-
       if (!deletedPlayer) {
         return left(
           new HttpError(HttpStatusCode.NOT_FOUND, 'Jogador não encontrado.')
