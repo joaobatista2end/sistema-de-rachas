@@ -36,6 +36,11 @@ const routes = async (fastify: FastifyInstance) => {
     { schema: createPlayerSchema, onRequest: [fastify.authenticate] },
     playerController.register.bind(playerController)
   );
+  fastify.delete<{ Params: { id: string } }>(
+    '/player/:id',
+    { onRequest: [fastify.authenticate] },
+    playerController.delete.bind(playerController)
+  );
 
   // Match
   fastify.post(

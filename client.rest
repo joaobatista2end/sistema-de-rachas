@@ -81,6 +81,14 @@ Authorization: Bearer {{token}}
 
 ###
 
+# @name PlayerDelete
+DELETE {{baseUrl}}/player/671bd6cde4c8bf61aee9549e
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+
 # @name MatchRegister
 POST {{baseUrl}}/match
 content-type: application/json

@@ -39,14 +39,17 @@ class SoccerFieldController {
   async register(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
     const soccerFieldDto = req.body as CreateSoccerFieldDto;
-    const soccerField = await RegisterSoccerFieldUseCase.execute({
+    const result = await RegisterSoccerFieldUseCase.execute({
       ...soccerFieldDto,
       user: user.id,
     });
 
-    res.send({
-      data: soccerField !== null ? SoccerFieldPresenter(soccerField) : {},
-    });
+    if (result.isLeft()) {
+      res.status(result.value.code).send(result.value.message);
+      return;
+    }
+
+    res.status(HttpStatusCode.CREATED).send(SoccerFieldPresenter(result.value));
   }
   async availableTimes(
     req: FastifyRequest<{
@@ -58,14 +61,15 @@ class SoccerFieldController {
     const { id } = req.params;
     const { month } = req.query;
 
-    const availableTimes = await GetSoccerFieldAvailableTimes.execute(
-      id,
-      month
-    );
+    const result = await GetSoccerFieldAvailableTimes.execute(id, month);
 
-    return {
-      data: availableTimes ? AvailableTimesPresenter(availableTimes) : null,
-    };
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value);
+    }
+
+    res.status(HttpStatusCode.OK).send({
+      data: AvailableTimesPresenter(result.value),
+    });
   }
 }
 
