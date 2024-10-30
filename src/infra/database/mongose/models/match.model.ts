@@ -1,7 +1,10 @@
 import mongoose, { Document, Schema, model, Model } from 'mongoose';
 import { SoccerFieldDto } from '../../../../domain/dto/soccer-field.dto';
 import { ScheduleDocument } from './schedule.model';
-import { SoccerFieldDocument } from './soccer-field.model';
+import {
+  SoccerFieldDocument,
+  SoccerFieldDocumentWithRelations,
+} from './soccer-field.model';
 import { PlayerDocument } from './player.model';
 import { TeamDocument } from './team.model';
 import { UserDocument } from './user.model';
@@ -21,7 +24,7 @@ export interface MatchDocumentWithRelations extends Document<string> {
   name: string;
   thumb: string;
   description: string;
-  soccerField: SoccerFieldDocument;
+  soccerField: SoccerFieldDocumentWithRelations;
   schedule: ScheduleDocument;
   players?: PlayerDocument[];
   teams?: TeamDocument[];
