@@ -138,3 +138,92 @@ export const createSoccerFieldSchema: FastifySchema = {
     },
   },
 };
+
+export const getSoccerFieldsByUserSchema: FastifySchema = {
+  response: {
+    200: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', description: 'ID of the soccer field' },
+          name: { type: 'string', description: 'Name of the soccer field' },
+          pixKey: { type: 'string', description: 'Pix key for payment' },
+          rentalValue: {
+            type: 'number',
+            description: 'Rental value for the field',
+          },
+          workDays: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Days of the week when the field is available',
+          },
+          workStartTime: {
+            type: 'string',
+            format: 'time',
+            description: 'Start time of operation (HH:mm:ss)',
+          },
+          workFinishTime: {
+            type: 'string',
+            format: 'time',
+            description: 'Finish time of operation (HH:mm:ss)',
+          },
+          user: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                description: 'ID of the user who owns the soccer field',
+              },
+              email: {
+                type: 'string',
+                format: 'email',
+                description: 'Email of the user',
+              },
+              name: { type: 'string', description: 'Name of the user' },
+              photoUrl: {
+                type: 'string',
+                format: 'uri',
+                description: "URL of the user's profile photo",
+              },
+              role: {
+                type: 'integer',
+                description: 'Role of the user (e.g., admin, regular user)',
+              },
+            },
+            description: 'Information about the user who owns the soccer field',
+          },
+        },
+      },
+      example: [
+        {
+          id: '671c026c866232c3e801b1eb',
+          name: 'campo do zé',
+          pixKey: 'Campo do zézinho2',
+          rentalValue: 150,
+          workDays: ['segunda', 'sexta'],
+          workStartTime: '10:00:00',
+          workFinishTime: '21:00:00',
+          user: {
+            id: '6717f7ef66f1861cb37a5055',
+            email: 'josesilva12@gmail.com',
+            name: 'José da Silva3',
+            photoUrl: 'https://lasdijasidas.com',
+            role: 1,
+          },
+        },
+      ],
+    },
+    401: {
+      type: 'object',
+      properties: {
+        error: {
+          type: 'string',
+          description: 'Unauthorized access error message',
+        },
+      },
+      example: { error: 'Unauthorized' },
+    },
+  },
+  tags: ['Campo'],
+};

@@ -5,6 +5,7 @@ import playerController from '../controllers/player.controller';
 import soccerFieldController from '../controllers/soccer-field.controller';
 import authController from '../controllers/auth.controller';
 import {
+  getUserProfileSchema,
   loginSwaggerSchema,
   registerSwaggerSchema,
 } from '../swagger/auth.schema';
@@ -15,6 +16,7 @@ import {
 import {
   createSoccerFieldSchema,
   deleteSoccerFieldSchema,
+  getSoccerFieldsByUserSchema,
 } from '../swagger/soccer-field.schema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
@@ -32,6 +34,7 @@ const routes = async (fastify: FastifyInstance) => {
   fastify.get(
     '/auth/me',
     {
+      schema: getUserProfileSchema,
       onRequest: [fastify.authenticate],
     },
     authController.me.bind(authController)
@@ -94,7 +97,7 @@ const routes = async (fastify: FastifyInstance) => {
   );
   fastify.get(
     '/soccer-field/by-user',
-    { onRequest: [fastify.authenticate] },
+    { schema: getSoccerFieldsByUserSchema, onRequest: [fastify.authenticate] },
     soccerFieldController.allByUser.bind(soccerFieldController)
   );
   fastify.get<{ Params: { id: string }; Querystring: { month: number } }>(
