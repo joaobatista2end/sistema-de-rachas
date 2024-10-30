@@ -33,12 +33,12 @@ export class MatchMongoRepository implements MatchRepository {
   async create(data: CreateMatchDto): Promise<Match | null> {
     const schedule = await this.scheduleRepository.create(data.schedule);
     if (!schedule) throw Error('Erro ao criar agendamento da partida');
-    const match = new this.model({
+    const matchModel = new this.model({
       ...data,
       schedule: schedule.id,
     });
 
-    await match.save();
+    const match = await matchModel.save();
 
     return this.findById(match._id);
   }
@@ -63,7 +63,7 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
 
-  private parseToEntity(match: SoccerFieldDocumentWithRelations): Match | null {
+  private parseToEntity(match: MatchDocumentWithRelations): Match | null {
     if (!match?.soccerField?._id || !match?.schedule?._id) {
       return null;
     }
@@ -109,7 +109,7 @@ export class MatchMongoRepository implements MatchRepository {
       user: new User({
         id: match.user?._id || uid(),
         email: match.user.email,
-        name: match.user.email,
+        name: match.user.name,
         role: match.user.role,
         password: match.user.password,
         photoUrl: match.user.photoUrl,
