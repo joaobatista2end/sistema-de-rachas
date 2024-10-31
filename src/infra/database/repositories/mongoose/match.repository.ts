@@ -42,8 +42,17 @@ export class MatchMongoRepository implements MatchRepository {
 
     return this.findById(match._id);
   }
-  update(id: string, data: Partial<CreateMatchDto>): Promise<Match | null> {
-    throw new Error('Method not implemented.');
+  async update(
+    id: string,
+    data: Partial<CreateMatchDto>
+  ): Promise<Match | null> {
+    const updated = await this.model
+      .findByIdAndUpdate(id, data, { new: true })
+      .populate(['soccerField', 'players', 'schedule'])
+      .exec();
+    if (!updated) return null;
+
+    return this.parseToEntity(updated);
   }
   delete(id: string): Promise<Match | null> {
     throw new Error('Method not implemented.');

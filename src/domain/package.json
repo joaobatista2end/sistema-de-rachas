@@ -2,7 +2,6 @@
   "name": "sistema-rachas-domain",
   "version": "1.0.4",
   "description": "Domínio contendo recursos da aplicação de Rachas",
-  "main": "dist/index.js",
   "files": [
     "dist",
     "dto",
