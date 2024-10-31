@@ -120,8 +120,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "soccerField": "66ea1c97b6c878b4c7530ae3",
-  "players": ["66ea1ca8b6c878b4c7530ae9", "66ea1cb2b6c878b4c7530aea"]
+  "soccerField": "6723ab7722b54fa143f2cc62"
 }
 
 ###

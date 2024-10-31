@@ -64,10 +64,14 @@ class MatchController {
   ) {
     const { id } = req.params;
     const matchDto = req.body as Partial<CreateMatchDto>;
-    const updated = UpdateMatchUseCase.execute(id, matchDto);
+    const result = await UpdateMatchUseCase.execute(id, matchDto);
 
-    res.send({
-      data: updated,
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    res.status(HttpStatusCode.CREATED).send({
+      data: MatchPresenter(result.value),
     });
   }
 }
