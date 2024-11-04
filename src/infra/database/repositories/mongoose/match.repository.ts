@@ -50,7 +50,8 @@ export class MatchMongoRepository implements MatchRepository {
       .findByIdAndUpdate(id, data, { new: true })
       .populate(['soccerField', 'players', 'schedule'])
       .exec();
-    if (!updated) return null;
+
+    if (!updated?._id) return null;
 
     return this.parseToEntity(updated);
   }
@@ -66,8 +67,11 @@ export class MatchMongoRepository implements MatchRepository {
 
     if (!match) throw Error('Partida não encontrada');
     if (!match.soccerField?._id)
-      throw Error('É necessário especificiar o campo');
-    if (!match.schedule?._id) throw Error('É necessário especificiar o campo');
+      throw Error('Campo não encontrado! Verifique as informações da partida.');
+    if (!match.schedule?._id)
+      throw Error(
+        'Horário não encontrado! Verifique as informações da partida.'
+      );
 
     return this.parseToEntity(match);
   }

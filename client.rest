@@ -60,7 +60,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "campo do zé",
+  "name": "Campo dos amigos",
   "pixKey": "Campo do zézinho2",
   "rentalValue": 150,
   "workStartTime": "10:00:00",
@@ -101,10 +101,10 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Partida de teste",
+  "name": "Partida de teste 2",
   "description":"Partida de teste.",
   "thumb": "Partida de teste",
-  "soccerField": "672286eb867cdc565ce51b8d",
+  "soccerField": "67283a81a64374d37ed8f036",
   "schedule": {
     "day": "2024-09-04T11:30:00Z",
     "startTime": "11:30:00",
@@ -115,12 +115,14 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchUpdate
-PUT {{baseUrl}}/match/66971ecd00f5b5b3f453ea94
+PUT {{baseUrl}}/match/6728aa4831cd725af51d591f
 content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "soccerField": "6723ab7722b54fa143f2cc62"
+  "players": ["6728aa7231cd725af51d5928"],
+  "name": "Racha dos Amigos",
+  "soccerField": "6728aaa531cd725af51d5932"
 }
 
 ###
