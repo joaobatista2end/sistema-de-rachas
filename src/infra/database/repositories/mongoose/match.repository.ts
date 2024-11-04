@@ -31,15 +31,8 @@ export class MatchMongoRepository implements MatchRepository {
       .filter((match) => match !== null);
   }
   async create(data: CreateMatchDto): Promise<Match | null> {
-    const schedule = await this.scheduleRepository.create(data.schedule);
-    if (!schedule) throw Error('Erro ao criar agendamento da partida');
-    const matchModel = new this.model({
-      ...data,
-      schedule: schedule.id,
-    });
-
+    const matchModel = new this.model(data);
     const match = await matchModel.save();
-
     return this.findById(match._id);
   }
   async update(

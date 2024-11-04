@@ -105,22 +105,20 @@ Authorization: Bearer {{token}}
   "description":"Partida de teste.",
   "thumb": "Partida de teste",
   "soccerField": "672286eb867cdc565ce51b8d",
-  "schedule": {
-    "day": "2024-09-04T11:30:00Z",
-    "startTime": "11:30:00",
-    "finishTime": "12:40:00"
-  }
+  "schedule": "6728d8901820e75c35c65e66"
 }
 
 ###
 
 # @name MatchUpdate
-PUT {{baseUrl}}/match/66971ecd00f5b5b3f453ea94
+PUT {{baseUrl}}/match/6728d8901820e75c35c65e67
 content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "soccerField": "6723ab7722b54fa143f2cc62"
+  "name": "partidinha de teste2",
+  "thumb": "thumbzinha de teste",
+  "description": "de"
 }
 
 ###

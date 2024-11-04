@@ -19,7 +19,7 @@ export type CreateMatchDto = {
   thumb: string;
   description: string;
   soccerField: string;
-  schedule: CreateScheduleDto;
+  schedule: string;
   players: string[];
   user: string;
 };
