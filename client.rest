@@ -60,7 +60,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "campo do zé",
+  "name": "Campo dos amigos",
   "pixKey": "Campo do zézinho2",
   "rentalValue": 150,
   "workStartTime": "10:00:00",
@@ -101,7 +101,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Partida de teste",
+  "name": "Partida de teste 2",
   "description":"Partida de teste.",
   "thumb": "Partida de teste",
   "soccerField": "672286eb867cdc565ce51b8d",

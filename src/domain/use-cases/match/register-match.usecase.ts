@@ -8,9 +8,8 @@ import { HttpError } from '../../errors/http.error';
 import { HttpStatusCode } from '../../enums';
 
 export class RegisterMatchUseCase {
-  private static repository: MatchRepository = new MatchMongoRepository(
-    MatchModel
-  );
+  private static readonly repository: MatchRepository =
+    new MatchMongoRepository(MatchModel);
 
   static async execute(
     matchDto: CreateMatchDto
@@ -25,10 +24,14 @@ export class RegisterMatchUseCase {
       }
 
       return right(match);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(error);
+
       return left(
-        new HttpError(HttpStatusCode.BAD_REQUEST, 'Erro ao registrar partida')
+        new HttpError(
+          HttpStatusCode.BAD_REQUEST,
+          error instanceof Error ? error.message : 'Erro ao registrar partida'
+        )
       );
     }
   }
