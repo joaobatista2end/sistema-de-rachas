@@ -1,16 +1,33 @@
-export const formatDate = (date: Date): string => {
-  if (!(date instanceof Date) || isNaN(date.getTime())) {
+import dayjs from 'dayjs';
+import { ScheduleDocument } from '../../infra/database/mongose/models/schedule.model';
+
+export const formatDate = (date: Date | string): string => {
+  const parsedDate = dayjs(date).utc();
+  if (!parsedDate.isValid()) {
     return 'Invalid Date';
   }
-
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-
-  return `${day}/${month}/${year}`;
+  return parsedDate.format('DD/MM/YYYY');
 };
 
-export const stringToDate = (date: string): Date => {
-  const [day, month, year] = date.split('/').map((part) => parseInt(part, 10));
-  return new Date(year, month - 1, day);
+interface Schedule {
+  startTime: string;
+  finishTime: string;
+  day: string;
+  _id: any;
+}
+
+export const transformSchedulesToDateRange = (
+  schedules: ScheduleDocument[]
+) => {
+  return schedules.map((schedule) => {
+    // Combina a data e hora corretamente, levando em consideração o horário local
+    const startDate = `${schedule.day} ${schedule.startTime}`;
+    const finishDate = `${schedule.day} ${schedule.finishTime}`;
+
+    // Retorna as datas no formato Date
+    return {
+      startDate, // Converte para o formato Date
+      finishDate, // Converte para o formato Date
+    };
+  });
 };

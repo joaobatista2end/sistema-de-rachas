@@ -100,7 +100,7 @@ const routes = async (fastify: FastifyInstance) => {
     { schema: getSoccerFieldsByUserSchema, onRequest: [fastify.authenticate] },
     soccerFieldController.allByUser.bind(soccerFieldController)
   );
-  fastify.get<{ Params: { id: string }; Querystring: { month: number } }>(
+  fastify.get<{ Params: { id: string }; Querystring: { day?: string } }>(
     '/soccer-field/:id',
     { onRequest: [fastify.authenticate] },
     soccerFieldController.availableTimes.bind(soccerFieldController)

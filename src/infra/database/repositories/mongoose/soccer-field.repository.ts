@@ -8,11 +8,44 @@ import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-fi
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { User } from '../../../../domain/entities/user';
+import MatchModel from '../../mongose/models/match.model';
+import { ScheduleDocument } from '../../mongose/models/schedule.model';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import { transformSchedulesToDateRange } from '../../../../application/utils/date';
+import { MatchPresenter } from '../../../../application/presenters/match.presenter';
+
+dayjs.extend(isSameOrBefore);
+dayjs.extend(utc);
+
 export class SoccerFieldMongoRepository implements SoccerFieldRepository {
   private model: Model<SoccerFieldDocumentWithRelations>;
 
   constructor(model: Model<SoccerFieldDocumentWithRelations>) {
     this.model = model;
+  }
+
+  async getAvailableTimes(
+    id: string,
+    day?: string
+  ): Promise<ScheduleDocument[]> {
+    const currentDay = day ?? dayjs.utc().startOf('day').format('YYYY-MM-DD');
+
+    if (!dayjs(currentDay, 'YYYY-MM-DD', true).isValid()) {
+      throw Error('A data informada não está no formato YYYY-MM-DD');
+    }
+
+    const soccerField = await this.model.findById(id).exec();
+    if (!soccerField) {
+      throw new Error('Campo de futebol não encontrado');
+    }
+
+    const matchs = await MatchModel.find()
+      .populate(['soccerField', 'players', 'schedules'])
+      .exec();
+
+    return matchs.map((match) => match.schedules).flat();
   }
 
   async all(): Promise<Array<SoccerField>> {

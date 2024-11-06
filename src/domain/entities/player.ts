@@ -1,20 +1,24 @@
+import { PlayerPositionsEnum } from '../enums/player-position';
 import { Match } from './match';
 
 export type PlayerParams = {
   name: string;
-  stars: number;
+  stars?: number;
+  position?: PlayerPositionsEnum;
   id: string;
 };
 
 export class Player {
   id: string;
   name: string;
-  stars: number;
+  stars?: number;
+  position?: PlayerPositionsEnum;
 
   public constructor(params: PlayerParams) {
     this.id = params.id;
     this.name = params.name;
     this.stars = params.stars;
+    this.position = params.position;
   }
 
   public isPaid(match: Match) {

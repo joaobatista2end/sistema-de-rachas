@@ -14,7 +14,7 @@ export const MatchPresenter = (match: Match | null): MatchDto | null => {
     description: match.description,
     thumb: match.thumb,
     players: match.players.map((player) => PlayerPresenter(player)),
-    schedule: SchedulePresenter(match.schedule),
+    schedules: match.schedules.map((schedule) => SchedulePresenter(schedule)),
     soccerField: SoccerFieldPresenter(match.soccerField),
     user: UserPresenter(match.user),
   };

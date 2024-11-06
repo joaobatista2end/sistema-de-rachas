@@ -6,5 +6,6 @@ export const PlayerPresenter = (player: Player): PlayerDto => {
     id: player.id,
     name: player.name,
     stars: player.stars,
+    position: player.position,
   };
 };

@@ -1,4 +1,4 @@
-import { PlayerDto } from './player.dto';
+import { CreatePlayerDto, PlayerDto } from './player.dto';
 import { CreateScheduleDto, ScheduleDto } from './schedule.dto';
 import { SoccerFieldDto } from './soccer-field.dto';
 import { UserDto } from './user.dto';
@@ -9,7 +9,7 @@ export type MatchDto = {
   thumb: string;
   description: string;
   soccerField: SoccerFieldDto;
-  schedule: ScheduleDto;
+  schedules: ScheduleDto[];
   players?: PlayerDto[];
   user: UserDto;
 };
@@ -19,7 +19,7 @@ export type CreateMatchDto = {
   thumb: string;
   description: string;
   soccerField: string;
-  schedule: string;
-  players: string[];
+  schedules: CreateScheduleDto[];
+  players: CreatePlayerDto[];
   user: string;
 };

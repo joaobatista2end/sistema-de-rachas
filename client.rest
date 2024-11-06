@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name SoccerFieldGetAvailableTimes
-GET {{baseUrl}}/soccer-field/66fac90c0b7f0d8c63b94c8c?month=10
+GET {{baseUrl}}/soccer-field/672b9da4e7c38a59ac49b17d
 Authorization: Bearer {{token}}
 
 ###
@@ -101,11 +101,34 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Partida de teste 2",
-  "description":"Partida de teste.",
-  "thumb": "Partida de teste",
-  "soccerField": "672286eb867cdc565ce51b8d",
-  "schedule": "6728d8901820e75c35c65e66"
+  "name": "Pardita 2",
+  "description":"Pardita 2",
+  "thumb": "Pardita 2",
+  "soccerField": "672b9da4e7c38a59ac49b17d",
+  "players": [
+    {
+      "name": "João",
+      "stars": 4,
+      "position": "Atacante"
+    },
+    {
+      "name": "Marcos",
+      "stars": 2,
+      "position": "Goleiro"
+    }
+  ],
+  "schedules": [
+    {
+      "startTime": "10:00:00",
+      "finishTime": "14:00:00",
+      "day": "2024-11-05"
+    },
+    {
+      "startTime": "14:00:00",
+      "finishTime": "21:00:00",
+      "day": "2024-11-05"
+    }
+  ]
 }
 
 ###
@@ -124,7 +147,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchFindById
-GET {{baseUrl}}/match/672288ff23705792eb3991b6
+GET {{baseUrl}}/match/672bb786fa16892715025b99
 Authorization: Bearer {{token}}
 
 ###

@@ -1,3 +1,4 @@
+import { ScheduleDocument } from '../../../infra/database/mongose/models/schedule.model';
 import SoccerFieldModel from '../../../infra/database/mongose/models/soccer-field.model';
 import { SoccerFieldMongoRepository } from '../../../infra/database/repositories/mongoose/soccer-field.repository';
 import { SoccerFieldRepository } from '../../../infra/database/repositories/soccer-field.repository';
@@ -12,12 +13,14 @@ export class GetSoccerFieldAvailableTimes {
 
   static async execute(
     id: string,
-    month?: number
-  ): Promise<Either<HttpError, AvailableTimesByDay>> {
+    day?: string
+  ): Promise<Either<HttpError, ScheduleDocument[]>> {
     try {
-      const registredSoccerField =
-        await GetSoccerFieldAvailableTimes.repository.findById(id);
-      const availableTimes = registredSoccerField?.getAvailableTimes(month);
+      const availableTimes =
+        await GetSoccerFieldAvailableTimes.repository.getAvailableTimes(
+          id,
+          day
+        );
 
       if (!availableTimes) {
         return left(

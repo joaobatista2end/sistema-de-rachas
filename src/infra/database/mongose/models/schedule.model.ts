@@ -1,4 +1,4 @@
-import { Model, model, Schema, Document } from 'mongoose';
+import mongoose, { Model, model, Schema, Document } from 'mongoose';
 
 export interface ScheduleDocument extends Document<string> {
   startTime: string;

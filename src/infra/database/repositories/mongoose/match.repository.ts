@@ -12,36 +12,42 @@ import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { User } from '../../../../domain';
+import { PlayerRepository } from '../player.respository';
+import { PlayerMongoRepository } from './player.repository';
+import PlayerModel from '../../mongose/models/player.model';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
-  private scheduleRepository: ScheduleRepository;
 
   constructor(model: Model<MatchDocumentWithRelations>) {
     this.model = model;
-    this.scheduleRepository = new ScheduleMongoRepository(ScheduleModel);
   }
+
   async all(): Promise<Array<Match>> {
     const matchs = await this.model
       .find()
-      .populate(['soccerField', 'players', 'schedule'])
+      .populate(['soccerField', 'players', 'schedules'])
       .exec();
     return matchs
       .map((match) => this.parseToEntity(match))
       .filter((match) => match !== null);
   }
+
   async create(data: CreateMatchDto): Promise<Match | null> {
-    const matchModel = new this.model(data);
+    const matchData = { ...data };
+    const matchModel = new this.model(matchData);
     const match = await matchModel.save();
+
     return this.findById(match._id);
   }
+
   async update(
     id: string,
     data: Partial<CreateMatchDto>
   ): Promise<Match | null> {
     const updated = await this.model
       .findByIdAndUpdate(id, data, { new: true })
-      .populate(['soccerField', 'players', 'schedule'])
+      .populate(['soccerField', 'players', 'schedules'])
       .exec();
 
     if (!updated?._id) return null;
@@ -55,24 +61,26 @@ export class MatchMongoRepository implements MatchRepository {
   async findById(id: string): Promise<Match | null> {
     const match = await this.model
       .findById(id)
-      .populate(['soccerField', 'players', 'schedule'])
+      .populate(['soccerField', 'players', 'schedules'])
       .exec();
 
     if (!match) throw Error('Partida não encontrada');
     if (!match.soccerField?._id)
       throw Error('Campo não encontrado! Verifique as informações da partida.');
-    if (!match.schedule?._id)
-      throw Error(
-        'Horário não encontrado! Verifique as informações da partida.'
-      );
+    if (!match.schedules.length) throw Error('Sem horários na partida');
 
     return this.parseToEntity(match);
   }
 
   private parseToEntity(match: MatchDocumentWithRelations): Match | null {
-    if (!match?.soccerField?._id || !match?.schedule?._id) {
+    if (
+      !match?.soccerField?._id ||
+      !Array.isArray(match?.schedules) ||
+      match.schedules.length === 0
+    ) {
       return null;
     }
+
     return new Match({
       id: match._id || uid(),
       description: match.description,
@@ -83,7 +91,8 @@ export class MatchMongoRepository implements MatchRepository {
           new Player({
             id: player._id || uid(),
             name: player.name,
-            stars: player.stars,
+            stars: player?.stars,
+            position: player.position,
           }) ?? []
         );
       }),
@@ -106,12 +115,16 @@ export class MatchMongoRepository implements MatchRepository {
           photoUrl: match.soccerField.user.photoUrl,
         }),
       }),
-      schedule: new Schedule({
-        id: match.schedule?._id || uid(),
-        day: match.schedule.day,
-        startTime: match.schedule.startTime,
-        finishTime: match.schedule.finishTime,
-      }),
+      // Agora lidando com múltiplos schedules
+      schedules: match.schedules.map(
+        (schedule) =>
+          new Schedule({
+            id: schedule._id || uid(),
+            day: schedule.day,
+            startTime: schedule.startTime,
+            finishTime: schedule.finishTime,
+          })
+      ),
       user: new User({
         id: match.user?._id || uid(),
         email: match.user.email,

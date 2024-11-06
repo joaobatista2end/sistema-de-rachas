@@ -1,5 +1,7 @@
 import mongoose, { Document, Model, model, Schema } from 'mongoose';
 import { UserDocument } from './user.model';
+import { Schedule } from '../../../../domain';
+import { ScheduleDocument } from './schedule.model';
 
 export interface SoccerFieldDocument extends Document<string> {
   name: string;
@@ -19,6 +21,7 @@ export interface SoccerFieldDocumentWithRelations extends Document<string> {
   workStartTime: string;
   workFinishTime: string;
   user: UserDocument;
+  schedules: ScheduleDocument[];
 }
 
 export const soccerFieldSchema: Schema = new Schema({

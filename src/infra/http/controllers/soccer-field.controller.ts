@@ -69,21 +69,21 @@ class SoccerFieldController {
   async availableTimes(
     req: FastifyRequest<{
       Params: { id: string };
-      Querystring: { month?: number };
+      Querystring: { day?: string };
     }>,
     res: FastifyReply
   ) {
     const { id } = req.params;
-    const { month } = req.query;
+    const { day } = req.query;
 
-    const result = await GetSoccerFieldAvailableTimes.execute(id, month);
+    const result = await GetSoccerFieldAvailableTimes.execute(id, day);
 
     if (result.isLeft()) {
       return res.status(result.value.code).send(result.value);
     }
 
     res.status(HttpStatusCode.OK).send({
-      data: AvailableTimesPresenter(result.value),
+      data: result.value,
     });
   }
 }

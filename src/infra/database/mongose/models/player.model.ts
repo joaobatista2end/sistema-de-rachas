@@ -1,8 +1,10 @@
 import { Document, Schema, model, Model } from 'mongoose';
+import { PlayerPositionsEnum } from '../../../../domain/enums/player-position';
 
 export interface PlayerDocument extends Document<string> {
   name: string;
-  stars: number;
+  stars?: number;
+  position?: PlayerPositionsEnum;
 }
 
 export const playerSchema: Schema = new Schema({
@@ -12,7 +14,12 @@ export const playerSchema: Schema = new Schema({
   },
   stars: {
     type: Number,
-    required: true,
+    required: false,
+  },
+  position: {
+    type: String,
+    enum: Object.values(PlayerPositionsEnum),
+    required: false,
   },
 });
 

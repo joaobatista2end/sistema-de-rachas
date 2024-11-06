@@ -46,8 +46,6 @@ export class ScheduleMongoRepository implements ScheduleRepository {
 
     if (!schedule?._id) return null;
 
-    console.log({ data });
-
     return new Schedule({
       id: schedule.id || uid(),
       day: schedule.day,
