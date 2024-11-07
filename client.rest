@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name SoccerFieldGetAvailableTimes
-GET {{baseUrl}}/soccer-field/672b9da4e7c38a59ac49b17d
+GET {{baseUrl}}/soccer-field/672b9da4e7c38a59ac49b17d?day=2024-11-05
 Authorization: Bearer {{token}}
 
 ###

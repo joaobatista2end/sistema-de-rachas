@@ -30,11 +30,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     id: string,
     day?: string
   ): Promise<ScheduleDocument[]> {
-    const currentDay = day ?? dayjs.utc().startOf('day').format('YYYY-MM-DD');
-
-    if (!dayjs(currentDay, 'YYYY-MM-DD', true).isValid()) {
-      throw Error('A data informada não está no formato YYYY-MM-DD');
-    }
+    const currentDay = day ?? new Date().toISOString();
 
     const soccerField = await this.model.findById(id).exec();
     if (!soccerField) {
@@ -43,7 +39,27 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
 
     const matchs = await MatchModel.find()
       .populate(['soccerField', 'players', 'schedules'])
+      .find({
+        schedules: {
+          $elemMatch: {
+            day: { $gte: new Date(currentDay).toISOString() },
+          },
+        },
+        soccerField: id,
+      })
       .exec();
+
+    const occupiedTimes: { startTime: string; finishTime: string }[] = [];
+    matchs.forEach((match) => {
+      match.schedules.forEach((schedule) => {
+        if (schedule.day === currentDay) {
+          occupiedTimes.push({
+            startTime: schedule.startTime,
+            finishTime: schedule.finishTime,
+          });
+        }
+      });
+    });
 
     return matchs.map((match) => match.schedules).flat();
   }
