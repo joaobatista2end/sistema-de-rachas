@@ -15,6 +15,7 @@ import utc from 'dayjs/plugin/utc';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { transformSchedulesToDateRange } from '../../../../application/utils/date';
 import { MatchPresenter } from '../../../../application/presenters/match.presenter';
+import { convertNumberToDayOfWeek } from '../../../../domain';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(utc);
@@ -62,6 +63,18 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     });
 
     return matchs.map((match) => match.schedules).flat();
+  }
+
+  private getWorkTimes(soccerField: SoccerFieldDocumentWithRelations) {
+    const currentDayIndex = dayjs().day();
+    const dayOfWeek = convertNumberToDayOfWeek(currentDayIndex);
+
+    if (soccerField.workDays.includes(dayOfWeek)) {
+      return [];
+    }
+
+    soccerField.workStartTime;
+    soccerField.workFinishTime;
   }
 
   async all(): Promise<Array<SoccerField>> {
