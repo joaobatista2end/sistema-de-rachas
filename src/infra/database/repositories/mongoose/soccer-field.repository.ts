@@ -15,7 +15,8 @@ import utc from 'dayjs/plugin/utc';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { transformSchedulesToDateRange } from '../../../../application/utils/date';
 import { MatchPresenter } from '../../../../application/presenters/match.presenter';
-import { convertNumberToDayOfWeek } from '../../../../domain';
+import { convertNumberToDayOfWeek, Time } from '../../../../domain';
+import { start } from 'repl';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(utc);
@@ -27,10 +28,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
     this.model = model;
   }
 
-  async getAvailableTimes(
-    id: string,
-    day?: string
-  ): Promise<ScheduleDocument[]> {
+  async getAvailableTimes(id: string, day?: string): Promise<any> {
     const currentDay = day ?? new Date().toISOString();
 
     const soccerField = await this.model.findById(id).exec();
@@ -50,19 +48,27 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       })
       .exec();
 
-    const occupiedTimes: { startTime: string; finishTime: string }[] = [];
-    matchs.forEach((match) => {
-      match.schedules.forEach((schedule) => {
-        if (schedule.day === currentDay) {
-          occupiedTimes.push({
-            startTime: schedule.startTime,
-            finishTime: schedule.finishTime,
-          });
-        }
-      });
+    const occupiedTimes = matchs
+      .map((match) => {
+        return match.schedules.map((schedule) => {
+          return {
+            startTime: new Time(schedule.startTime),
+            finishTime: new Time(schedule.finishTime),
+          };
+        });
+      })
+      .flat();
+
+    const workTimes = this.getWorkTimes(soccerField);
+    console.log({
+      occupiedTimes,
+      workTimes,
     });
 
-    return matchs.map((match) => match.schedules).flat();
+    return {
+      occupiedTimes,
+      workTimes,
+    };
   }
 
   private getWorkTimes(soccerField: SoccerFieldDocumentWithRelations) {
@@ -73,8 +79,19 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       return [];
     }
 
-    soccerField.workStartTime;
-    soccerField.workFinishTime;
+    const workTimes = [];
+    const startTime = new Time(soccerField.workStartTime);
+    const finishTime = new Time(soccerField.workFinishTime);
+    const interval = 1;
+
+    while (startTime.number < finishTime.number) {
+      workTimes.push({
+        startTime,
+        finishTime,
+      });
+    }
+
+    return workTimes;
   }
 
   async all(): Promise<Array<SoccerField>> {

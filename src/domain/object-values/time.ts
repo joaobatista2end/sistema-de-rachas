@@ -1,3 +1,5 @@
+type TimeParam = 'hours' | 'minutes' | 'seconds';
+
 export class Time {
   hours: number;
   minutes: number;
@@ -15,6 +17,11 @@ export class Time {
     return this.hours * 3600 + this.minutes * 60 + this.seconds;
   }
 
+  public add(timeParam: TimeParam, value: number) {
+    this[timeParam] += value;
+    return this;
+  }
+
   // Compara se o tempo atual é anterior ao tempo passado como parâmetro
   public isBefore(otherTime: Time): boolean {
     return this.toSeconds() < otherTime.toSeconds();
@@ -23,6 +30,10 @@ export class Time {
   // Compara se o tempo atual é posterior ao tempo passado como parâmetro
   public isAfter(otherTime: Time): boolean {
     return this.toSeconds() > otherTime.toSeconds();
+  }
+
+  public isEqual(otherTime: Time): boolean {
+    return this.toSeconds() === otherTime.toSeconds();
   }
 
   get number(): number {
