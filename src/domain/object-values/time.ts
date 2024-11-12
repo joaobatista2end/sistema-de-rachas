@@ -13,13 +13,23 @@ export class Time {
   }
 
   // Converte o tempo para o total em segundos, para facilitar as comparações
-  private toSeconds(): number {
+  public toSeconds(): number {
     return this.hours * 3600 + this.minutes * 60 + this.seconds;
   }
 
-  public add(timeParam: TimeParam, value: number) {
-    this[timeParam] += value;
-    return this;
+  public add(timeParam: TimeParam, value: number): Time {
+    const totalSeconds =
+      this.toSeconds() +
+      (timeParam === 'hours'
+        ? value * 3600
+        : timeParam === 'minutes'
+        ? value * 60
+        : value);
+    const newHours = Math.floor(totalSeconds / 3600) % 24; // Garantir que horas fiquem no intervalo 0-23
+    const newMinutes = Math.floor((totalSeconds % 3600) / 60);
+    const newSeconds = totalSeconds % 60;
+
+    return new Time(`${newHours}:${newMinutes}:${newSeconds}`);
   }
 
   // Compara se o tempo atual é anterior ao tempo passado como parâmetro

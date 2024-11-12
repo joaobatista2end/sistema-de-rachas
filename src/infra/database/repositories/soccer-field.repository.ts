@@ -1,9 +1,10 @@
 import { CreateSoccerFieldDto } from '../../../domain/dto/soccer-field.dto';
 import { SoccerField } from '../../../domain/entities/soccer-field';
+import { TimeInterval } from '../../../domain/types/available-times';
 
 export interface SoccerFieldRepository {
   all(): Promise<Array<SoccerField>>;
-  getAvailableTimes(id: string, day?: string): Promise<Array<any>>;
+  getOccupiedTimes(id: string, day?: string): Promise<Array<TimeInterval>>;
   allByUser(userId: string): Promise<Array<SoccerField>>;
   findById(id: string): Promise<SoccerField | null>;
   findByName(name: string): Promise<SoccerField | null>;

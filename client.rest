@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name SoccerFieldGetAvailableTimes
-GET {{baseUrl}}/soccer-field/672b9da4e7c38a59ac49b17d?day=2024-11-05
+GET {{baseUrl}}/soccer-field/6732a870b900e1018258a523?day=2024-11-05
 Authorization: Bearer {{token}}
 
 ###
@@ -104,7 +104,7 @@ Authorization: Bearer {{token}}
   "name": "Pardita 2",
   "description":"Pardita 2",
   "thumb": "Pardita 2",
-  "soccerField": "672b9da4e7c38a59ac49b17d",
+  "soccerField": "6732a870b900e1018258a523",
   "players": [
     {
       "name": "João",
@@ -120,12 +120,7 @@ Authorization: Bearer {{token}}
   "schedules": [
     {
       "startTime": "10:00:00",
-      "finishTime": "14:00:00",
-      "day": "2024-11-05"
-    },
-    {
-      "startTime": "14:00:00",
-      "finishTime": "21:00:00",
+      "finishTime": "11:00:00",
       "day": "2024-11-05"
     }
   ]

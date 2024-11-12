@@ -50,45 +50,98 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
 
     const occupiedTimes = matchs
       .map((match) => {
-        return match.schedules.map((schedule) => {
-          return {
-            startTime: new Time(schedule.startTime),
-            finishTime: new Time(schedule.finishTime),
-          };
-        });
+        return match.schedules.map((schedule) => ({
+          startTime: new Time(schedule.startTime),
+          finishTime: new Time(schedule.finishTime),
+        }));
       })
       .flat();
 
-    const workTimes = this.getWorkTimes(soccerField);
-    console.log({
-      occupiedTimes,
-      workTimes,
-    });
-
-    return {
-      occupiedTimes,
-      workTimes,
-    };
+    const workTimes = this.getWorkTimes(soccerField, currentDay);
+    const availableTimes = this.getAvailableIntervals(workTimes, occupiedTimes);
+    return availableTimes;
   }
 
-  private getWorkTimes(soccerField: SoccerFieldDocumentWithRelations) {
-    const currentDayIndex = dayjs().day();
-    const dayOfWeek = convertNumberToDayOfWeek(currentDayIndex);
+  private getAvailableIntervals(
+    workTimes: Array<{ startTime: Time; finishTime: Time }>,
+    occupiedTimes: Array<{ startTime: Time; finishTime: Time }>
+  ): Array<{ startTime: string; finishTime: string }> {
+    const availableTimes: Array<{ startTime: string; finishTime: string }> = [];
 
-    if (soccerField.workDays.includes(dayOfWeek)) {
+    workTimes.forEach((workInterval) => {
+      let { startTime, finishTime } = workInterval;
+
+      occupiedTimes.forEach((occupiedInterval) => {
+        if (
+          occupiedInterval.startTime.isBefore(finishTime) &&
+          occupiedInterval.finishTime.isAfter(startTime)
+        ) {
+          if (occupiedInterval.startTime.isAfter(startTime)) {
+            availableTimes.push({
+              startTime: startTime.toString(),
+              finishTime: occupiedInterval.startTime.toString(),
+            });
+          }
+          startTime = new Time(
+            Math.max(
+              occupiedInterval.finishTime.toSeconds(),
+              startTime.toSeconds()
+            ).toString()
+          );
+        }
+      });
+
+      if (startTime.isBefore(finishTime)) {
+        availableTimes.push({
+          startTime: startTime.toString(),
+          finishTime: finishTime.toString(),
+        });
+      }
+    });
+
+    return availableTimes;
+  }
+
+  private getWorkTimes(
+    soccerField: SoccerFieldDocumentWithRelations,
+    currentDay: string
+  ) {
+    const dayOfWeekIndex = dayjs(currentDay).day();
+    const dayOfWeek = convertNumberToDayOfWeek(dayOfWeekIndex);
+
+    if (!soccerField.workDays.includes(dayOfWeek)) {
       return [];
     }
 
-    const workTimes = [];
-    const startTime = new Time(soccerField.workStartTime);
+    let startTime = new Time(soccerField.workStartTime);
     const finishTime = new Time(soccerField.workFinishTime);
     const interval = 1;
 
-    while (startTime.number < finishTime.number) {
+    if (startTime.isAfter(finishTime)) {
+      throw new Error(
+        'Horário de início não pode ser depois do horário de término.'
+      );
+    }
+
+    const workTimes = [];
+
+    while (startTime.isBefore(finishTime)) {
+      const nextTime = startTime.add('hours', interval);
+
+      if (nextTime.isAfter(finishTime)) {
+        workTimes.push({
+          startTime: new Time(startTime.toString()),
+          finishTime: new Time(finishTime.toString()),
+        });
+        break;
+      }
+
       workTimes.push({
-        startTime,
-        finishTime,
+        startTime: new Time(startTime.toString()),
+        finishTime: new Time(nextTime.toString()),
       });
+
+      startTime = nextTime;
     }
 
     return workTimes;
