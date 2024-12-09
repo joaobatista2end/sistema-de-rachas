@@ -1,6 +1,7 @@
 import { CreatePlayerDto, PlayerDto } from './player.dto';
 import { CreateScheduleDto, ScheduleDto } from './schedule.dto';
 import { SoccerFieldDto } from './soccer-field.dto';
+import { CreateTeamDto, TeamDto } from './team.dto';
 import { UserDto } from './user.dto';
 
 export type MatchDto = {
@@ -11,6 +12,7 @@ export type MatchDto = {
   soccerField: SoccerFieldDto;
   schedules: ScheduleDto[];
   players?: PlayerDto[];
+  teams?: TeamDto[];
   user: UserDto;
 };
 
@@ -21,5 +23,6 @@ export type CreateMatchDto = {
   soccerField: string;
   schedules: CreateScheduleDto[];
   players: CreatePlayerDto[];
+  teams: CreateTeamDto[];
   user: string;
 };

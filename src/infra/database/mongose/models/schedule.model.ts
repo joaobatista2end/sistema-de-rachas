@@ -22,6 +22,6 @@ export const scheduleSchema: Schema = new Schema({
 });
 
 export const ScheduleModel: Model<ScheduleDocument> = model<ScheduleDocument>(
-  'schedule',
+  'Schedule',
   scheduleSchema
 );

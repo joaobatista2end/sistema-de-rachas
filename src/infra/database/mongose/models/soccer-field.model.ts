@@ -49,10 +49,10 @@ export const soccerFieldSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const SoccerFieldModel: Model<SoccerFieldDocumentWithRelations> =
-  model<SoccerFieldDocumentWithRelations>('soccer-field', soccerFieldSchema);
+  model<SoccerFieldDocumentWithRelations>('SoccerField', soccerFieldSchema);
 
 export default SoccerFieldModel;

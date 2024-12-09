@@ -24,7 +24,7 @@ export const playerSchema: Schema = new Schema({
 });
 
 const PlayerModel: Model<PlayerDocument> = model<PlayerDocument>(
-  'player',
+  'Player',
   playerSchema
 );
 

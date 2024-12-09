@@ -104,7 +104,17 @@ Authorization: Bearer {{token}}
   "name": "Pardita 2",
   "description":"Pardita 2",
   "thumb": "Pardita 2",
-  "soccerField": "6732a870b900e1018258a523",
+  "soccerField": "6756ee2d98775ff92fa4b269",
+  "teams": [
+    {
+      "name": "Team 1",
+      "players": []
+    },
+    {
+      "name": "Team 2",
+      "players": []
+    }
+  ],
   "players": [
     {
       "name": "João",
@@ -149,7 +159,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name DeleteMatch
-DELETE {{baseUrl}}/match/6732a8dfb900e1018258a561
+DELETE {{baseUrl}}/match/6756e5587985a9b78ee919bb
 Authorization: Bearer {{token}}
 
 ###

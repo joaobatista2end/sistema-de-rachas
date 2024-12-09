@@ -2,7 +2,11 @@ import mongoose, { Document, Schema, model, Model } from 'mongoose';
 import { ScheduleDocument, scheduleSchema } from './schedule.model';
 import { SoccerFieldDocumentWithRelations } from './soccer-field.model';
 import { PlayerDocument, playerSchema } from './player.model';
-import { TeamDocument } from './team.model';
+import {
+  TeamDocument,
+  TeamDocumentWithRelationships,
+  teamSchema,
+} from './team.model';
 import { UserDocument } from './user.model';
 
 export interface MatchDocument extends Document<string> {
@@ -23,7 +27,7 @@ export interface MatchDocumentWithRelations extends Document<string> {
   soccerField: SoccerFieldDocumentWithRelations;
   schedules: ScheduleDocument[];
   players?: PlayerDocument[];
-  teams?: TeamDocument[];
+  teams?: TeamDocumentWithRelationships[];
   user: UserDocument;
 }
 
@@ -33,12 +37,12 @@ const matchSchema: Schema = new Schema({
   description: String,
   players: [playerSchema],
   schedules: [scheduleSchema],
-  soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'soccer-field' },
-  teams: [{ type: mongoose.Schema.Types.ObjectId, ref: 'team' }],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+  teams: [teamSchema],
+  soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'SoccerField' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const MatchModel: Model<MatchDocumentWithRelations> =
-  model<MatchDocumentWithRelations>('match', matchSchema);
+  model<MatchDocumentWithRelations>('Match', matchSchema);
 
 export default MatchModel;

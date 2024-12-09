@@ -12,6 +12,7 @@ export type MatchParams = {
   soccerField: SoccerField;
   schedules: Schedule[];
   players?: Array<Player>;
+  teams?: Array<Team>;
   user: User;
 };
 
@@ -23,7 +24,7 @@ export class Match {
   schedules: Schedule[];
   paymentListPlayers: Array<string>;
   soccerField: SoccerField;
-  teams: Array<Team>;
+  teams?: Array<Team>;
   description: string;
   user: User;
 
@@ -35,7 +36,7 @@ export class Match {
     this.soccerField = params.soccerField;
     this.schedules = params.schedules;
     this.thumb = params.thumb;
-    this.teams = [];
+    this.teams = params?.teams ?? [];
     this.paymentListPlayers = [];
     this.user = params.user;
   }

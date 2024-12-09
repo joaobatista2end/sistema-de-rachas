@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema, model, Model } from 'mongoose';
+import mongoose, { Document, Schema, model } from 'mongoose';
+import { PlayerDocument } from './player.model';
 
 export interface TeamDocument extends Document<string> {
   name: string;
@@ -7,27 +8,18 @@ export interface TeamDocument extends Document<string> {
   maxPlayers?: number;
 }
 
+export interface TeamDocumentWithRelationships extends Document<string> {
+  name: string;
+  players: PlayerDocument[];
+  minPlayers?: number;
+  maxPlayers?: number;
+}
+
 export const teamSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  players: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Player',
-    },
-  ],
-  minPlayers: {
-    type: Number,
-    default: 6,
-  },
-  maxPlayers: {
-    type: Number,
-    default: 12,
-  },
+  name: { type: String, required: true },
+  players: [{ type: Schema.Types.ObjectId, ref: 'Player' }],
+  minPlayers: { type: Number, default: 6 },
+  maxPlayers: { type: Number, default: 12 },
 });
 
-const TeamModel: Model<TeamDocument> = model<TeamDocument>('team', teamSchema);
-
-export default TeamModel;
+export const TeamModel = model<TeamDocument>('Team', teamSchema);

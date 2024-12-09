@@ -8,9 +8,21 @@ import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
-import { CreateTeamDto, HttpStatusCode, User } from '../../../../domain';
+import { CreateTeamDto, HttpStatusCode, Team, User } from '../../../../domain';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { RemoveMatchUseCase } from '../../../../domain/use-cases/match/remove-match.usecase';
+import { PlayerDocument } from '../../mongose/models/player.model';
+import {
+  SoccerFieldDocument,
+  SoccerFieldDocumentWithRelations,
+} from '../../mongose/models/soccer-field.model';
+import { ScheduleDocument } from '../../mongose/models/schedule.model';
+import { UserDocument } from '../../mongose/models/user.model';
+import {
+  TeamDocument,
+  TeamDocumentWithRelationships,
+  TeamModel,
+} from '../../mongose/models/team.model';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -22,7 +34,7 @@ export class MatchMongoRepository implements MatchRepository {
   async all(): Promise<Array<Match>> {
     const matchs = await this.model
       .find()
-      .populate(['soccerField', 'players', 'schedules'])
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
       .exec();
     return matchs
       .map((match) => this.parseToEntity(match))
@@ -43,7 +55,7 @@ export class MatchMongoRepository implements MatchRepository {
   ): Promise<Match | null> {
     const updated = await this.model
       .findByIdAndUpdate(id, data, { new: true })
-      .populate(['soccerField', 'players', 'schedules'])
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
       .exec();
 
     if (!updated?._id) return null;
@@ -66,9 +78,10 @@ export class MatchMongoRepository implements MatchRepository {
   }
 
   async delete(id: string): Promise<Match | null> {
-    const deletedMatch = await this.model.findByIdAndDelete(id);
-
-    console.log({ deletedMatch });
+    const deletedMatch = await this.model
+      .findByIdAndDelete(id)
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
+      .exec();
 
     if (!deletedMatch) {
       return null;
@@ -80,7 +93,7 @@ export class MatchMongoRepository implements MatchRepository {
   async findById(id: string): Promise<Match | null> {
     const match = await this.model
       .findById(id)
-      .populate(['soccerField', 'players', 'schedules'])
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
       .exec();
 
     if (!match) throw Error('Partida não encontrada');
@@ -100,41 +113,33 @@ export class MatchMongoRepository implements MatchRepository {
       return null;
     }
 
-    return new Match({
-      id: match._id || uid(),
-      description: match.description,
-      name: match.name,
-      thumb: match.thumb,
-      players: (match?.players ?? []).map((player) => {
-        return (
+    const parsePlayers = (players?: PlayerDocument[]): Player[] =>
+      (players ?? []).map(
+        (player) =>
           new Player({
             id: player._id || uid(),
             name: player.name,
             stars: player?.stars,
             position: player.position,
-          }) ?? []
-        );
-      }),
-      soccerField: new SoccerField({
-        id: match.soccerField?._id || uid(),
-        name: match.soccerField.name,
-        pixKey: match.soccerField.pixKey,
-        rentalValue: match.soccerField.rentalValue,
-        workDays: match.soccerField.workDays.map(
-          (day: string) => day as DayOfWeek
-        ),
-        workStartTime: match.soccerField.workStartTime,
-        workFinishTime: match.soccerField.workFinishTime,
-        user: new User({
-          id: match.soccerField.user?._id || uid(),
-          email: match.soccerField.user.email,
-          name: match.soccerField.user.email,
-          role: match.soccerField.user.role,
-          password: match.soccerField.user.password,
-          photoUrl: match.soccerField.user.photoUrl,
-        }),
-      }),
-      schedules: match.schedules.map(
+          })
+      );
+
+    const parseSoccerField = (
+      soccerField: SoccerFieldDocumentWithRelations
+    ): SoccerField =>
+      new SoccerField({
+        id: soccerField?._id || uid(),
+        name: soccerField.name,
+        pixKey: soccerField.pixKey,
+        rentalValue: soccerField.rentalValue,
+        workDays: (soccerField?.workDays as Array<DayOfWeek>) ?? [],
+        workStartTime: soccerField.workStartTime,
+        workFinishTime: soccerField.workFinishTime,
+        user: parseUser(soccerField.user),
+      });
+
+    const parseSchedules = (schedules: ScheduleDocument[]): Schedule[] =>
+      schedules.map(
         (schedule) =>
           new Schedule({
             id: schedule._id || uid(),
@@ -142,15 +147,38 @@ export class MatchMongoRepository implements MatchRepository {
             startTime: schedule.startTime,
             finishTime: schedule.finishTime,
           })
-      ),
-      user: new User({
-        id: match.user?._id || uid(),
-        email: match.user.email,
-        name: match.user.name,
-        role: match.user.role,
-        password: match.user.password,
-        photoUrl: match.user.photoUrl,
-      }),
+      );
+
+    const parseUser = (user: UserDocument): User =>
+      new User({
+        id: user?._id ?? uid(),
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        password: user.password,
+        photoUrl: user.photoUrl,
+      });
+
+    const parseTeams = (teams?: TeamDocumentWithRelationships[]): Team[] => {
+      return (teams ?? []).map((team: TeamDocumentWithRelationships) => {
+        return new Team({
+          id: team?._id ?? uid(),
+          name: team.name,
+          players: parsePlayers(team.players) ?? [],
+        });
+      });
+    };
+
+    return new Match({
+      id: match._id || uid(),
+      description: match.description,
+      name: match.name,
+      thumb: match.thumb,
+      players: parsePlayers(match.players),
+      soccerField: parseSoccerField(match.soccerField),
+      schedules: parseSchedules(match.schedules),
+      teams: parseTeams(match.teams),
+      user: parseUser(match.user),
     });
   }
 }

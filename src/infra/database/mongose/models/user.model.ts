@@ -34,6 +34,6 @@ export const userSchema: Schema = new Schema({
 });
 
 export const UserModel: Model<UserDocument> = model<UserDocument>(
-  'user',
+  'User',
   userSchema
 );
