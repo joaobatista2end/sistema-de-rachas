@@ -1,15 +1,39 @@
 import { uid } from 'uid';
-import { Match } from '../../entities/match';
 import { Team } from '../../entities/team';
+import { Either, left, right } from '../../utils';
+import { HttpError } from '../../errors/http.error';
+import { HttpStatusCode } from '../../enums';
+import { MatchRepository } from '../../../infra/database/repositories/match.repository';
+import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
+import MatchModel from '../../../infra/database/mongose/models/match.model';
 
-export class GenerateTeamsUseCase {
-  public static execute(match: Match): Array<Team> {
+export class GenerateTeamsByPlayerStarsUseCase {
+  private static readonly repository: MatchRepository =
+    new MatchMongoRepository(MatchModel);
+
+  public static async execute(
+    matchId: string
+  ): Promise<Either<HttpError, Array<Team>>> {
+    const match = await GenerateTeamsByPlayerStarsUseCase.repository.findById(
+      matchId
+    );
+
+    if (!match) {
+      return left(
+        new HttpError(HttpStatusCode.NOT_FOUND, 'Partida não encontrada.')
+      );
+    }
+
     const players = [...match.players];
+
     if (players.length < Team.minPlayers * 2) {
-      throw new Error(
-        `É necessário ter no mínimo: ${
-          Team.minPlayers * 2
-        } jogadores para criar 2 times!`
+      return left(
+        new HttpError(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          `É necessário ter no mínimo: ${
+            Team.minPlayers * 2
+          } jogadores para criar 2 times!`
+        )
       );
     }
 
@@ -40,11 +64,14 @@ export class GenerateTeamsUseCase {
     const maxStars = Math.max(...teams.map((team) => team.totalStars));
 
     if (maxStars - minStars > 2) {
-      throw new Error(
-        'Erro: Não é possível criar times com diferença de estrelas superior a 1.'
+      return left(
+        new HttpError(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'Não é possível criar times com diferença de estrelas superior a 1.'
+        )
       );
     }
 
-    return teams;
+    return right(teams);
   }
 }

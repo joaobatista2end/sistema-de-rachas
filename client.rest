@@ -145,6 +145,13 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/match/672bb786fa16892715025b99
 Authorization: Bearer {{token}}
 
+
+###
+
+# @name DeleteMatch
+DELETE {{baseUrl}}/match/6732a8dfb900e1018258a561
+Authorization: Bearer {{token}}
+
 ###
 
 # @name MatchGetAll
