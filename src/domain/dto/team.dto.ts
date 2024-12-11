@@ -6,6 +6,7 @@ export type TeamDto = {
   players: Array<PlayerDto>;
   minPlayers?: number;
   maxPlayers?: number;
+  totalStars?: number;
 };
 
 export type CreateTeamDto = {

@@ -6,13 +6,15 @@ import { HttpStatusCode } from '../../enums';
 import { MatchRepository } from '../../../infra/database/repositories/match.repository';
 import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
 import MatchModel from '../../../infra/database/mongose/models/match.model';
+import { TeamCreatePresenter } from '../../../application/presenters/team.presenter';
 
 export class GenerateTeamsByPlayerStarsUseCase {
   private static readonly repository: MatchRepository =
     new MatchMongoRepository(MatchModel);
 
   public static async execute(
-    matchId: string
+    matchId: string,
+    maxDifference: number = 1
   ): Promise<Either<HttpError, Array<Team>>> {
     const match = await GenerateTeamsByPlayerStarsUseCase.repository.findById(
       matchId
@@ -50,28 +52,47 @@ export class GenerateTeamsByPlayerStarsUseCase {
         })
     );
 
-    for (let player of players) {
-      let minTeam = teams.reduce(
+    const distributePlayers = (
+      remainingPlayers: typeof players,
+      currentTeams: typeof teams,
+      differenceLimit: number
+    ): Array<Team> => {
+      if (remainingPlayers.length === 0) {
+        return currentTeams;
+      }
+
+      const player = remainingPlayers[0];
+      let minTeam = currentTeams.reduce(
         (minTeam, currentTeam) =>
           currentTeam.totalStars < minTeam.totalStars ? currentTeam : minTeam,
-        teams[0]
+        currentTeams[0]
       );
 
       minTeam.addPlayer(player);
-    }
 
-    const minStars = Math.min(...teams.map((team) => team.totalStars));
-    const maxStars = Math.max(...teams.map((team) => team.totalStars));
+      const minStars = Math.min(...currentTeams.map((team) => team.totalStars));
+      const maxStars = Math.max(...currentTeams.map((team) => team.totalStars));
 
-    if (maxStars - minStars > 2) {
-      return left(
-        new HttpError(
-          HttpStatusCode.INTERNAL_SERVER_ERROR,
-          'Não é possível criar times com diferença de estrelas superior a 1.'
-        )
+      if (maxStars - minStars > differenceLimit) {
+        minTeam.removePlayer(player.id);
+        return distributePlayers(
+          remainingPlayers,
+          currentTeams,
+          differenceLimit + 1
+        );
+      }
+
+      return distributePlayers(
+        remainingPlayers.slice(1),
+        currentTeams,
+        differenceLimit
       );
-    }
+    };
 
+    teams = distributePlayers(players, teams, maxDifference);
+    GenerateTeamsByPlayerStarsUseCase.repository.update(matchId, {
+      teams: teams.map((team) => TeamCreatePresenter(team)),
+    });
     return right(teams);
   }
 }

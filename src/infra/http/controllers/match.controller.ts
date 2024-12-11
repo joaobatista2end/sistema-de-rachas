@@ -10,6 +10,7 @@ import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.u
 import { HttpStatusCode } from '../../../domain';
 import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
 import { RemoveMatchUseCase } from '../../../domain/use-cases/match/remove-match.usecase';
+import { TeamPresenter } from '../../../application/presenters/team.presenter';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -102,7 +103,7 @@ class MatchController {
     }
 
     res.status(HttpStatusCode.CREATED).send({
-      data: result.value,
+      data: result.value.map((team) => TeamPresenter(team)),
     });
   }
 }

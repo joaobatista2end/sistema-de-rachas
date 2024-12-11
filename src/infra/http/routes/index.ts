@@ -69,6 +69,11 @@ const routes = async (fastify: FastifyInstance) => {
     matchController.update.bind(matchController)
   );
   fastify.get<{ Params: { id: string } }>(
+    '/match/:id/generate-teams-by-players-stars',
+    { onRequest: [fastify.authenticate] },
+    matchController.generateTeamsByPlayerStars.bind(matchController)
+  );
+  fastify.get<{ Params: { id: string } }>(
     '/match/:id',
     { onRequest: [fastify.authenticate] },
     matchController.findById.bind(matchController)

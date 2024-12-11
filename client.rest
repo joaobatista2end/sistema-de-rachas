@@ -118,13 +118,67 @@ Authorization: Bearer {{token}}
   "players": [
     {
       "name": "João",
-      "stars": 4,
+      "stars": 1,
+      "position": "Atacante"
+    },
+    {
+      "name": "Jose",
+      "stars": 2,
+      "position": "Atacante"
+    },
+    {
+      "name": "Kaio",
+      "stars": 3,
+      "position": "Atacante"
+    },
+    {
+      "name": "Antonio",
+      "stars": 1,
       "position": "Atacante"
     },
     {
       "name": "Marcos",
       "stars": 2,
-      "position": "Goleiro"
+      "position": "Atacante"
+    },
+    {
+      "name": "Rodrigo",
+      "stars": 2,
+      "position": "Atacante"
+    },
+    {
+      "name": "Oliver",
+      "stars": 5,
+      "position": "Atacante"
+    },
+    {
+      "name": "Cristiano",
+      "stars": 3,
+      "position": "Atacante"
+    },{
+      "name": "Ortega",
+      "stars": 2,
+      "position": "Atacante"
+    },
+    {
+      "name": "Mariano",
+      "stars": 3,
+      "position": "Atacante"
+    },
+    {
+      "name": "Alvin",
+      "stars": 2,
+      "position": "Atacante"
+    },
+    {
+      "name": "Marivan",
+      "stars": 1,
+      "position": "Atacante"
+    },
+    {
+      "name": "Tony",
+      "stars": 5,
+      "position": "Atacante"
     }
   ],
   "schedules": [
@@ -152,7 +206,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchFindById
-GET {{baseUrl}}/match/672bb786fa16892715025b99
+GET {{baseUrl}}/match/6759fbed256218e1005341cd
 Authorization: Bearer {{token}}
 
 
@@ -171,5 +225,11 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchCalculatePaymentPerPlayer
-GET {{baseUrl}}/match/66ea191e8665af450bf9f33b/amount-paid-players
+GET {{baseUrl}}/match/6759fbed256218e1005341cd/amount-paid-players
+Authorization: Bearer {{token}}
+
+###
+
+# @name GenerateTeamsByPlayerStars
+GET {{baseUrl}}/match/6759fbed256218e1005341cd/generate-teams-by-players-stars
 Authorization: Bearer {{token}}
