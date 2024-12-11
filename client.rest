@@ -101,7 +101,6 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-<<<<<<< HEAD
   "name": "Pardita 2",
   "description":"Pardita 2",
   "thumb": "Pardita 2",
@@ -135,16 +134,6 @@ Authorization: Bearer {{token}}
     {
       "name": "Antonio",
       "stars": 1,
-=======
-  "name": "CorxBah",
-  "description":"Vingancinha",
-  "thumb": "Pardita 233",
-  "soccerField": "6734d7d4a24d9335815f0b03",
-  "players": [
-    {
-      "name": "João333",
-      "stars": 4,
->>>>>>> 3825b34498a945f65550f0966dea20da7e15a18c
       "position": "Atacante"
     },
     {
