@@ -11,13 +11,13 @@ export type PlayerParams = {
 export class Player {
   id: string;
   name: string;
-  stars?: number;
+  stars: number;
   position?: PlayerPositionsEnum;
 
   public constructor(params: PlayerParams) {
     this.id = params.id;
     this.name = params.name;
-    this.stars = params.stars;
+    this.stars = params.stars ?? 0;
     this.position = params.position;
   }
 

@@ -73,10 +73,20 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     matchController.findById.bind(matchController)
   );
+  fastify.delete<{ Params: { id: string } }>(
+    '/match/:id',
+    { onRequest: [fastify.authenticate] },
+    matchController.delete.bind(matchController)
+  );
   fastify.get<{ Params: { id: string } }>(
     '/match/:id/amount-paid-players',
     { onRequest: [fastify.authenticate] },
     matchController.getAmountPaidPlayer.bind(matchController)
+  );
+  fastify.get<{ Params: { id: string } }>(
+    '/match/:id/generate-players',
+    { onRequest: [fastify.authenticate] },
+    matchController.generateTeamsByPlayerStars.bind(matchController)
   );
 
   // Soccer Field

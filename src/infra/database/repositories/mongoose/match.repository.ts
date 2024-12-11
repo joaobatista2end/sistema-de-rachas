@@ -1,9 +1,6 @@
 import { Model } from 'mongoose';
 import { MatchRepository } from '../../repositories/match.repository';
-import { ScheduleRepository } from '../../repositories/schedule.repository';
-import { ScheduleMongoRepository } from './schedule.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
-import { ScheduleModel } from '../../mongose/models/schedule.model';
 import { MatchDocumentWithRelations } from '../../mongose/models/match.model';
 import { Match } from '../../../../domain/entities/match';
 import { Player } from '../../../../domain/entities/player';
@@ -11,10 +8,9 @@ import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
-import { User } from '../../../../domain';
-import { PlayerRepository } from '../player.respository';
-import { PlayerMongoRepository } from './player.repository';
-import PlayerModel from '../../mongose/models/player.model';
+import { CreateTeamDto, HttpStatusCode, User } from '../../../../domain';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { RemoveMatchUseCase } from '../../../../domain/use-cases/match/remove-match.usecase';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -54,8 +50,31 @@ export class MatchMongoRepository implements MatchRepository {
 
     return this.parseToEntity(updated);
   }
-  delete(id: string): Promise<Match | null> {
-    throw new Error('Method not implemented.');
+
+  async createTeams(
+    id: string,
+    data: Array<CreateTeamDto>
+  ): Promise<Match | null> {
+    const updated = await this.model
+      .findByIdAndUpdate(id, data, { new: true })
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
+      .exec();
+
+    if (!updated?._id) return null;
+
+    return this.parseToEntity(updated);
+  }
+
+  async delete(id: string): Promise<Match | null> {
+    const deletedMatch = await this.model.findByIdAndDelete(id);
+
+    console.log({ deletedMatch });
+
+    if (!deletedMatch) {
+      return null;
+    }
+
+    return this.parseToEntity(deletedMatch);
   }
 
   async findById(id: string): Promise<Match | null> {
@@ -115,7 +134,6 @@ export class MatchMongoRepository implements MatchRepository {
           photoUrl: match.soccerField.user.photoUrl,
         }),
       }),
-      // Agora lidando com múltiplos schedules
       schedules: match.schedules.map(
         (schedule) =>
           new Schedule({

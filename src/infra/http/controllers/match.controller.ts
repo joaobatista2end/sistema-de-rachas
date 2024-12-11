@@ -7,7 +7,9 @@ import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.use
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
 import { MatchPresenter } from '../../../application/presenters/match.presenter';
 import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
-import { HttpStatusCode, UserDto } from '../../../domain';
+import { HttpStatusCode } from '../../../domain';
+import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
+import { RemoveMatchUseCase } from '../../../domain/use-cases/match/remove-match.usecase';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -72,6 +74,35 @@ class MatchController {
 
     res.status(HttpStatusCode.CREATED).send({
       data: MatchPresenter(result.value),
+    });
+  }
+
+  async delete(
+    req: FastifyRequest<{ Params: { id: string } }>,
+    res: FastifyReply
+  ) {
+    const result = await RemoveMatchUseCase.execute(req.params.id);
+    if (result.isLeft()) {
+      res.status(result.value.code).send(result.value.message);
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).send(result.value);
+  }
+
+  async generateTeamsByPlayerStars(
+    req: FastifyRequest<{ Params: { id: string } }>,
+    res: FastifyReply
+  ) {
+    const { id } = req.params;
+    const result = await GenerateTeamsByPlayerStarsUseCase.execute(id);
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    res.status(HttpStatusCode.CREATED).send({
+      data: result.value,
     });
   }
 }
