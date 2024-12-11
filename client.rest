@@ -60,18 +60,18 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Campo dos amigos",
-  "pixKey": "Campo do zézinho2",
+  "name": "Itaquerão",
+  "pixKey": "8775Eri",
   "rentalValue": 150,
-  "workStartTime": "10:00:00",
-  "workFinishTime": "21:00:00",
-  "workDays": ["segunda", "sexta"]
+  "workStartTime": "01:00:00",
+  "workFinishTime": "09:00:00",
+  "workDays": ["segunda","terça","quarta","quinta", "sexta", "sabado", "domingo"]
 }
 
 ###
 
 # @name SoccerFieldGetAvailableTimes
-GET {{baseUrl}}/soccer-field/6732a870b900e1018258a523?day=2024-11-05
+GET {{baseUrl}}/soccer-field/6734d7d4a24d9335815f0b03
 Authorization: Bearer {{token}}
 
 ###
@@ -82,14 +82,14 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "joao3",
+  "name": "joao33",
   "stars": 4
 }
 
 ###
 
 # @name PlayerDelete
-DELETE {{baseUrl}}/player/671bfe53b97aeb100c7f68b1
+DELETE {{baseUrl}}/player/6747a87e6b3e9e5c351883be
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -101,18 +101,18 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Pardita 2",
-  "description":"Pardita 2",
-  "thumb": "Pardita 2",
-  "soccerField": "6732a870b900e1018258a523",
+  "name": "CorxBah",
+  "description":"Vingancinha",
+  "thumb": "Pardita 233",
+  "soccerField": "6734d7d4a24d9335815f0b03",
   "players": [
     {
-      "name": "João",
+      "name": "João333",
       "stars": 4,
       "position": "Atacante"
     },
     {
-      "name": "Marcos",
+      "name": "Marcos33",
       "stars": 2,
       "position": "Goleiro"
     }
@@ -129,20 +129,24 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchUpdate
-PUT {{baseUrl}}/match/6728d8901820e75c35c65e67
+PUT {{baseUrl}}/match/6749f8f904cedd43d36187dd
 content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "partidinha de teste2",
-  "thumb": "thumbzinha de teste",
-  "description": "de"
+  "players": [
+    {
+      "name": "João",
+      "stars": 4,
+      "position": "Atacante"
+    }
+  ]
 }
 
 ###
 
 # @name MatchFindById
-GET {{baseUrl}}/match/672bb786fa16892715025b99
+GET {{baseUrl}}/match/673b6b8407dd149877e3293f
 Authorization: Bearer {{token}}
 
 ###
