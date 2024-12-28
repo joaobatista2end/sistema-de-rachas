@@ -9,8 +9,8 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "josesilva12@gmail.com",
-  "password": "qwe123qwewww"
+  "email": "dono@gmail.com",
+  "password": "Senha123"
 }
 
 ###
@@ -101,10 +101,10 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Pardita 2",
-  "description":"Pardita 2",
-  "thumb": "Pardita 2",
-  "soccerField": "6756ee2d98775ff92fa4b269",
+  "name": "27 de Dezembro",
+  "description":"Cliente",
+  "thumb": "Dezembro",
+  "soccerField": "676eb7d2b0ea17087abcb3f2",
   "teams": [
     {
       "name": "Team 1",
@@ -235,5 +235,47 @@ Authorization: Bearer {{token}}
 ###
 
 # @name GenerateTeamsByPlayerStars
-GET {{baseUrl}}/match/6759fbed256218e1005341cd/generate-teams-by-players-stars
+GET {{baseUrl}}/match/676319df8fbfd289252d2847/generate-teams-by-players-stars
 Authorization: Bearer {{token}}
+
+###
+
+# @name SoccerFieldFindById
+GET {{baseUrl}}/soccer-field/find/676eb7d2b0ea17087abcb3f2
+Authorization: Bearer {{token}}
+
+###
+
+# @name SoccerFieldUpdate
+PUT {{baseUrl}}/soccer-field/676eb7d2b0ea17087abcb3f2
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Campo Atualizado",
+  "pixKey": "novaChavePix",
+  "rentalValue": 200,
+  "workStartTime": "08:00:00",
+  "workFinishTime": "22:00:00",
+  "workDays": ["segunda", "terça", "quarta", "quinta", "sexta"]
+}
+###
+
+###
+# @name GetOwnerMatches
+GET {{baseUrl}}/soccer-field/owner/matches
+Authorization: Bearer {{token}}
+###
+
+###
+# @name GetOwnerDashboard
+GET {{baseUrl}}/soccer-field/owner/dashboard
+Authorization: Bearer {{token}}
+
+###
+
+###
+# @name GetUserMatches
+GET {{baseUrl}}/match/by-user
+Authorization: Bearer {{token}}
+###

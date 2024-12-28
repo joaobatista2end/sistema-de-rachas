@@ -104,7 +104,7 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
 
-  private parseToEntity(match: MatchDocumentWithRelations): Match | null {
+  public parseToEntity(match: MatchDocumentWithRelations): Match | null {
     if (
       !match?.soccerField?._id ||
       !Array.isArray(match?.schedules) ||

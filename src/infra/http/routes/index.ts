@@ -18,6 +18,7 @@ import {
   deleteSoccerFieldSchema,
   getSoccerFieldsByUserSchema,
 } from '../swagger/soccer-field.schema';
+import { CreateSoccerFieldDto } from '../../../domain';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -93,6 +94,12 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     matchController.generateTeamsByPlayerStars.bind(matchController)
   );
+  fastify.get(
+  '/match/by-user',
+  { onRequest: [fastify.authenticate] },
+  matchController.getUserMatches.bind(matchController)
+);
+
 
   // Soccer Field
   fastify.post(
@@ -100,6 +107,40 @@ const routes = async (fastify: FastifyInstance) => {
     { schema: createSoccerFieldSchema, onRequest: [fastify.authenticate] },
     soccerFieldController.register.bind(soccerFieldController)
   );
+  fastify.put<{
+    Params: { id: string };
+    Body: Partial<CreateSoccerFieldDto>;
+  }>(
+    '/soccer-field/:id',
+    {
+      onRequest: [fastify.authenticate],
+      schema: {
+        params: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+          },
+          required: ['id'],
+        },
+        body: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            pixKey: { type: 'string' },
+            rentalValue: { type: 'number' },
+            workStartTime: { type: 'string' },
+            workFinishTime: { type: 'string' },
+            workDays: {
+              type: 'array',
+              items: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+    soccerFieldController.update.bind(soccerFieldController)
+  );
+
   fastify.delete<{ Params: { id: string } }>(
     '/soccer-field/:id',
     { schema: deleteSoccerFieldSchema, onRequest: [fastify.authenticate] },
@@ -116,9 +157,27 @@ const routes = async (fastify: FastifyInstance) => {
     soccerFieldController.allByUser.bind(soccerFieldController)
   );
   fastify.get<{ Params: { id: string }; Querystring: { day?: string } }>(
-    '/soccer-field/:id',
+    '/soccer-field/:id/available-times',
     { onRequest: [fastify.authenticate] },
     soccerFieldController.availableTimes.bind(soccerFieldController)
+  );
+
+  fastify.get(
+    '/soccer-field/owner/dashboard',
+    { onRequest: [fastify.authenticate] },
+    soccerFieldController.getDashboard.bind(soccerFieldController)
+  );
+
+  fastify.get(
+    '/soccer-field/owner/matches',
+    { onRequest: [fastify.authenticate] },
+    soccerFieldController.getOwnerMatches.bind(soccerFieldController)
+  );
+
+  fastify.get<{ Params: { id: string } }>(
+    '/soccer-field/find/:id',
+    { onRequest: [fastify.authenticate] },
+    soccerFieldController.findById.bind(soccerFieldController)
   );
 };
 

@@ -11,6 +11,7 @@ import { HttpStatusCode } from '../../../domain';
 import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
 import { RemoveMatchUseCase } from '../../../domain/use-cases/match/remove-match.usecase';
 import { TeamPresenter } from '../../../application/presenters/team.presenter';
+import { GetUserMatchesUseCase } from '../../../domain/use-cases/match/get-user-matches.usecase';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -58,6 +59,27 @@ class MatchController {
 
     res.send({
       data: MatchPresenter(match),
+    });
+  }
+
+  async getUserMatches(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+    const result = await GetUserMatchesUseCase.execute(user.id);
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    res.status(HttpStatusCode.OK).send({
+      data: result.value.map((match) => ({
+        id: match.id,
+        name: match.name,
+        date: match.schedules[0].day,
+        startTime: match.schedules[0].startTime.toString(),
+        endTime: match.schedules[0].finishTime.toString(),
+        field: match.soccerField.name,
+        actions: true, // para habilitar os botões de ação
+      })),
     });
   }
 
