@@ -70,17 +70,7 @@ class MatchController {
       return res.status(result.value.code).send(result.value.message);
     }
 
-    res.status(HttpStatusCode.OK).send({
-      data: result.value.map((match) => ({
-        id: match.id,
-        name: match.name,
-        date: match.schedules[0].day,
-        startTime: match.schedules[0].startTime.toString(),
-        endTime: match.schedules[0].finishTime.toString(),
-        field: match.soccerField.name,
-        actions: true, // para habilitar os botões de ação
-      })),
-    });
+    res.status(HttpStatusCode.OK).send(result.value);
   }
 
   async update(
