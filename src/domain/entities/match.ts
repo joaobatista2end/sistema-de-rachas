@@ -70,7 +70,7 @@ export class Match {
 
   public get amountToBePaidPerPlayer(): number {
     return (
-      (this.schedule.totalHours * this.soccerField.rentalValue) /
+      (this.schedules.totalHours * this.soccerField.rentalValue) /
       this.players.length
     );
   }

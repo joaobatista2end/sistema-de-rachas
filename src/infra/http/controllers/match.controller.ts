@@ -64,7 +64,7 @@ class MatchController {
 
   async getUserMatches(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
-    const result = await GetUserMatchesUseCase.execute(user.id);
+    const result = await GetUserMatchesUseCase.execute(user.id, user.role);
 
     if (result.isLeft()) {
       return res.status(result.value.code).send(result.value.message);

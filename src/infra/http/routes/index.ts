@@ -64,6 +64,11 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     matchController.all.bind(matchController)
   );
+  fastify.get(
+    '/match/by-user',
+    { onRequest: [fastify.authenticate] },
+    matchController.getUserMatches.bind(matchController)
+  );
   fastify.put<{ Params: { id: string } }>(
     '/match/:id',
     { onRequest: [fastify.authenticate] },
@@ -94,12 +99,6 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     matchController.generateTeamsByPlayerStars.bind(matchController)
   );
-  fastify.get(
-  '/match/by-user',
-  { onRequest: [fastify.authenticate] },
-  matchController.getUserMatches.bind(matchController)
-);
-
 
   // Soccer Field
   fastify.post(

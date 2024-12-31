@@ -8,23 +8,35 @@ import { SoccerFieldMongoRepository } from '../../../infra/database/repositories
 import SoccerFieldModel from '../../../infra/database/mongose/models/soccer-field.model';
 
 export class GetUserMatchesUseCase {
-  static async execute(userId: string): Promise<Either<HttpError, Match[]>> {
+  static async execute(
+    userId: string,
+    userType: number
+  ): Promise<Either<HttpError, Match[]>> {
     try {
       const repository = new MatchMongoRepository(MatchModel);
-      const soccerFieldRepository = new SoccerFieldMongoRepository(
-        SoccerFieldModel
-      );
 
-      // Primeiro busca os campos do dono
-      const ownerFields = await soccerFieldRepository.allByUser(userId);
-      const fieldIds = ownerFields.map((field) => field.id);
+      let matches;
+      if (userType === 1) {
+        // owner
+        const soccerFieldRepository = new SoccerFieldMongoRepository(
+          SoccerFieldModel
+        );
+        const ownerFields = await soccerFieldRepository.allByUser(userId);
+        const fieldIds = ownerFields.map((field) => field.id);
 
-      // Depois busca as partidas desses campos
-      const matches = await MatchModel.find({
-        soccerField: { $in: fieldIds },
-      })
-        .populate(['soccerField', 'schedules'])
-        .exec();
+        matches = await MatchModel.find({
+          soccerField: { $in: fieldIds },
+        })
+          .populate(['soccerField', 'schedules', 'players', 'teams'])
+          .exec();
+      } else {
+        // client
+        matches = await MatchModel.find({
+          user: userId,
+        })
+          .populate(['soccerField', 'schedules', 'players', 'teams'])
+          .exec();
+      }
 
       const matchEntities = matches
         .map((match) => repository.parseToEntity(match))
@@ -44,7 +56,7 @@ export class GetUserMatchesUseCase {
       return left(
         new HttpError(
           HttpStatusCode.INTERNAL_SERVER_ERROR,
-          'Erro ao buscar partidas dos campos'
+          'Erro ao buscar partidas'
         )
       );
     }
