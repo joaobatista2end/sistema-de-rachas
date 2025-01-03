@@ -2,21 +2,16 @@ import { Model } from 'mongoose';
 import { SoccerFieldRepository } from '../../repositories/soccer-field.repository';
 import {
   CreateSoccerFieldDto,
-  SoccerFieldDto,
 } from '../../../../domain/dto/soccer-field.dto';
 import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { User } from '../../../../domain/entities/user';
 import MatchModel from '../../mongose/models/match.model';
-import { ScheduleDocument } from '../../mongose/models/schedule.model';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import { transformSchedulesToDateRange } from '../../../../application/utils/date';
-import { MatchPresenter } from '../../../../application/presenters/match.presenter';
 import { convertNumberToDayOfWeek, Time } from '../../../../domain';
-import { start } from 'repl';
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(utc);
