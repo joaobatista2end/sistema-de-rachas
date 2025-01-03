@@ -7,11 +7,13 @@ import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.use
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
 import { MatchPresenter } from '../../../application/presenters/match.presenter';
 import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
-import { HttpStatusCode } from '../../../domain';
+import { CreatePaymentDto, HttpStatusCode } from '../../../domain';
 import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
 import { RemoveMatchUseCase } from '../../../domain/use-cases/match/remove-match.usecase';
 import { TeamPresenter } from '../../../application/presenters/team.presenter';
 import { GetUserMatchesUseCase } from '../../../domain/use-cases/match/get-user-matches.usecase';
+import { MakePaymentUseCase } from '../../../domain/use-cases/match/payment-match.usecase';
+import { PaymentPresenter } from '../../../application/presenters/payment.presenter';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -116,6 +118,25 @@ class MatchController {
 
     res.status(HttpStatusCode.CREATED).send({
       data: result.value.map((team) => TeamPresenter(team)),
+    });
+  }
+
+  async makePayment(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+
+    const paymentDto: CreatePaymentDto = {
+      ...(req.body as CreatePaymentDto),
+      user: user.id,
+    };
+
+    const result = await MakePaymentUseCase.execute(paymentDto);
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    res.status(HttpStatusCode.CREATED).send({
+      data: PaymentPresenter.toDto(result.value),
     });
   }
 }
