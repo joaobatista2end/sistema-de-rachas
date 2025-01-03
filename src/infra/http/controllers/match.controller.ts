@@ -135,9 +135,11 @@ class MatchController {
       return res.status(result.value.code).send(result.value.message);
     }
 
-    res.status(HttpStatusCode.CREATED).send({
-      data: PaymentPresenter.toDto(result.value),
-    });
+    const data = PaymentPresenter(result.value);
+
+    res.send({
+      data,
+    }).status(HttpStatusCode.CREATED);
   }
 }
 
