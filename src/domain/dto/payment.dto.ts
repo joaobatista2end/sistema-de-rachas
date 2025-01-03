@@ -11,7 +11,6 @@ export type PaymentDto = {
 };
 
 export type CreatePaymentDto = {
-  amount: number;
   paymentDate: Date;
   paymentMethod: string;
   match: string;
