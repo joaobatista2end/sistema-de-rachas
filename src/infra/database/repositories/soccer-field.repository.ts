@@ -4,7 +4,6 @@ import { TimeInterval } from '../../../domain/types/available-times';
 
 export interface SoccerFieldRepository {
   all(): Promise<Array<SoccerField>>;
-  getOccupiedTimes(id: string, day?: string): Promise<Array<TimeInterval>>;
   allByUser(userId: string): Promise<Array<SoccerField>>;
   findById(id: string): Promise<SoccerField | null>;
   findByName(name: string): Promise<SoccerField | null>;
