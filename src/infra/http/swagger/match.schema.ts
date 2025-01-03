@@ -4,9 +4,8 @@ export const createPaymentSchema = {
     summary: 'Create payment',
     body: {
       type: 'object',
-      required: ['amount', 'paymentDate', 'paymentMethod', 'match'],
+      required: ['paymentDate', 'paymentMethod', 'match'],
       properties: {
-        amount: { type: 'number', description: 'Amount of the payment' },
         paymentDate: { type: 'string', format: 'date-time', description: 'Date of the payment' },
         paymentMethod: { type: 'string', description: 'Method of the payment' },
         match: { type: 'string', description: 'ID of the match' },
@@ -19,7 +18,6 @@ export const createPaymentSchema = {
         type: 'object',
         properties: {
           id: { type: 'string', description: 'ID of the payment' },
-          amount: { type: 'number', description: 'Amount of the payment' },
           paymentDate: { type: 'string', format: 'date-time', description: 'Date of the payment' },
           paymentMethod: { type: 'string', description: 'Method of the payment' },
           match: {
