@@ -1,6 +1,4 @@
-node_modules/
-database/
-package-lock.json
-sonarqube/
-src/domain/dist
-dist/
+/node_modules/
+/database/
+/package-lock.json
+/sonarqube/
