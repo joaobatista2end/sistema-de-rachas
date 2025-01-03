@@ -21,6 +21,6 @@ export const MatchPresenter = (match: Match | null): MatchDto | null => {
     teams: (match.teams ?? []).map((team) => TeamPresenter(team)),
     user: UserPresenter(match.user),
     paid: match.isPaid,
-    payment: match.payment ? PaymentPresenter(match.payment) : null,
+    payment: match.payment ? PaymentPresenter(match.payment) : undefined,
   };
 };
