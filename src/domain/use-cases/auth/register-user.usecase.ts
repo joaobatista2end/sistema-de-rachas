@@ -27,6 +27,9 @@ export class RegisterUserUseCase {
       ...payload,
       password,
     });
+    if (!user) {
+      return left(new HttpError(HttpStatusCode.INTERNAL_SERVER_ERROR, 'User registration failed'));
+    }
     return right(user);
   }
 }

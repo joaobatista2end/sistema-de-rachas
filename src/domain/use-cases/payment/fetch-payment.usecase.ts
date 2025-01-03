@@ -18,7 +18,7 @@ export class FetchPaymentUseCase {
         return left(new HttpError(HttpStatusCode.BAD_REQUEST, 'Erro ao obter pagamentos'));
       }
 
-      return right(payments);
+      return right(payments.filter((payment): payment is Payment => payment !== null));
     } catch (error: unknown) {
       console.error(error);
 

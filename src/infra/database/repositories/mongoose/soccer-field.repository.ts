@@ -25,7 +25,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
 
   async getAvailableTimes(id: string, day?: string): Promise<any> {
     const currentDay = day ?? new Date().toISOString();
-
+    
     const soccerField = await this.model.findById(id).exec();
     if (!soccerField) {
       throw new Error('Campo de futebol não encontrado');

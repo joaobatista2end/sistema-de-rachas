@@ -1,7 +1,6 @@
 import { FastifySchema } from 'fastify';
 
 export const createPlayerSchema: FastifySchema = {
-  tags: ['Jogador'],
   body: {
     type: 'object',
     properties: {
@@ -27,7 +26,6 @@ export const createPlayerSchema: FastifySchema = {
 };
 
 export const deletePlayerSchema: FastifySchema = {
-  tags: ['Jogador'],
   params: {
     type: 'object',
     properties: {

@@ -38,8 +38,7 @@ export class GetUserMatchesUseCase {
           .exec();
       }
 
-      const matchEntities = matches
-        .map((match) => repository.parseToEntity(match))
+      const matchEntities = (await Promise.all(matches.map((match) => repository.parseToEntity(match))))
         .filter((match): match is Match => match !== null)
         .sort((a, b) => {
           const dateA = new Date(

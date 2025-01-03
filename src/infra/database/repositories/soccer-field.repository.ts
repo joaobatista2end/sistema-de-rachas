@@ -8,6 +8,7 @@ export interface SoccerFieldRepository {
   findById(id: string): Promise<SoccerField | null>;
   findByName(name: string): Promise<SoccerField | null>;
   create(data: CreateSoccerFieldDto): Promise<SoccerField | null>;
+  getAvailableTimes(id: string, day?: string): Promise<any>;
   update(
     id: string,
     payload: Partial<CreateSoccerFieldDto>

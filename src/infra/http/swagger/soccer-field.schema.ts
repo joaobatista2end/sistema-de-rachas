@@ -1,7 +1,6 @@
 import { FastifySchema } from 'fastify';
 
 export const deleteSoccerFieldSchema: FastifySchema = {
-  tags: ['Campo'],
   params: {
     type: 'object',
     properties: {
@@ -44,7 +43,6 @@ export const deleteSoccerFieldSchema: FastifySchema = {
 };
 
 export const createSoccerFieldSchema: FastifySchema = {
-  tags: ['Campo'],
   body: {
     type: 'object',
     properties: {
@@ -224,6 +222,5 @@ export const getSoccerFieldsByUserSchema: FastifySchema = {
       },
       example: { error: 'Unauthorized' },
     },
-  },
-  tags: ['Campo'],
+  }
 };

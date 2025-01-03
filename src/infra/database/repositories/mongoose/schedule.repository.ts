@@ -1,8 +1,7 @@
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ScheduleRepository } from '../../repositories/schedule.repository';
 import {
   CreateScheduleDto,
-  ScheduleDto,
 } from '../../../../domain/dto/schedule.dto';
 import { ScheduleDocument } from '../../mongose/models/schedule.model';
 import { Schedule } from '../../../../domain/entities/schedule';
