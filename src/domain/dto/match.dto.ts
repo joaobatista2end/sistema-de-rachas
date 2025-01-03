@@ -10,7 +10,7 @@ export type MatchDto = {
   name: string;
   thumb: string;
   description: string;
-  soccerField: SoccerFieldDto;
+  soccerField: Partial<SoccerFieldDto>;
   schedules: ScheduleDto[];
   players?: PlayerDto[];
   teams?: TeamDto[];

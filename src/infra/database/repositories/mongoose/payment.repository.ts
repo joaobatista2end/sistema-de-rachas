@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreatePaymentDto } from '../../../../domain/dto/payment.dto';
 import { Payment } from '../../../../domain/entities/payment';
 import { PaymentRepository } from '../payment.repository';
@@ -11,6 +11,7 @@ import {
   SoccerField,
   User,
 } from '../../../../domain';
+import { ObjectId } from 'mongodb';
 
 export class PaymentMongoRepository implements PaymentRepository {
   private model: Model<PaymentDocumentWithRelations>;
@@ -46,21 +47,40 @@ export class PaymentMongoRepository implements PaymentRepository {
   }
 
   async findByUser(userId: string): Promise<Array<Payment>> {
-    const paymentsSelected = await this.model
-      .find()
-      .populate({
-        path: 'match',
-        populate: [
-          { path: 'schedules' },
-          { path: 'players' },
-          { path: 'user' },
-          {
-            path: 'soccerField',
-            match: { user: userId },
-          },
-        ],
-      })
-      .exec();
+    const paymentsSelected = await this.model.aggregate([
+      {
+        $lookup: {
+          from: 'matches',
+          localField: 'match',
+          foreignField: '_id',
+          as: 'match'
+        }
+      },
+      { $unwind: '$match' },
+      {
+        $lookup: {
+          from: 'soccerfields',
+          localField: 'match.soccerField',
+          foreignField: '_id',
+          as: 'match.soccerField'
+        }
+      },
+      { $unwind: '$match.soccerField' },
+      {
+        $match: {
+          'match.soccerField.user': new ObjectId(userId)
+        }
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' }
+    ]).exec();
 
     return paymentsSelected.map(this.parseToEntity);
   }
@@ -112,12 +132,13 @@ export class PaymentMongoRepository implements PaymentRepository {
   }
 
   private parseToEntity(document: PaymentDocumentWithRelations): Payment {
+    console.log(document)
     if (!document) {
       throw new Error('Document is null');
     }
     const parseSchedule = (schedule: any): Schedule => {
       return new Schedule({
-        id: schedule._id || uid(),
+        id: schedule?._id || uid(),
         startTime: schedule.startTime,
         finishTime: schedule.finishTime,
         day: schedule.day,
@@ -126,7 +147,7 @@ export class PaymentMongoRepository implements PaymentRepository {
 
     const parseSoccerField = (document: any): SoccerField => {
       return new SoccerField({
-        id: document._id as string,
+        id: document?._id || uid(),
         name: document.name,
         pixKey: document.pixKey,
         rentalValue: document.rentalValue,
@@ -139,7 +160,7 @@ export class PaymentMongoRepository implements PaymentRepository {
 
     const parseMatch = (match: any): Match => {
       return new Match({
-        id: match._id || uid(),
+        id: match?._id || uid(),
         name: match.name,
         thumb: match.thumb,
         description: match.description,
@@ -162,7 +183,7 @@ export class PaymentMongoRepository implements PaymentRepository {
     };
 
     return new Payment({
-      id: document._id || uid(),
+      id: document?._id || uid(),
       paymentDate: document.paymentDate,
       paymentMethod: document.paymentMethod,
       amount: document.amount,

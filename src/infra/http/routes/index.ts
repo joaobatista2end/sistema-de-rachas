@@ -187,8 +187,8 @@ const routes = async (fastify: FastifyInstance) => {
   );
 
   // Payments
-  fastify.get<{ Params: { id: string } }>(
-    '/payments/by-user/:id',
+  fastify.get(
+    '/payments/owner',
     { onRequest: [fastify.authenticate] },
     paymentsController.findByUser.bind(soccerFieldController)
   );

@@ -16,6 +16,9 @@ export const PaymentPresenter = (payment: Payment): PaymentDto => {
     match: {
       id: payment.match.id.toString(),
       name: payment.match.name,
+      soccerField: {
+        name: payment.match.soccerField.name
+      }
     },
     user: {
       id: payment.user.id.toString(),

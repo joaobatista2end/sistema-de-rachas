@@ -5,11 +5,11 @@ import { PaymentPresenter } from '../../../application/presenters/payment.presen
 
 class PaymentController {
   async findByUser(
-    req: FastifyRequest<{ Params: { id: string } }>,
+    req: FastifyRequest,
     res: FastifyReply
   ) {
-    const { id } = req.params;
-    const result = await FetchPaymentUseCase.execute(id);
+    const user = req.user as any;
+    const result = await FetchPaymentUseCase.execute(user.id);
 
     if (result.isLeft()) {
       return res.status(result.value.code).send(result.value.message);
