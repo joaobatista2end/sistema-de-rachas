@@ -19,6 +19,7 @@ import {
   getSoccerFieldsByUserSchema,
 } from '../swagger/soccer-field.schema';
 import { CreateSoccerFieldDto } from '../../../domain';
+import { createPaymentSchema } from '../swagger/match.schema';
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -98,6 +99,11 @@ const routes = async (fastify: FastifyInstance) => {
     '/match/:id/generate-players',
     { onRequest: [fastify.authenticate] },
     matchController.generateTeamsByPlayerStars.bind(matchController)
+  );
+  fastify.post(
+    '/match/payment',
+    { schema: createPaymentSchema, onRequest: [fastify.authenticate] },
+    matchController.makePayment.bind(matchController)
   );
 
   // Soccer Field
