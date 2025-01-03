@@ -27,6 +27,7 @@ export class SoccerField {
   user: User;
 
   public constructor(params: SoccerFieldParams) {
+    console.log('params', params);
     this.id = params.id;
     this.name = params.name;
     this.rentalValue = params.rentalValue;
