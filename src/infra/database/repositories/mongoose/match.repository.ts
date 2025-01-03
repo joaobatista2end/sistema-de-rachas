@@ -8,20 +8,15 @@ import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { Schedule } from '../../../../domain/entities/schedule';
 import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
-import { CreateTeamDto, HttpStatusCode, Team, User } from '../../../../domain';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { RemoveMatchUseCase } from '../../../../domain/use-cases/match/remove-match.usecase';
+import { CreateTeamDto, Team, User } from '../../../../domain';
 import { PlayerDocument } from '../../mongose/models/player.model';
 import {
-  SoccerFieldDocument,
   SoccerFieldDocumentWithRelations,
 } from '../../mongose/models/soccer-field.model';
 import { ScheduleDocument } from '../../mongose/models/schedule.model';
 import { UserDocument } from '../../mongose/models/user.model';
 import {
-  TeamDocument,
-  TeamDocumentWithRelationships,
-  TeamModel,
+  TeamDocumentWithRelationships
 } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
