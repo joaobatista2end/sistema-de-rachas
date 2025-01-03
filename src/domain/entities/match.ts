@@ -68,10 +68,18 @@ export class Match {
     this.paymentListPlayers.push(playerID);
   }
 
+  public get totalHours(): number {
+    return this.schedules.reduce((sum, schedule) => sum + schedule.totalHours, 0);
+  }
+  public get amount(): number {
+    return (this.totalHours * this.soccerField.rentalValue)
+  }
+
   public get amountToBePaidPerPlayer(): number {
-    return (
-      (this.schedules.totalHours * this.soccerField.rentalValue) /
-      this.players.length
-    );
+    if (this.players.length === 0) {
+      return 0;
+    }
+
+    return this.amount / this.players.length;
   }
 }
