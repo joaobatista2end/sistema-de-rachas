@@ -9,8 +9,8 @@ export type ScheduleParams = {
 
 export class Schedule {
   id: string;
-  startTime: Time;
-  finishTime: Time;
+  public startTime: Time;
+  public finishTime: Time;
   day: Date;
 
   public constructor(params: ScheduleParams) {
