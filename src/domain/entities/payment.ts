@@ -3,7 +3,6 @@ import { User } from './user';
 
 export type PaymentParams = {
     id: string;
-    amount: number;
     paymentDate: Date;
     paymentMethod: string;
     match: Match;
@@ -12,7 +11,6 @@ export type PaymentParams = {
 
 export class Payment {
     id: string;
-    amount: number;
     paymentDate: Date;
     paymentMethod: string;
     match: Match;
@@ -20,10 +18,13 @@ export class Payment {
 
     constructor(params: PaymentParams) {
         this.id = params.id;
-        this.amount = params.amount;
         this.paymentDate = params.paymentDate;
         this.paymentMethod = params.paymentMethod;
         this.match = params.match;
         this.user = params.user;
+    }
+
+    get amount(): number {
+        return this.match.amount;
     }
 }
