@@ -1,5 +1,6 @@
 import { MatchDto } from '../../domain/dto/match.dto';
 import { Match } from '../../domain/entities/match';
+import { PaymentPresenter } from './payment.presenter';
 import { PlayerPresenter } from './player.presenter';
 import { SchedulePresenter } from './schedule.presenter';
 import { SoccerFieldPresenter } from './soccer-field.presenter';
@@ -19,5 +20,7 @@ export const MatchPresenter = (match: Match | null): MatchDto | null => {
     soccerField: SoccerFieldPresenter(match.soccerField),
     teams: (match.teams ?? []).map((team) => TeamPresenter(team)),
     user: UserPresenter(match.user),
+    paid: match.isPaid,
+    payment: match.payment ? PaymentPresenter(match.payment) : null,
   };
 };

@@ -1,3 +1,4 @@
+import { PaymentDto } from './payment.dto';
 import { CreatePlayerDto, PlayerDto } from './player.dto';
 import { CreateScheduleDto, ScheduleDto } from './schedule.dto';
 import { SoccerFieldDto } from './soccer-field.dto';
@@ -14,6 +15,8 @@ export type MatchDto = {
   players?: PlayerDto[];
   teams?: TeamDto[];
   user: UserDto;
+  paid?: boolean;
+  payment?: PaymentDto;
 };
 
 export type CreateMatchDto = {

@@ -57,10 +57,14 @@ class MatchController {
     res: FastifyReply
   ) {
     const { id } = req.params;
-    const match = await FindMatchUseCase.execute(id);
+    const result = await FindMatchUseCase.execute(id);
 
-    res.send({
-      data: MatchPresenter(match),
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    res.status(HttpStatusCode.CREATED).send({
+      data: MatchPresenter(result.value),
     });
   }
 

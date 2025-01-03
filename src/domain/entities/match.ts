@@ -1,8 +1,9 @@
 import { Player } from './player';
 import { Schedule } from './schedule';
 import { SoccerField } from './soccer-field';
-import { Team } from './team';
 import { User } from './user';
+import { Payment } from './payment';
+import { Team } from './team';
 
 export type MatchParams = {
   id: string;
@@ -14,6 +15,7 @@ export type MatchParams = {
   players?: Array<Player>;
   teams?: Array<Team>;
   user: User;
+  payment?: Payment;
 };
 
 export class Match {
@@ -27,24 +29,20 @@ export class Match {
   teams?: Array<Team>;
   description: string;
   user: User;
+  payment?: Payment;
 
   public constructor(params: MatchParams) {
     this.id = params.id;
     this.name = params.name;
+    this.thumb = params.thumb;
     this.description = params.description;
-    this.players = params?.players || [];
     this.soccerField = params.soccerField;
     this.schedules = params.schedules;
-    this.thumb = params.thumb;
-    this.teams = params?.teams ?? [];
-    this.paymentListPlayers = [];
+    this.players = params.players || [];
+    this.teams = params.teams || [];
     this.user = params.user;
-  }
-
-  public get paymentPlayers(): Array<Player> {
-    return this.players.filter((player) => {
-      return this.paymentListPlayers.includes(player.id);
-    });
+    this.payment = params.payment;
+    this.paymentListPlayers = [];
   }
 
   public addPlayer(player: Player) {
@@ -71,15 +69,15 @@ export class Match {
   public get totalHours(): number {
     return this.schedules.reduce((sum, schedule) => sum + schedule.totalHours, 0);
   }
-  public get amount(): number {
-    return (this.totalHours * this.soccerField.rentalValue)
-  }
 
   public get amountToBePaidPerPlayer(): number {
     if (this.players.length === 0) {
       return 0;
     }
+    return (this.totalHours * this.soccerField.rentalValue) / this.players.length;
+  }
 
-    return this.amount / this.players.length;
+  public get isPaid(): boolean {
+    return !!this.payment;
   }
 }

@@ -23,12 +23,16 @@ import {
   TeamDocumentWithRelationships,
   TeamModel,
 } from '../../mongose/models/team.model';
+import PaymentModel from '../../mongose/models/payment.model';
+import { PaymentMongoRepository } from './payment.repository';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
+  private paymentRepository: PaymentMongoRepository;
 
   constructor(model: Model<MatchDocumentWithRelations>) {
     this.model = model;
+    this.paymentRepository = new PaymentMongoRepository(PaymentModel);
   }
 
   async all(): Promise<Array<Match>> {
@@ -36,9 +40,10 @@ export class MatchMongoRepository implements MatchRepository {
       .find()
       .populate(['soccerField', 'players', 'schedules', 'teams'])
       .exec();
-    return matchs
-      .map((match) => this.parseToEntity(match))
-      .filter((match) => match !== null);
+    const parsedMatches = await Promise.all(
+      matchs.map((match) => this.parseToEntity(match))
+    );
+    return parsedMatches.filter((match) => match !== null) as Match[];
   }
 
   async create(data: CreateMatchDto): Promise<Match | null> {
@@ -104,7 +109,7 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
 
-  public parseToEntity(match: MatchDocumentWithRelations): Match | null {
+  public async parseToEntity(match: MatchDocumentWithRelations): Promise<Match | null> {
     if (
       !match?.soccerField?._id ||
       !Array.isArray(match?.schedules) ||
@@ -112,6 +117,10 @@ export class MatchMongoRepository implements MatchRepository {
     ) {
       return null;
     }
+
+
+    const payment = match._id ? await this.paymentRepository.findByMatch(match._id.toString()) : null;
+
 
     const parsePlayers = (players?: PlayerDocument[]): Player[] =>
       (players ?? []).map(
@@ -174,6 +183,7 @@ export class MatchMongoRepository implements MatchRepository {
       description: match.description,
       name: match.name,
       thumb: match.thumb,
+      payment: !payment ? undefined : payment,
       players: parsePlayers(match.players),
       soccerField: parseSoccerField(match.soccerField),
       schedules: parseSchedules(match.schedules),

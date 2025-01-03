@@ -3,11 +3,15 @@ import { PaymentDto } from '../../domain/dto/payment.dto';
 import dayjs from 'dayjs';
 
 export const PaymentPresenter = (payment: Payment): PaymentDto => {
-  const amount = payment.match.amount;
   return {
     id: payment.id.toString(),
-    amount,
-    paymentDate: dayjs(payment.paymentDate).format('DD/MM/YYYY'), 
+    amount: payment.amount,
+    discount: payment.discount,
+    totalAmountWithDiscount: payment.totalAmountWithDiscount,
+    formattedAmount: payment.formattedAmount,
+    formattedDiscount: payment.formattedDiscount,
+    formattedTotalAmountWithDiscount: payment.formattedTotalAmountWithDiscount,
+    paymentDate: dayjs(payment.paymentDate).format('DD/MM/YYYY'),
     paymentMethod: payment.paymentMethod,
     match: {
       id: payment.match.id.toString(),
