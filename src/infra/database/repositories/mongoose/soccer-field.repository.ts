@@ -1,8 +1,6 @@
 import { Model } from 'mongoose';
 import { SoccerFieldRepository } from '../../repositories/soccer-field.repository';
-import {
-  CreateSoccerFieldDto,
-} from '../../../../domain/dto/soccer-field.dto';
+import { CreateSoccerFieldDto } from '../../../../domain/dto/soccer-field.dto';
 import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-field.model';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
 import { DayOfWeek } from '../../../../domain/object-values/day';
@@ -25,7 +23,7 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
 
   async getAvailableTimes(id: string, day?: string): Promise<any> {
     const currentDay = day ?? new Date().toISOString();
-    
+
     const soccerField = await this.model.findById(id).exec();
     if (!soccerField) {
       throw new Error('Campo de futebol não encontrado');
@@ -219,14 +217,23 @@ export class SoccerFieldMongoRepository implements SoccerFieldRepository {
       workFinishTime: document.workFinishTime,
       workStartTime: document.workStartTime,
       workDays: document.workDays as DayOfWeek[],
-      user: new User({
-        email: document.user.email,
-        id: document.user._id as string,
-        name: document.user.name,
-        password: document.user.password,
-        photoUrl: document.user.photoUrl,
-        role: document.user.role,
-      }),
+      user: document.user
+        ? new User({
+            email: document.user.email,
+            id: document.user._id as string,
+            name: document.user.name,
+            password: document.user.password,
+            photoUrl: document.user.photoUrl,
+            role: document.user.role,
+          })
+        : new User({
+            email: '',
+            id: '',
+            name: '',
+            password: '',
+            photoUrl: '',
+            role: 1,
+          }),
     });
   }
 }
