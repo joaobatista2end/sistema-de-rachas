@@ -1,5 +1,5 @@
 ### Definição de Variáveis Globais
-@baseUrl = http://localhost:3002
+@baseUrl = http://localhost:8000
 @token = {{AuthLogin.response.body.token}}
 
 ###
@@ -9,8 +9,8 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "cliente@teste.com",
-  "password": "Senha123"
+  "email": "jhonxbatista4@gmail.com",
+  "password": "qwe123QWE123"
 }
 
 ###
@@ -71,7 +71,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name SoccerFieldGetAvailableTimes
-GET {{baseUrl}}/soccer-field/6734d7d4a24d9335815f0b03
+GET {{baseUrl}}/soccer-field/6776dbe2935c57bb3c596b9f/available-times?day=2024-11-05
 Authorization: Bearer {{token}}
 
 ###
@@ -210,7 +210,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchFindById
-GET {{baseUrl}}/match/6759fbed256218e1005341cd
+GET {{baseUrl}}/match/672be5e33aa9283eb40fe3b6
 Authorization: Bearer {{token}}
 
 
@@ -279,3 +279,25 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/match/by-user
 Authorization: Bearer {{token}}
 ###
+
+
+###
+# @name MakePayment
+POST {{baseUrl}}/match/payment
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "paymentDate": "2025-01-03T01:07:13.325Z",
+  "paymentMethod": "pix",
+  "discount": 20,
+  "amount": 100,
+  "totalAmountWithDiscount": 80,
+  "match": "677830efde12be69ce3a674e",
+  "user": "6717f7ef66f1861cb37a5055"
+}
+
+###
+# @name Get Payments By User
+GET {{baseUrl}}/payments/owner
+Authorization: Bearer {{token}}
