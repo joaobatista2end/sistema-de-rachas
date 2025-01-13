@@ -9,8 +9,8 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "jhonxbatista4@gmail.com",
-  "password": "qwe123QWE123"
+  "email": "cliente@teste.com",
+  "password": "Senha123"
 }
 
 ###
@@ -104,7 +104,7 @@ Authorization: Bearer {{token}}
   "name": "27 de Dezembro",
   "description":"Cliente",
   "thumb": "Dezembro",
-  "soccerField": "676eb7d2b0ea17087abcb3f2",
+  "soccerField": "677842aa83bb533f531f8f8a",
   "teams": [
     {
       "name": "Team 1",
@@ -210,7 +210,7 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchFindById
-GET {{baseUrl}}/match/672be5e33aa9283eb40fe3b6
+GET {{baseUrl}}/match/677e9a76637f8e62432e9866
 Authorization: Bearer {{token}}
 
 
@@ -293,8 +293,8 @@ Content-Type: application/json
   "discount": 20,
   "amount": 100,
   "totalAmountWithDiscount": 80,
-  "match": "677830efde12be69ce3a674e",
-  "user": "6717f7ef66f1861cb37a5055"
+  "match": "677e9a76637f8e62432e9866",
+  "user": "6778425e83bb533f531f8f81"
 }
 
 ###

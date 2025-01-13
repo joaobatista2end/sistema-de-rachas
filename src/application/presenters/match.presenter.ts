@@ -24,3 +24,9 @@ export const MatchPresenter = (match: Match | null): MatchDto | null => {
     payment: match.payment ? PaymentPresenter(match.payment) : undefined,
   };
 };
+
+
+export const MatchsPresenter = (matchs: Match []): MatchDto[] | null => {
+  if (!matchs.length) return [];
+  return matchs.map(match => MatchPresenter(match))
+};

@@ -5,7 +5,7 @@ import { RegisterMatchUseCase } from '../../../domain/use-cases/match/register-m
 import { UpdateMatchUseCase } from '../../../domain/use-cases/match/update-match.usecase';
 import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.usecase';
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
-import { MatchPresenter } from '../../../application/presenters/match.presenter';
+import { MatchPresenter, MatchsPresenter } from '../../../application/presenters/match.presenter';
 import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
 import { CreatePaymentDto, HttpStatusCode } from '../../../domain';
 import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
@@ -76,7 +76,7 @@ class MatchController {
       return res.status(result.value.code).send(result.value.message);
     }
 
-    res.status(HttpStatusCode.OK).send(result.value);
+    res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
   async update(
