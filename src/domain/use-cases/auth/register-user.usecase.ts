@@ -26,9 +26,15 @@ export class RegisterUserUseCase {
     const user = await RegisterUserUseCase.repository.register({
       ...payload,
       password,
+      isMatchAdmin: false,
     });
     if (!user) {
-      return left(new HttpError(HttpStatusCode.INTERNAL_SERVER_ERROR, 'User registration failed'));
+      return left(
+        new HttpError(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          'User registration failed'
+        )
+      );
     }
     return right(user);
   }
