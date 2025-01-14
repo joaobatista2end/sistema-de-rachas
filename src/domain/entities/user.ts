@@ -7,6 +7,7 @@ export type UserParams = {
   password: string;
   photoUrl?: string;
   role: UserRoleEnum;
+  isMatchAdmin: boolean;
 };
 
 export class User {
@@ -16,6 +17,7 @@ export class User {
   photoUrl?: string;
   role: UserRoleEnum;
   password: string;
+  isMatchAdmin: boolean;
 
   constructor(params: UserParams) {
     this.id = params.id;
@@ -24,5 +26,6 @@ export class User {
     this.password = params.password;
     this.photoUrl = params.photoUrl;
     this.role = params.role;
+    this.isMatchAdmin = params.isMatchAdmin;
   }
 }
