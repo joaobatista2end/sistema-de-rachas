@@ -3,6 +3,7 @@ export type ScheduleDto = {
   startTime: string;
   finishTime: string;
   day: string;
+  formattedDay: string;
 };
 
 export type CreateScheduleDto = {
