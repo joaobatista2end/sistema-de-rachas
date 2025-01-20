@@ -1,5 +1,5 @@
 ### Definição de Variáveis Globais
-@baseUrl = http://localhost:8000
+@baseUrl = http://localhost:3002
 @token = {{AuthLogin.response.body.token}}
 
 ###
@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "cliente@teste.com",
+  "email": "dono@gmail.com",
   "password": "Senha123"
 }
 
@@ -20,11 +20,11 @@ POST {{baseUrl}}/auth/register
 content-type: application/json
 
 {
-  "name": "José da Silva3",
-  "email": "josesilva12@gmail.com",
-  "password": "qwe123qwewww",
+  "name": "Cliente",
+  "email": "cliente@gmail.com",
+  "password": "Senha123",
   "photoUrl": "https://lasdijasidas.com",
-  "role": 1
+  "role": 2
 }
 
 ###
@@ -104,7 +104,7 @@ Authorization: Bearer {{token}}
   "name": "27 de Dezembro",
   "description":"Cliente",
   "thumb": "Dezembro",
-  "soccerField": "677842aa83bb533f531f8f8a",
+  "soccerField": "678e6c506161190d152d91c1",
   "teams": [
     {
       "name": "Team 1",
@@ -300,4 +300,10 @@ Content-Type: application/json
 ###
 # @name Get Payments By User
 GET {{baseUrl}}/payments/owner
+Authorization: Bearer {{token}}
+
+###
+
+# @name GetUnpaidUserMatches
+GET {{baseUrl}}/match/by-user/unpaid
 Authorization: Bearer {{token}}
