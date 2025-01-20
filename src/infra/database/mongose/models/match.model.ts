@@ -29,6 +29,7 @@ export interface MatchDocumentWithRelations extends Document<string> {
   players?: PlayerDocument[];
   teams?: TeamDocumentWithRelationships[];
   user: UserDocument;
+  paid: boolean;
 }
 
 const matchSchema: Schema = new Schema({
@@ -40,6 +41,22 @@ const matchSchema: Schema = new Schema({
   teams: [teamSchema],
   soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'SoccerField' },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  paid: { type: Boolean, default: false }, // Certifique-se de que o campo está definido
+});
+
+matchSchema.pre('save', function (next) {
+  console.log(`Salvando partida: ${JSON.stringify(this)}`);
+  next();
+});
+
+matchSchema.post('find', function (docs) {
+  docs.forEach((doc: any) => {
+    console.log(`Partida encontrada: ${JSON.stringify(doc)}`);
+  });
+});
+
+matchSchema.post('findOne', function (doc) {
+  console.log(`Partida encontrada: ${JSON.stringify(doc)}`);
 });
 
 const MatchModel: Model<MatchDocumentWithRelations> =

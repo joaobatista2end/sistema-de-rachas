@@ -14,7 +14,7 @@ import { TeamPresenter } from '../../../application/presenters/team.presenter';
 import { GetUserMatchesUseCase } from '../../../domain/use-cases/match/get-user-matches.usecase';
 import { MakePaymentUseCase } from '../../../domain/use-cases/match/payment-match.usecase';
 import { PaymentPresenter } from '../../../application/presenters/payment.presenter';
-import { FechUnpaidMatchUseCase } from '../../../domain/use-cases/match/fetch-unpaid-match.usecase';
+import { GetUserUnpaidMatchesUseCase } from '../../../domain/use-cases/match/get-user-unpaid-matches.usecase';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -77,6 +77,20 @@ class MatchController {
       return res.status(result.value.code).send(result.value.message);
     }
 
+    res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
+  }
+
+  async getUserUnpaidMatches(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+    console.log(`Requisição para partidas não pagas do usuário: ${user.id}`);
+    const result = await GetUserUnpaidMatchesUseCase.execute(user.id);
+
+    if (result.isLeft()) {
+      console.error(`Erro ao buscar partidas não pagas: ${result.value.message}`);
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    console.log(`Partidas não pagas encontradas: ${JSON.stringify(result.value)}`);
     res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
