@@ -5,7 +5,10 @@ import { RegisterMatchUseCase } from '../../../domain/use-cases/match/register-m
 import { UpdateMatchUseCase } from '../../../domain/use-cases/match/update-match.usecase';
 import { FindMatchUseCase } from '../../../domain/use-cases/match/find-match.usecase';
 import { CreateMatchDto } from '../../../domain/dto/match.dto';
-import { MatchPresenter, MatchsPresenter } from '../../../application/presenters/match.presenter';
+import {
+  MatchPresenter,
+  MatchsPresenter,
+} from '../../../application/presenters/match.presenter';
 import { FetchMatchUseCase } from '../../../domain/use-cases/match/fetch-match.usecase';
 import { CreatePaymentDto, HttpStatusCode } from '../../../domain';
 import { GenerateTeamsByPlayerStarsUseCase } from '../../../domain/use-cases/match/generate-teams.usecase';
@@ -15,6 +18,8 @@ import { GetUserMatchesUseCase } from '../../../domain/use-cases/match/get-user-
 import { MakePaymentUseCase } from '../../../domain/use-cases/match/payment-match.usecase';
 import { PaymentPresenter } from '../../../application/presenters/payment.presenter';
 import { GetUserUnpaidMatchesUseCase } from '../../../domain/use-cases/match/get-user-unpaid-matches.usecase';
+import { MatchMongoRepository } from '../../database/repositories/mongoose/match.repository';
+import MatchModel from '../../database/mongose/models/match.model';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -80,10 +85,18 @@ class MatchController {
     res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
+  private getUserUnpaidMatchesUseCase: GetUserUnpaidMatchesUseCase;
+
+  constructor() {
+    const matchRepository = new MatchMongoRepository(MatchModel);
+    this.getUserUnpaidMatchesUseCase = new GetUserUnpaidMatchesUseCase(matchRepository);
+  }
+
   async getUserUnpaidMatches(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
     console.log(`Requisição para partidas não pagas do usuário: ${user.id}`);
-    const result = await GetUserUnpaidMatchesUseCase.execute(user.id);
+
+    const result = await this.getUserUnpaidMatchesUseCase.execute(user.id);
 
     if (result.isLeft()) {
       console.error(`Erro ao buscar partidas não pagas: ${result.value.message}`);
@@ -93,6 +106,7 @@ class MatchController {
     console.log(`Partidas não pagas encontradas: ${JSON.stringify(result.value)}`);
     res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
+
 
   async update(
     req: FastifyRequest<{ Params: { id: string } }>,
@@ -156,9 +170,11 @@ class MatchController {
 
     const data = PaymentPresenter(result.value);
 
-    res.send({
-      data,
-    }).status(HttpStatusCode.CREATED);
+    res
+      .send({
+        data,
+      })
+      .status(HttpStatusCode.CREATED);
   }
 }
 
