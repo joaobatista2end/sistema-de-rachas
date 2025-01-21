@@ -14,6 +14,7 @@ import { TeamPresenter } from '../../../application/presenters/team.presenter';
 import { GetUserMatchesUseCase } from '../../../domain/use-cases/match/get-user-matches.usecase';
 import { MakePaymentUseCase } from '../../../domain/use-cases/match/payment-match.usecase';
 import { PaymentPresenter } from '../../../application/presenters/payment.presenter';
+import { FechUnpaidMatchUseCase } from '../../../domain/use-cases/match/fetch-unpaid-match.usecase';
 
 class MatchController {
   async all(req: FastifyRequest, res: FastifyReply) {
@@ -145,6 +146,22 @@ class MatchController {
       data,
     }).status(HttpStatusCode.CREATED);
   }
+
+  async upaidMatchs(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+
+    const result = await FechUnpaidMatchUseCase.execute(user.id);
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send(result.value.message);
+    }
+
+    const data = result.value.map((match) => MatchPresenter(match));
+
+    res.send({
+      data,
+    }).status(HttpStatusCode.CREATED);
+  } 
 }
 
 export default new MatchController();

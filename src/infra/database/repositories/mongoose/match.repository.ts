@@ -41,6 +41,26 @@ export class MatchMongoRepository implements MatchRepository {
     return parsedMatches.filter((match) => match !== null) as Match[];
   }
 
+  async unpaidMatchs(userId: string): Promise<Array<Match>> {
+    const matches = await this.model
+      .find({ 
+        payment: { $exists: false },
+        soccerField: { $ne: null } 
+      })
+      .populate({
+        path: 'soccerField',
+        match: { user: userId }
+      })
+      .populate(['players', 'schedules', 'teams'])
+      .exec();
+      
+    const parsedMatches = await Promise.all(
+      matches.map((match) => this.parseToEntity(match))
+    );
+      
+    return parsedMatches.filter((match) => match !== null) as Match[];
+  }
+
   async create(data: CreateMatchDto): Promise<Match | null> {
     const matchData = { ...data };
     const matchModel = new this.model(matchData);

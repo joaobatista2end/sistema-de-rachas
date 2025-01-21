@@ -56,6 +56,11 @@ const routes = async (fastify: FastifyInstance) => {
   );
 
   // Match
+  fastify.get(
+    '/upaid-matchs',
+    { onRequest: [fastify.authenticate] },
+    matchController.upaidMatchs.bind(matchController)
+  );
   fastify.post(
     '/match',
     { onRequest: [fastify.authenticate] },
