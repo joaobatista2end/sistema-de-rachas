@@ -9,5 +9,5 @@ export interface MatchRepository {
   update(id: string, data: Partial<CreateMatchDto>): Promise<Match | null>;
   delete(id: string): Promise<Match | null>;
   createTeams(id: string, data: Array<CreateTeamDto>): Promise<Match | null>;
-  unpaidMatchs(userId: string): Promise<Array<Match>>;
+  findUnpaidMatchesByUser(userId: string): Promise<Match[]>;
 }
