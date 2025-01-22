@@ -132,10 +132,6 @@ export class PaymentMongoRepository implements PaymentRepository {
   }
 
   private parseToEntity(document: PaymentDocumentWithRelations): Payment {
-    console.log(document)
-    if (!document) {
-      throw new Error('Document is null');
-    }
     const parseSchedule = (schedule: any): Schedule => {
       return new Schedule({
         id: schedule?._id || uid(),

@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "cliente@teste.com",
+  "email": "dono@gmail.com",
   "password": "Senha123"
 }
 
@@ -279,3 +279,26 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/match/by-user
 Authorization: Bearer {{token}}
 ###
+
+###
+# @name GetUnpaidMatches
+
+GET {{baseUrl}}/unpaid-matchs
+Authorization: Bearer {{token}}
+
+###
+
+### @name MakePayment
+
+POST {{baseUrl}}/match/payment
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "match": "678e6c946161190d152d91ca",
+  "amount": 100,
+  "paymentMethod": "PIX",
+  "paymentDate": "2025-01-21T14:30:00Z",
+  "user": "678e6c7e6161190d152d91c6",
+  "totalAmountWithDiscount": 100
+}

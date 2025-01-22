@@ -10,14 +10,10 @@ import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { CreateTeamDto, Team, User } from '../../../../domain';
 import { PlayerDocument } from '../../mongose/models/player.model';
-import {
-  SoccerFieldDocumentWithRelations,
-} from '../../mongose/models/soccer-field.model';
+import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-field.model';
 import { ScheduleDocument } from '../../mongose/models/schedule.model';
 import { UserDocument } from '../../mongose/models/user.model';
-import {
-  TeamDocumentWithRelationships
-} from '../../mongose/models/team.model';
+import { TeamDocumentWithRelationships } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
 
@@ -33,7 +29,10 @@ export class MatchMongoRepository implements MatchRepository {
   async all(): Promise<Array<Match>> {
     const matchs = await this.model
       .find()
-      .populate(['soccerField', 'players', 'schedules', 'teams'])
+      .populate({ path: 'soccerField', model: 'SoccerField' })
+      .populate({ path: 'players', model: 'Player' })
+      .populate({ path: 'schedules', model: 'Schedule' })
+      .populate({ path: 'teams', model: 'Team' })
       .exec();
     const parsedMatches = await Promise.all(
       matchs.map((match) => this.parseToEntity(match))
@@ -42,22 +41,36 @@ export class MatchMongoRepository implements MatchRepository {
   }
 
   async unpaidMatchs(userId: string): Promise<Array<Match>> {
+    console.log('Iniciando query unpaidMatchs para userId:', userId);
+
+    // Buscar todas as partidas do usuário
     const matches = await this.model
-      .find({ 
-        payment: { $exists: false },
-        soccerField: { $ne: null } 
-      })
-      .populate({
-        path: 'soccerField',
-        match: { user: userId }
-      })
-      .populate(['players', 'schedules', 'teams'])
+      .find({ user: userId })
+      .populate(['soccerField', 'players', 'schedules', 'teams'])
       .exec();
-      
-    const parsedMatches = await Promise.all(
-      matches.map((match) => this.parseToEntity(match))
+    console.log('Partidas encontradas para userId:', matches);
+
+    if (matches.length === 0) {
+      console.log('Nenhuma partida encontrada para o userId:', userId);
+      return [];
+    }
+
+    // Filtrar partidas que não têm pagamento associado
+    const unpaidMatchesFiltered = await Promise.all(
+      matches.map(async (match) => {
+        const payment = await this.paymentRepository.findByMatch(match._id.toString());
+        console.log(`Verificando pagamento para match ${match._id}:`, payment);
+        return payment ? null : match;
+      })
     );
-      
+
+    // Parsear partidas para entidades
+    const parsedMatches = await Promise.all(
+      unpaidMatchesFiltered.filter((match) => match !== null).map((match) => this.parseToEntity(match))
+    );
+
+    console.log('Partidas não pagas após filtragem e parsing:', parsedMatches);
+
     return parsedMatches.filter((match) => match !== null) as Match[];
   }
 
@@ -124,7 +137,9 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
 
-  public async parseToEntity(match: MatchDocumentWithRelations): Promise<Match | null> {
+  private async parseToEntity(
+    match: MatchDocumentWithRelations
+  ): Promise<Match | null> {
     if (
       !match?.soccerField?._id ||
       !Array.isArray(match?.schedules) ||
@@ -133,9 +148,9 @@ export class MatchMongoRepository implements MatchRepository {
       return null;
     }
 
-
-    const payment = match._id ? await this.paymentRepository.findByMatch(match._id.toString()) : null;
-
+    const payment = match._id
+      ? await this.paymentRepository.findByMatch(match._id.toString())
+      : null;
 
     const parsePlayers = (players?: PlayerDocument[]): Player[] =>
       (players ?? []).map(
