@@ -1,4 +1,4 @@
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { MatchRepository } from '../../repositories/match.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
 import MatchModel, {
