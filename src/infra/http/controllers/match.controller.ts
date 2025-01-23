@@ -85,26 +85,35 @@ class MatchController {
     res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
-  private getUserUnpaidMatchesUseCase: GetUserUnpaidMatchesUseCase;
+  async getUserUnpaidMatches(req: any, reply: FastifyReply) {
+    const userId = req.user.id; // Pegue o ID do usuário autenticado
 
-  constructor() {
-    const matchRepository = new MatchMongoRepository(MatchModel);
-    this.getUserUnpaidMatchesUseCase = new GetUserUnpaidMatchesUseCase(matchRepository);
-  }
+    try {
+      // Consulta para encontrar partidas não pagas
+      const unpaidMatches = await MatchModel.aggregate([
+        {
+          $lookup: {
+            from: 'payments',
+            localField: '_id',
+            foreignField: 'match',
+            as: 'payments'
+          },
+        },
+        {
+          $match: {
+            payments: { $size: 0 },
+          }
+        },
+      ])
 
-  async getUserUnpaidMatches(req: FastifyRequest, res: FastifyReply) {
-    const user = req.user as any;
-    console.log(`Requisição para partidas não pagas do usuário: ${user.id}`);
+      if (!unpaidMatches || unpaidMatches.length === 0) {
+        return reply.status(404).send({ message: 'Nenhuma partida não paga encontrada.' });
+      }
 
-    const result = await this.getUserUnpaidMatchesUseCase.execute(user.id);
-
-    if (result.isLeft()) {
-      console.error(`Erro ao buscar partidas não pagas: ${result.value.message}`);
-      return res.status(result.value.code).send(result.value.message);
+      reply.send(unpaidMatches);
+    } catch (error) {
+      reply.status(500).send({ error: 'Erro ao buscar partidas não pagas' });
     }
-
-    console.log(`Partidas não pagas encontradas: ${JSON.stringify(result.value)}`);
-    res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
 

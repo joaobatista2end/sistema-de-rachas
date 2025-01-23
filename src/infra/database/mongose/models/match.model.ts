@@ -8,6 +8,7 @@ import {
   teamSchema,
 } from './team.model';
 import { UserDocument } from './user.model';
+import { paymentSchema } from './payment.model';
 
 export interface MatchDocument extends Document<string> {
   name: string;
@@ -41,7 +42,8 @@ const matchSchema: Schema = new Schema({
   teams: [teamSchema],
   soccerField: { type: mongoose.Schema.Types.ObjectId, ref: 'SoccerField' },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  paid: { type: Boolean, default: false }, // Certifique-se de que o campo está definido
+  paid: { type: Boolean, default: false },
+  payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
 });
 
 matchSchema.pre('save', function (next) {

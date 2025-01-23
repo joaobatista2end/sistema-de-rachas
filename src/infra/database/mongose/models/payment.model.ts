@@ -22,7 +22,7 @@ export interface PaymentDocumentWithRelations extends Document<string> {
     user: UserDocument;
 }
 
-const paymentSchema: Schema = new Schema({
+export const paymentSchema: Schema = new Schema({
     paymentDate: { type: Date, required: true },
     paymentMethod: { type: String, required: true },
     amount: { type: Number, required: true },

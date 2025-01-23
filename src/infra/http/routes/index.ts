@@ -71,16 +71,22 @@ const routes = async (fastify: FastifyInstance) => {
     { onRequest: [fastify.authenticate] },
     matchController.all.bind(matchController)
   );
-  fastify.get(
-    '/match/by-user/unpaid',
-    { onRequest: [fastify.authenticate] },
-    matchController.getUserUnpaidMatches.bind(matchController)
-  );
+  // fastify.get(
+  //   '/match/by-user/unpaid',
+  //   { onRequest: [fastify.authenticate] },
+  //   matchController.getUserUnpaidMatches.bind(matchController)
+  // );
   fastify.get(
     '/match/by-user',
     { onRequest: [fastify.authenticate] },
     matchController.getUserMatches.bind(matchController)
   );
+  fastify.get(
+    '/match/by-user/unpaid',
+    { onRequest: [fastify.authenticate] },
+    matchController.getUserUnpaidMatches.bind(matchController)
+  );
+  
   fastify.put<{ Params: { id: string } }>(
     '/match/:id',
     { onRequest: [fastify.authenticate] },
