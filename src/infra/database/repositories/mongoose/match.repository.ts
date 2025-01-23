@@ -1,7 +1,9 @@
 import mongoose, { Model } from 'mongoose';
 import { MatchRepository } from '../../repositories/match.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
-import { MatchDocumentWithRelations } from '../../mongose/models/match.model';
+import MatchModel, {
+  MatchDocumentWithRelations,
+} from '../../mongose/models/match.model';
 import { Match } from '../../../../domain/entities/match';
 import { Player } from '../../../../domain/entities/player';
 import { SoccerField } from '../../../../domain/entities/soccer-field';
@@ -10,12 +12,15 @@ import { uid } from 'uid';
 import { DayOfWeek } from '../../../../domain/object-values/day';
 import { CreateTeamDto, Team, User } from '../../../../domain';
 import { PlayerDocument } from '../../mongose/models/player.model';
-import { SoccerFieldDocumentWithRelations } from '../../mongose/models/soccer-field.model';
+import SoccerFieldModel, {
+  SoccerFieldDocumentWithRelations,
+} from '../../mongose/models/soccer-field.model';
 import { ScheduleDocument } from '../../mongose/models/schedule.model';
 import { UserDocument } from '../../mongose/models/user.model';
 import { TeamDocumentWithRelationships } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
+import { SoccerFieldMongoRepository } from './soccer-field.repository';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -100,33 +105,31 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
   async findUnpaidMatchesByUser(userId: string): Promise<Match[]> {
-    const userObjectId = new mongoose.Types.ObjectId(userId);
-    console.log(
-      `Query executada: ${JSON.stringify({
-        user: userObjectId,
-        $or: [{ paid: false }, { paid: { $exists: false } }],
-      })}`
+    // owner
+    const soccerFieldRepository = new SoccerFieldMongoRepository(
+      SoccerFieldModel
     );
+    const ownerFields = await soccerFieldRepository.allByUser(userId);
+    const fieldIds = ownerFields.map((field) => field.id);
 
-    const matches = await this.model
-      .find({
-        user: userObjectId,
-        $or: [{ paid: false }, { paid: { $exists: false } }],
+    try {
+      const matches = await MatchModel.find({
+        soccerField: { $in: fieldIds },
+        payment: { $exists: false },
       })
-      .populate(['soccerField', 'schedules', 'players', 'teams'])
-      .exec();
-    console.log(
-      `Query executada: ${JSON.stringify({
-        user: userObjectId,
-        $or: [{ paid: false }, { paid: { $exists: false } }],
-      })}`
-    );
-
-    const parsedMatches = await Promise.all(
-      matches.map((match) => this.parseToEntity(match))
-    );
-
-    return parsedMatches.filter((match): match is Match => match !== null);
+        .populate(['soccerField', 'schedules', 'players', 'teams'])
+        .exec();
+      if (!matches.length) {
+        console.warn(`No unpaid matches found for user: ${userId}`);
+      }
+      const parsedMatches = await Promise.all(
+        matches.map((match) => this.parseToEntity(match))
+      );
+      return parsedMatches.filter((match): match is Match => match !== null);
+    } catch (error: any) {
+      console.error(`Error finding unpaid matches: ${error.message}`);
+      throw error;
+    }
   }
 
   public async parseToEntity(
