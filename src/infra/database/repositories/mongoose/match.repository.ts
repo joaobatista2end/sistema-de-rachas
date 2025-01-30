@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { MatchRepository } from '../../repositories/match.repository';
 import { CreateMatchDto } from '../../../../domain/dto/match.dto';
 import MatchModel, {
@@ -125,41 +125,103 @@ export class MatchMongoRepository implements MatchRepository {
     return this.parseToEntity(match);
   }
   async findUnpaidMatchesByUser(userId: string): Promise<Match[]> {
-    // owner
-    const soccerFieldRepository = new SoccerFieldMongoRepository(
-      SoccerFieldModel
-    );
-    const ownerFields = await soccerFieldRepository.allByUser(userId);
-    const fieldIds = ownerFields.map((field) => field.id);
+    const unpaidMatches = await this.model.aggregate([
+      {
+        $lookup: {
+          from: 'payments',
+          localField: '_id',
+          foreignField: 'match',
+          as: 'payments',
+        },
+      },
+      {
+        $match: {
+          payments: { $size: 0 }, // Filtra partidas sem pagamentos
+          user: new mongoose.Types.ObjectId(userId), // Filtra partidas do usuário
+        },
+      },
+      {
+        $lookup: {
+          from: 'soccerfields', // Nome da coleção de campos
+          localField: 'soccerField', // Campo na coleção de partidas que referencia o campo
+          foreignField: '_id', // Campo na coleção de campos que é referenciado
+          as: 'soccerField', // Nome do campo que armazenará os dados do campo
+        },
+      },
+      {
+        $unwind: {
+          path: '$soccerField',
+          preserveNullAndEmptyArrays: true, // Mantém documentos mesmo se o soccerField não existir
+        },
+      },
+      {
+        $lookup: {
+          from: 'schedules', // Nome da coleção de schedules
+          localField: 'schedules', // Campo na coleção de partidas que referencia os schedules
+          foreignField: '_id', // Campo na coleção de schedules que é referenciado
+          as: 'schedules', // Nome do campo que armazenará os dados dos schedules
+        },
+      },
+      {
+        $lookup: {
+          from: 'users', // Nome da coleção de usuários
+          localField: 'user', // Campo na coleção de partidas que referencia o usuário
+          foreignField: '_id', // Campo na coleção de usuários que é referenciado
+          as: 'user', // Nome do campo que armazenará os dados do usuário
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+          preserveNullAndEmptyArrays: true, // Mantém documentos mesmo se o user não existir
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          thumb: 1,
+          description: 1,
+          players: 1,
+          teams: 1,
+          soccerField: 1, // Inclui os dados do campo
+          user: 1, // Inclui os dados do usuário
+          schedules: {
+            $map: {
+              input: '$schedules',
+              as: 'schedule',
+              in: {
+                _id: '$$schedule._id',
+                startTime: '$$schedule.startTime',
+                finishTime: '$$schedule.finishTime',
+                day: '$$schedule.day',
+              },
+            },
+          },
+        },
+      },
+    ]);
 
-    try {
-      const matches = await MatchModel.find({
-        soccerField: { $in: fieldIds },
-        payment: { $exists: false },
-      })
-        .populate(['soccerField', 'schedules', 'players', 'teams'])
-        .exec();
-      if (!matches.length) {
-        console.warn(`No unpaid matches found for user: ${userId}`);
-      }
-      const parsedMatches = await Promise.all(
-        matches.map((match) => this.parseToEntity(match))
-      );
-      return parsedMatches.filter((match): match is Match => match !== null);
-    } catch (error: any) {
-      console.error(`Error finding unpaid matches: ${error.message}`);
-      throw error;
-    }
+    console.log('Unpaid Matches:', JSON.stringify(unpaidMatches, null, 2)); // Log para verificar os dados
+
+    return this.parseToEntities(unpaidMatches);
+  }
+
+  private async parseToEntities(matches: any[]): Promise<Match[]> {
+    return matches.map((match) => new Match(match));
   }
 
   public async parseToEntity(
     match: MatchDocumentWithRelations
   ): Promise<Match | null> {
+    console.log('Match Document:', JSON.stringify(match, null, 2)); // Log para verificar o documento
+
     if (
       !match?.soccerField?._id ||
       !Array.isArray(match?.schedules) ||
       match.schedules.length === 0
     ) {
+      console.log('Schedules is empty or not an array:', match.schedules); // Log específico para schedules
       return null;
     }
 
@@ -180,8 +242,9 @@ export class MatchMongoRepository implements MatchRepository {
 
     const parseSoccerField = (
       soccerField: SoccerFieldDocumentWithRelations
-    ): SoccerField =>
-      new SoccerField({
+    ): SoccerField => {
+      console.log('Parsing SoccerField:', soccerField); // Log para verificar o soccerField
+      return new SoccerField({
         id: soccerField?._id || uid(),
         name: soccerField.name,
         pixKey: soccerField.pixKey,
@@ -191,9 +254,11 @@ export class MatchMongoRepository implements MatchRepository {
         workFinishTime: soccerField.workFinishTime,
         user: parseUser(soccerField.user),
       });
+    };
 
-    const parseSchedules = (schedules: ScheduleDocument[]): Schedule[] =>
-      schedules.map(
+    const parseSchedules = (schedules: any[]): Schedule[] => {
+      console.log('Parsing Schedules:', schedules); // Log para verificar os schedules antes de parsear
+      return schedules.map(
         (schedule) =>
           new Schedule({
             id: schedule._id || uid(),
@@ -202,6 +267,7 @@ export class MatchMongoRepository implements MatchRepository {
             finishTime: schedule.finishTime,
           })
       );
+    };
 
     const parseUser = (user: UserDocument): User =>
       new User({
@@ -230,8 +296,8 @@ export class MatchMongoRepository implements MatchRepository {
       thumb: match.thumb,
       payment: !payment ? undefined : payment,
       players: parsePlayers(match.players),
-      soccerField: parseSoccerField(match.soccerField),
-      schedules: parseSchedules(match.schedules),
+      soccerField: parseSoccerField(match.soccerField), // Parseia o soccerField
+      schedules: parseSchedules(match.schedules), // Parseia os schedules
       teams: parseTeams(match.teams),
       user: parseUser(match.user),
     });

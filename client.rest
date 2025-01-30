@@ -101,8 +101,8 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "27 de Dezembro",
-  "description":"Cliente",
+  "name": "Teste 4",
+  "description":"T4",
   "thumb": "Dezembro",
   "soccerField": "678e6c506161190d152d91c1",
   "teams": [
@@ -293,8 +293,8 @@ Content-Type: application/json
   "discount": 20,
   "amount": 100,
   "totalAmountWithDiscount": 80,
-  "match": "677e9a76637f8e62432e9866",
-  "user": "6778425e83bb533f531f8f81"
+  "match": "67925af0aaaa330eb947725a",
+  "user": "678fcc03445fda659b6f3bec"
 }
 
 ###
