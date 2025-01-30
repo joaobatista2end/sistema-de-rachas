@@ -4,15 +4,13 @@ import { Either, left, right } from '../../utils';
 import { HttpError } from '../../errors/http.error';
 import { HttpStatusCode } from '../../enums';
 import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
+import MatchModel from '../../../infra/database/mongose/models/match.model';
 
 export class GetUserUnpaidMatchesUseCase {
-  constructor(private matchRepository: MatchMongoRepository) {}
-
-  async execute(userId: string): Promise<Either<HttpError, Match[]>> {
+  static async execute(userId: string): Promise<Either<HttpError, Match[]>> {
     try {
-      const matches = await this.matchRepository.findUnpaidMatchesByUser(
-        userId
-      );
+      const matchRepository = new MatchMongoRepository(MatchModel);
+      const matches = await matchRepository.findUnpaidMatchesByUser(userId);
 
       if (!matches.length) {
         return left(

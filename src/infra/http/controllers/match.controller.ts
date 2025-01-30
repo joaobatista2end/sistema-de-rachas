@@ -85,37 +85,25 @@ class MatchController {
     res.status(HttpStatusCode.OK).send(MatchsPresenter(result.value));
   }
 
-  async getUserUnpaidMatches(req: any, reply: FastifyReply) {
-    const userId = req.user.id; // Pegue o ID do usuário autenticado
-
+  async getUserUnpaidMatches(req: FastifyRequest, res: FastifyReply) {
     try {
-      // Consulta para encontrar partidas não pagas
-      const unpaidMatches = await MatchModel.aggregate([
-        {
-          $lookup: {
-            from: 'payments',
-            localField: '_id',
-            foreignField: 'match',
-            as: 'payments'
-          },
-        },
-        {
-          $match: {
-            payments: { $size: 0 },
-          }
-        },
-      ])
+      const user = req.user as any;
+      const matchRepository = new MatchMongoRepository(MatchModel);
+      const result = await GetUserUnpaidMatchesUseCase.execute(user.id);
 
-      if (!unpaidMatches || unpaidMatches.length === 0) {
-        return reply.status(404).send({ message: 'Nenhuma partida não paga encontrada.' });
+      if (result.isLeft()) {
+        return res
+          .status(result.value.code)
+          .send({ message: result.value.message });
       }
 
-      reply.send(unpaidMatches);
+      res.status(HttpStatusCode.OK).send(result.value);
     } catch (error) {
-      reply.status(500).send({ error: 'Erro ao buscar partidas não pagas' });
+      return res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .send({ error: 'Erro ao buscar partidas não pagas' });
     }
   }
-
 
   async update(
     req: FastifyRequest<{ Params: { id: string } }>,
