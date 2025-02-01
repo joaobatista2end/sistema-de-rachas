@@ -10,7 +10,7 @@ export class GetUserUnpaidMatchesUseCase {
   static async execute(userId: string): Promise<Either<HttpError, Match[]>> {
     try {
       const matchRepository = new MatchMongoRepository(MatchModel);
-      const matches = await matchRepository.findUnpaidMatchesByUser(userId);
+      const matches = await matchRepository.findUnpaidMatchesByUser();
 
       if (!matches.length) {
         return left(

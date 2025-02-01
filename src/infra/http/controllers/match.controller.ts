@@ -88,7 +88,6 @@ class MatchController {
   async getUserUnpaidMatches(req: FastifyRequest, res: FastifyReply) {
     try {
       const user = req.user as any;
-      const matchRepository = new MatchMongoRepository(MatchModel);
       const result = await GetUserUnpaidMatchesUseCase.execute(user.id);
 
       if (result.isLeft()) {

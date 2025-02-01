@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "dono@gmail.com",
+  "email": "cliente@teste.com",
   "password": "Senha123"
 }
 
@@ -101,8 +101,8 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "name": "Teste 4",
-  "description":"T4",
+  "name": "Corinthians",
+  "description":"00",
   "thumb": "Dezembro",
   "soccerField": "678e6c506161190d152d91c1",
   "teams": [

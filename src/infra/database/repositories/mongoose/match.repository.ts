@@ -20,7 +20,6 @@ import { UserDocument } from '../../mongose/models/user.model';
 import { TeamDocumentWithRelationships } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
-import { SoccerFieldMongoRepository } from './soccer-field.repository';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -124,8 +123,24 @@ export class MatchMongoRepository implements MatchRepository {
 
     return this.parseToEntity(match);
   }
-
-  async findUnpaidMatchesByUser(userId: string): Promise<Match[]> {
+  private async parseToEntities(matches: any[]): Promise<Match[]> {
+    return matches.map(
+      (match) =>
+        new Match({
+          id: match._id.toString(), // Converta o _id para string
+          name: match.name,
+          thumb: match.thumb,
+          description: match.description,
+          soccerField: match.soccerField,
+          schedules: match.schedules,
+          players: match.players || [],
+          teams: match.teams || [],
+          user: match.user,
+          payment: match.payment,
+        })
+    );
+  }
+  async findUnpaidMatchesByUser(): Promise<Match[]> {
     const unpaidMatches = await this.model.aggregate([
       {
         $lookup: {
@@ -171,11 +186,8 @@ export class MatchMongoRepository implements MatchRepository {
       },
     ]);
 
+    console.log('Unpaid Matches (Raw Aggregation Result) ->', unpaidMatches);
     return this.parseToEntities(unpaidMatches);
-  }
-
-  private async parseToEntities(matches: any[]): Promise<Match[]> {
-    return matches.map((match) => new Match(match));
   }
 
   public async parseToEntity(
