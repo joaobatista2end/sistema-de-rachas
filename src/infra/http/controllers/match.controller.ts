@@ -172,22 +172,6 @@ class MatchController {
       })
       .status(HttpStatusCode.CREATED);
   }
-
-  async upaidMatchs(req: FastifyRequest, res: FastifyReply) {
-    const user = req.user as any;
-
-    const result = await FechUnpaidMatchUseCase.execute(user.id);
-
-    if (result.isLeft()) {
-      return res.status(result.value.code).send(result.value.message);
-    }
-
-    const data = result.value.map((match) => MatchPresenter(match));
-
-    res.send({
-      data,
-    }).status(HttpStatusCode.CREATED);
-  } 
 }
 
 export default new MatchController();
