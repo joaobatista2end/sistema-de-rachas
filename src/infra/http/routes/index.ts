@@ -21,6 +21,8 @@ import {
 import { CreateSoccerFieldDto } from '../../../domain';
 import { createPaymentSchema } from '../swagger/match.schema';
 import paymentsController from '../controllers/payments.controller';
+import { GetFinancialReportQueryParams } from '../controllers/payments.controller';
+
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -201,6 +203,25 @@ const routes = async (fastify: FastifyInstance) => {
     '/payments/owner',
     { onRequest: [fastify.authenticate] },
     paymentsController.findByUser.bind(soccerFieldController)
+  );
+
+  fastify.get<{ Querystring: GetFinancialReportQueryParams }>(
+    '/payments/owner/financial-report',
+    { 
+      onRequest: [fastify.authenticate],
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            startDate: { type: 'string', format: 'date' },
+            endDate: { type: 'string', format: 'date' },
+            soccerFieldId: { type: 'string' },
+            clientId: { type: 'string' }
+          }
+        }
+      }
+    },
+    paymentsController.getFinancialReport.bind(paymentsController)
   );
 };
 

@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "cliente@teste.com",
+  "email": "don@g.com",
   "password": "Senha123"
 }
 
@@ -306,4 +306,28 @@ Authorization: Bearer {{token}}
 
 # @name GetUnpaidUserMatches
 GET {{baseUrl}}/match/by-user/unpaid
+Authorization: Bearer {{token}}
+
+###
+
+# @name GetFinancialReport
+GET {{baseUrl}}/payments/owner/financial-report
+Authorization: Bearer {{token}}
+
+###
+
+# @name GetFinancialReportWithFilters
+GET {{baseUrl}}/payments/owner/financial-report?startDate=2024-01-01&endDate=2024-12-31&soccerFieldId=678e6c506161190d152d91c1
+Authorization: Bearer {{token}}
+
+###
+
+# @name GetFinancialReportByMonth
+GET {{baseUrl}}/payments/owner/financial-report?startDate=2024-03-01&endDate=2024-03-31
+Authorization: Bearer {{token}}
+
+###
+
+# @name GetFinancialReportByClient
+GET {{baseUrl}}/payments/owner/financial-report?clientId=YOUR_CLIENT_ID
 Authorization: Bearer {{token}}
