@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/login
 content-type: application/json
 
 {
-  "email": "cliente@teste.com",
+  "email": "erickcliente@gmail.com",
   "password": "Senha123"
 }
 
@@ -104,7 +104,7 @@ Authorization: Bearer {{token}}
   "name": "27 de Dezembro",
   "description":"Cliente",
   "thumb": "Dezembro",
-  "soccerField": "676eb7d2b0ea17087abcb3f2",
+  "soccerField": "67a0e2420ef1e08c2b5ffac2",
   "teams": [
     {
       "name": "Team 1",
@@ -193,11 +193,12 @@ Authorization: Bearer {{token}}
 ###
 
 # @name MatchUpdate
-PUT {{baseUrl}}/match/6749f8f904cedd43d36187dd
+PUT {{baseUrl}}/match/67b8045aa11e8f54fdbf9e1d
 content-type: application/json
 Authorization: Bearer {{token}}
 
 {
+  "name": "Editada",
   "players": [
     {
       "name": "João",
@@ -279,3 +280,14 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/match/by-user
 Authorization: Bearer {{token}}
 ###
+
+### Atualizar informações do usuário
+PUT {{baseUrl}}/auth/update
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": "Novo Nome",
+    "email": "novo@email.com",
+    "photoUrl": "https://nova-foto.com"
+}

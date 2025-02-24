@@ -6,15 +6,20 @@ import { UserPresenter } from '../../../application/presenters/user.presenter';
 import { HttpStatusCode } from '../../../domain/enums/http-status-code';
 import { AutenticateUserUsecases } from '../../../domain/use-cases/auth/authenticate-user.usecase';
 import { GetUserInformationsUsecase } from '../../../domain/use-cases/auth/get-user-informations.usecase';
+import { UpdateUserUseCase } from '../../../domain/use-cases/auth/update-user.usecase';
 
 class AuthController {
   async me(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
     const result = await GetUserInformationsUsecase.execute(user.id);
 
-    if (result.isRight()) {
-      return res.status(HttpStatusCode.OK).send(UserPresenter(result.value));
+    if (result.isLeft()) {
+      return res.status(result.value.code).send({
+        message: result.value.message,
+      });
     }
+
+    return res.status(HttpStatusCode.OK).send(UserPresenter(result.value));
   }
 
   async register(req: FastifyRequest, res: FastifyReply) {
@@ -38,6 +43,19 @@ class AuthController {
     } else {
       res.status(HttpStatusCode.OK).send({ token: result.value });
     }
+  }
+
+  async update(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+    const result = await UpdateUserUseCase.execute(user.id, req.body as Partial<CreateUserDto>);
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send({
+        message: result.value.message,
+      });
+    }
+
+    return res.status(HttpStatusCode.OK).send(UserPresenter(result.value));
   }
 }
 

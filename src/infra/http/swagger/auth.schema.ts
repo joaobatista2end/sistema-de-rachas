@@ -1,7 +1,6 @@
 import { FastifySchema } from 'fastify';
 
-export const registerSwaggerSchema = {
-  tags: ['Usuário'],
+export const registerSwaggerSchema: FastifySchema = {
   body: {
     type: 'object',
     required: ['name', 'email', 'password'],
@@ -74,8 +73,7 @@ export const registerSwaggerSchema = {
   },
 };
 
-export const loginSwaggerSchema = {
-  tags: ['Usuário'],
+export const loginSwaggerSchema: FastifySchema = {
   body: {
     type: 'object',
     required: ['email', 'password'],
@@ -162,5 +160,75 @@ export const getUserProfileSchema: FastifySchema = {
       example: { error: 'Unauthorized' },
     },
   },
-  tags: ['Usuário'],
+};
+
+export const updateUserSchema: FastifySchema = {
+  body: {
+    type: 'object',
+    properties: {
+      name: { type: 'string', description: 'O nome do usuário' },
+      email: {
+        type: 'string',
+        format: 'email',
+        description: 'O email do usuário',
+      },
+      password: {
+        type: 'string',
+        description: 'A senha do usuário',
+        format: 'password',
+      },
+      photoUrl: {
+        type: 'string',
+        format: 'uri',
+        description: 'URL da foto de perfil do usuário',
+        nullable: true,
+      },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'ID do usuário' },
+        name: { type: 'string', description: 'Nome do usuário' },
+        email: {
+          type: 'string',
+          format: 'email',
+          description: 'Email do usuário',
+        },
+        photoUrl: {
+          type: 'string',
+          format: 'uri',
+          description: 'URL da foto de perfil do usuário',
+        },
+        role: {
+          type: 'integer',
+          description: 'Papel do usuário (ex: admin, usuário comum)',
+        },
+      },
+    },
+    400: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'integer' },
+        error: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+    401: {
+      type: 'object',
+      properties: {
+        error: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+    500: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'integer' },
+        error: { type: 'string' },
+        message: { type: 'string' },
+      },
+    },
+  },
 };

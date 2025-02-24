@@ -8,6 +8,7 @@ import {
   getUserProfileSchema,
   loginSwaggerSchema,
   registerSwaggerSchema,
+  updateUserSchema,
 } from '../swagger/auth.schema';
 import {
   createPlayerSchema,
@@ -41,6 +42,15 @@ const routes = async (fastify: FastifyInstance) => {
       onRequest: [fastify.authenticate],
     },
     authController.me.bind(authController)
+  );
+
+  fastify.put(
+    '/auth/update',
+    {
+      schema: updateUserSchema,
+      onRequest: [fastify.authenticate],
+    },
+    authController.update.bind(authController)
   );
 
   // Players

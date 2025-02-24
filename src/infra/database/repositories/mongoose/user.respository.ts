@@ -32,7 +32,7 @@ export class UserMongoRespository implements UserRepository {
     id: string,
     payload: Partial<CreateUserDto>
   ): Promise<User | null> {
-    const user = await this.model.findByIdAndDelete(id, payload);
+    const user = await this.model.findByIdAndUpdate(id, payload, { new: true });
     if (!user) return null;
     return this.parseToEntity(user);
   }
