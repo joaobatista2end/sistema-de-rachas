@@ -1,6 +1,10 @@
 {
   "name": "sistema-rachas-domain",
+<<<<<<< HEAD
   "version": "1.0.6",
+=======
+  "version": "1.0.8",
+>>>>>>> ffe437ef894a7dbfda6899b30cd53200cad32e80
   "description": "Domínio contendo recursos da aplicação de Rachas",
   "files": [
     "dist",
