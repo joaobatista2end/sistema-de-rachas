@@ -57,19 +57,14 @@ const routes = async (fastify: FastifyInstance) => {
 
   // Match
   fastify.get(
-    '/upaid-matchs',
+    '/match',
     { onRequest: [fastify.authenticate] },
-    matchController.upaidMatchs.bind(matchController)
+    matchController.all.bind(matchController)
   );
   fastify.post(
     '/match',
     { onRequest: [fastify.authenticate] },
     matchController.register.bind(matchController)
-  );
-  fastify.get(
-    '/match',
-    { onRequest: [fastify.authenticate] },
-    matchController.all.bind(matchController)
   );
   fastify.get(
     '/match/by-user',
@@ -200,7 +195,12 @@ const routes = async (fastify: FastifyInstance) => {
   fastify.get(
     '/payments/owner',
     { onRequest: [fastify.authenticate] },
-    paymentsController.findByUser.bind(soccerFieldController)
+    paymentsController.findByUser.bind(paymentsController)
+  );
+  fastify.get(
+    '/payments/owner/dashboard',
+    { onRequest: [fastify.authenticate] },
+    paymentsController.getDashboard.bind(paymentsController)
   );
 };
 

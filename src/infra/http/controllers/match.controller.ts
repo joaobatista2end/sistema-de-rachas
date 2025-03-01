@@ -173,10 +173,10 @@ class MatchController {
       .status(HttpStatusCode.CREATED);
   }
 
-  async upaidMatchs(req: FastifyRequest, res: FastifyReply) {
+  async unpaidMatchs(req: FastifyRequest, res: FastifyReply) {
     const user = req.user as any;
 
-    const result = await FechUnpaidMatchUseCase.execute(user.id);
+    const result = await GetUserUnpaidMatchesUseCase.execute(user.id);
 
     if (result.isLeft()) {
       return res.status(result.value.code).send(result.value.message);

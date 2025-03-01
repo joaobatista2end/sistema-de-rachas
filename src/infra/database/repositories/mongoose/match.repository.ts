@@ -140,7 +140,7 @@ export class MatchMongoRepository implements MatchRepository {
         })
     );
   }
-  async findUnpaidMatchesByUser(): Promise<Match[]> {
+  async findUnpaidMatchesByUser(userId: string): Promise<Match[]> {
     const unpaidMatches = await this.model.aggregate([
       {
         $lookup: {
@@ -153,6 +153,7 @@ export class MatchMongoRepository implements MatchRepository {
       {
         $match: {
           payments: { $size: 0 },
+          user: userId
         },
       },
       {
@@ -169,7 +170,6 @@ export class MatchMongoRepository implements MatchRepository {
           preserveNullAndEmptyArrays: true,
         },
       },
-
       {
         $lookup: {
           from: 'users',
