@@ -20,6 +20,7 @@ import { UserDocument } from '../../mongose/models/user.model';
 import { TeamDocumentWithRelationships } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
+import { ObjectId } from 'mongodb';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -152,8 +153,7 @@ export class MatchMongoRepository implements MatchRepository {
       },
       {
         $match: {
-          payments: { $size: 0 },
-          user: userId
+          payments: { $size: 0 }
         },
       },
       {
@@ -169,6 +169,11 @@ export class MatchMongoRepository implements MatchRepository {
           path: '$soccerField',
           preserveNullAndEmptyArrays: true,
         },
+      },
+      {
+        $match: {
+          'soccerField.user': new ObjectId(userId)
+        }
       },
       {
         $lookup: {
