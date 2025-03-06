@@ -8,6 +8,7 @@ import {
   getUserProfileSchema,
   loginSwaggerSchema,
   registerSwaggerSchema,
+  updateUserProfileSchema,
 } from '../swagger/auth.schema';
 import {
   createPlayerSchema,
@@ -21,6 +22,7 @@ import {
 import { CreateSoccerFieldDto } from '../../../domain';
 import { createPaymentSchema } from '../swagger/match.schema';
 import paymentsController from '../controllers/payments.controller';
+
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
   fastify.post(
@@ -41,6 +43,15 @@ const routes = async (fastify: FastifyInstance) => {
       onRequest: [fastify.authenticate],
     },
     authController.me.bind(authController)
+  );
+
+  fastify.put(
+    '/auth/update',
+    {
+      schema: updateUserProfileSchema,
+      onRequest: [fastify.authenticate],
+    },
+    authController.updateProfile.bind(authController)
   );
 
   // Players

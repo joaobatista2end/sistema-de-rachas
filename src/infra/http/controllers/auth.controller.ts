@@ -6,6 +6,7 @@ import { UserPresenter } from '../../../application/presenters/user.presenter';
 import { HttpStatusCode } from '../../../domain/enums/http-status-code';
 import { AutenticateUserUsecases } from '../../../domain/use-cases/auth/authenticate-user.usecase';
 import { GetUserInformationsUsecase } from '../../../domain/use-cases/auth/get-user-informations.usecase';
+import { UpdateUserProfileUsecase } from '../../../domain/use-cases/auth/update-user-profile.usecase';
 
 class AuthController {
   async me(req: FastifyRequest, res: FastifyReply) {
@@ -38,6 +39,21 @@ class AuthController {
     } else {
       res.status(HttpStatusCode.OK).send({ token: result.value });
     }
+  }
+
+  async updateProfile(req: FastifyRequest, res: FastifyReply) {
+    const user = req.user as any;
+    const { name, email } = req.body as { name: string; email: string };
+
+    const result = await UpdateUserProfileUsecase.execute(user.id, { name, email });
+
+    if (result.isLeft()) {
+      return res.status(result.value.code).send({
+        message: result.value.message,
+      });
+    }
+
+    return res.status(HttpStatusCode.OK).send(UserPresenter(result.value));
   }
 }
 
