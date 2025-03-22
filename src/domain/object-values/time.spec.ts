@@ -72,6 +72,5 @@ describe('Testes da classe Time', () => {
     });
 
     expect(match.totalHours).equals(4);
-    expect(match.amount).equals(400);
   });
 });

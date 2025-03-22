@@ -22,6 +22,8 @@ import {
 import { CreateSoccerFieldDto } from '../../../domain';
 import { createPaymentSchema } from '../swagger/match.schema';
 import paymentsController from '../controllers/payments.controller';
+import { GetFinancialReportQueryParams } from '../controllers/payments.controller';
+
 
 const routes = async (fastify: FastifyInstance) => {
   // Auth Routes
@@ -70,6 +72,7 @@ const routes = async (fastify: FastifyInstance) => {
   fastify.get(
     '/match',
     { onRequest: [fastify.authenticate] },
+    matchController.getUserUnpaidMatches.bind(matchController)
     matchController.all.bind(matchController)
   );
   fastify.post(
@@ -212,6 +215,25 @@ const routes = async (fastify: FastifyInstance) => {
     '/payments/owner/dashboard',
     { onRequest: [fastify.authenticate] },
     paymentsController.getDashboard.bind(paymentsController)
+  );
+
+  fastify.get<{ Querystring: GetFinancialReportQueryParams }>(
+    '/payments/owner/financial-report',
+    { 
+      onRequest: [fastify.authenticate],
+      schema: {
+        querystring: {
+          type: 'object',
+          properties: {
+            startDate: { type: 'string', format: 'date' },
+            endDate: { type: 'string', format: 'date' },
+            soccerFieldId: { type: 'string' },
+            clientId: { type: 'string' }
+          }
+        }
+      }
+    },
+    paymentsController.getFinancialReport.bind(paymentsController)
   );
 };
 
