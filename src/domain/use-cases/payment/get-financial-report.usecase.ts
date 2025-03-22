@@ -1,81 +1,68 @@
+import { PaymentMongoRepository } from '../../../infra/database/repositories/mongoose/payment.repository';
 import { PaymentRepository } from '../../../infra/database/repositories/payment.repository';
-import { FinancialReport } from '../../entities/financial-report';
-import { Payment } from '../../entities/payment';
-import { HttpError } from '../../errors/http.error';
+import PaymentModel from '../../../infra/database/mongose/models/payment.model';
 import { Either, left, right } from '../../utils';
+import { HttpError } from '../../errors/http.error';
+import { HttpStatusCode } from '../../enums';
+import { MatchMongoRepository } from '../../../infra/database/repositories/mongoose/match.repository';
+import MatchModel from '../../../infra/database/mongose/models/match.model';
 
-interface FinancialReportFilters {
-  startDate?: Date;
-  endDate?: Date;
-  soccerFieldId?: string;
-  clientId?: string;
+interface FinancialReport {
+  totalMatches: number;
+  totalDiscounts: number;
+  totalRevenue: number;
+  unpaidMatches: number;
 }
 
 export class GetFinancialReportUseCase {
-  constructor(private readonly paymentRepository: PaymentRepository) {}
+  private static readonly paymentRepository: PaymentRepository =
+    new PaymentMongoRepository(PaymentModel);
+  private static readonly matchRepository = new MatchMongoRepository(MatchModel);
 
-  async execute(
-    ownerId: string,
-    filters?: FinancialReportFilters
-  ): Promise<Either<HttpError, FinancialReport>> {
+  public static async execute(userId: string): Promise<Either<HttpError, FinancialReport>> {
     try {
-      console.log('Buscando pagamentos para o dono:', ownerId);
-      const payments = (await this.paymentRepository.findByUser(ownerId)).filter((payment): payment is Payment => payment !== null);
-      console.log('Pagamentos encontrados:', payments.length);
+      const [payments, unpaidMatches] = await Promise.all([
+        GetFinancialReportUseCase.paymentRepository.findByUser(userId),
+        GetFinancialReportUseCase.matchRepository.findUnpaidMatchesByUser(userId)
+      ]);
 
-      if (payments.length === 0) {
+      if (!payments.length && !unpaidMatches.length) {
         return right({
           totalMatches: 0,
           totalDiscounts: 0,
-          totalRevenue: 0
+          totalRevenue: 0,
+          unpaidMatches: 0
         });
       }
 
-      let filteredPayments = payments;
-
-      if (filters?.startDate) {
-        console.log('Filtrando por data inicial:', filters.startDate);
-        filteredPayments = filteredPayments.filter(
-          payment => new Date(payment.paymentDate) >= new Date(filters.startDate!)
-        );
-      }
-
-      if (filters?.endDate) {
-        console.log('Filtrando por data final:', filters.endDate);
-        filteredPayments = filteredPayments.filter(
-          payment => new Date(payment.paymentDate) <= new Date(filters.endDate!)
-        );
-      }
-
-      if (filters?.soccerFieldId) {
-        console.log('Filtrando por campo:', filters.soccerFieldId);
-        filteredPayments = filteredPayments.filter(
-          payment => payment.match.soccerField.id === filters.soccerFieldId
-        );
-      }
-
-      if (filters?.clientId) {
-        console.log('Filtrando por cliente:', filters.clientId);
-        filteredPayments = filteredPayments.filter(
-          payment => payment.user.id === filters.clientId
-        );
-      }
-
-      console.log('Pagamentos após filtros:', filteredPayments.length);
-
-      const report: FinancialReport = {
-        totalMatches: filteredPayments.length,
-        totalDiscounts: filteredPayments.reduce((sum, p) => sum + (p.discount || 0), 0),
-        totalRevenue: filteredPayments.reduce((sum, p) => sum + p.totalAmountWithDiscount, 0)
-      };
+      const report = payments.reduce((acc, payment) => {
+        if (payment) {
+          acc.totalMatches++;
+          // Calcula o desconto de duas formas possíveis:
+          // 1. Se tiver o campo discount preenchido, usa ele
+          // 2. Se não tiver, calcula pela diferença entre amount e totalAmountWithDiscount
+          const calculatedDiscount = payment.discount || (payment.amount - payment.totalAmountWithDiscount);
+          acc.totalDiscounts += calculatedDiscount;
+          acc.totalRevenue += payment.totalAmountWithDiscount;
+        }
+        return acc;
+      }, {
+        totalMatches: 0,
+        totalDiscounts: 0,
+        totalRevenue: 0,
+        unpaidMatches: unpaidMatches.length
+      });
 
       return right(report);
-    } catch (error) {
-      console.error('Erro ao gerar relatório financeiro:', error);
-      if (error instanceof Error) {
-        return left(new HttpError(500, `Erro ao gerar relatório financeiro: ${error.message}`));
-      }
-      return left(new HttpError(500, 'Erro ao gerar relatório financeiro'));
+    } catch (error: unknown) {
+      console.error(error);
+
+      return left(
+        new HttpError(
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+          error instanceof Error ? error.message : 'Erro ao obter relatório financeiro'
+        )
+      );
     }
   }
 } 

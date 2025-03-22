@@ -20,6 +20,7 @@ import { UserDocument } from '../../mongose/models/user.model';
 import { TeamDocumentWithRelationships } from '../../mongose/models/team.model';
 import PaymentModel from '../../mongose/models/payment.model';
 import { PaymentMongoRepository } from './payment.repository';
+import { ObjectId } from 'mongodb';
 
 export class MatchMongoRepository implements MatchRepository {
   private model: Model<MatchDocumentWithRelations>;
@@ -140,7 +141,7 @@ export class MatchMongoRepository implements MatchRepository {
         })
     );
   }
-  async findUnpaidMatchesByUser(): Promise<Match[]> {
+  async findUnpaidMatchesByUser(userId: string): Promise<Match[]> {
     const unpaidMatches = await this.model.aggregate([
       {
         $lookup: {
@@ -152,7 +153,7 @@ export class MatchMongoRepository implements MatchRepository {
       },
       {
         $match: {
-          payments: { $size: 0 },
+          payments: { $size: 0 }
         },
       },
       {
@@ -169,7 +170,11 @@ export class MatchMongoRepository implements MatchRepository {
           preserveNullAndEmptyArrays: true,
         },
       },
-
+      {
+        $match: {
+          'soccerField.user': new ObjectId(userId)
+        }
+      },
       {
         $lookup: {
           from: 'users',

@@ -121,7 +121,7 @@ export const loginSwaggerSchema = {
   },
 };
 
-export const getUserProfileSchema: FastifySchema = {
+export const getUserProfileSchema = {
   response: {
     200: {
       type: 'object',
@@ -160,6 +160,92 @@ export const getUserProfileSchema: FastifySchema = {
         },
       },
       example: { error: 'Unauthorized' },
+    },
+  },
+  tags: ['Usuário'],
+};
+
+export const updateUserProfileSchema = {
+  body: {
+    type: 'object',
+    required: ['name', 'email'],
+    properties: {
+      name: { type: 'string', description: 'Nome do usuário' },
+      email: {
+        type: 'string',
+        format: 'email',
+        description: 'Email do usuário',
+      },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', description: 'ID do usuário' },
+        name: { type: 'string', description: 'Nome do usuário' },
+        email: {
+          type: 'string',
+          format: 'email',
+          description: 'Email do usuário',
+        },
+        photoUrl: {
+          type: 'string',
+          format: 'uri',
+          description: "URL da foto de perfil do usuário",
+        },
+        role: {
+          type: 'integer',
+          description: 'Função do usuário (por exemplo, administrador, usuário regular)',
+        },
+      },
+      example: {
+        id: '6717f7ef66f1861cb37a5055',
+        email: 'josesilva12@gmail.com',
+        name: 'José da Silva3',
+        photoUrl: 'https://lasdijasidas.com',
+        role: 1,
+      },
+    },
+    400: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          description: 'Mensagem de erro de validação',
+        },
+      },
+      example: { message: 'Este e-mail já está em uso por outro usuário' },
+    },
+    401: {
+      type: 'object',
+      properties: {
+        error: {
+          type: 'string',
+          description: 'Mensagem de erro de acesso não autorizado',
+        },
+      },
+      example: { error: 'Unauthorized' },
+    },
+    404: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          description: 'Mensagem de erro quando o usuário não é encontrado',
+        },
+      },
+      example: { message: 'Usuário não encontrado' },
+    },
+    500: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          description: 'Mensagem de erro interno do servidor',
+        },
+      },
+      example: { message: 'Erro ao atualizar o perfil' },
     },
   },
   tags: ['Usuário'],
